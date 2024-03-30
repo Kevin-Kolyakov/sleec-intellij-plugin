@@ -1,0 +1,26 @@
+{
+  parserClass="com.example.sleeclanguageextension.SleecParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Sleec"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.example.sleeclanguageextension.psi"
+  psiImplPackage="com.example.sleeclanguageextension.impl"
+
+  elementTypeHolderClass="com.example.sleeclanguageextension.SleecTypes"
+  elementTypeClass="com.example.sleeclanguageextension.SleecElementType"
+  tokenTypeClass="com.example.sleeclanguageextension.SleecTokenType"
+
+    psiImplUtilClass="com.example.sleeclanguageextension.SimplePsiImplUtil"
+
+}
+
+simpleFile ::= item_*
+
+private item_ ::= (property|COMMENT|CRLF)
+
+property ::= (KEY? SEPARATOR VALUE?) | KEY
+{
+  methods=[getKey getValue]
+}
