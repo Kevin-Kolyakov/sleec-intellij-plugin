@@ -12,14 +12,14 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.example.sleeclanguageextension.psi.*;
 import com.example.sleeclanguageextension.SleecPsiImplUtil;
 
-public class SleecPropertyImpl extends ASTWrapperPsiElement implements SleecProperty {
+public class SleecPropertiesImpl extends ASTWrapperPsiElement implements SleecProperties {
 
-  public SleecPropertyImpl(@NotNull ASTNode node) {
+  public SleecPropertiesImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull SleecVisitor visitor) {
-    visitor.visitProperty(this);
+    visitor.visitProperties(this);
   }
 
   @Override
@@ -29,9 +29,15 @@ public class SleecPropertyImpl extends ASTWrapperPsiElement implements SleecProp
   }
 
   @Override
+  @Nullable
+  public SleecExpr getExpr() {
+    return findChildByClass(SleecExpr.class);
+  }
+
+  @Override
   @NotNull
-  public List<SleecPropert> getPropertList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, SleecPropert.class);
+  public PsiElement getId() {
+    return findNotNullChildByType(ID);
   }
 
 }

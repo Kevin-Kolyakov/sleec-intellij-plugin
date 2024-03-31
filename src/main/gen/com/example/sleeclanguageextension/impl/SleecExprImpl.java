@@ -12,26 +12,20 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.example.sleeclanguageextension.psi.*;
 import com.example.sleeclanguageextension.SleecPsiImplUtil;
 
-public class SleecPropertyImpl extends ASTWrapperPsiElement implements SleecProperty {
+public abstract class SleecExprImpl extends ASTWrapperPsiElement implements SleecExpr {
 
-  public SleecPropertyImpl(@NotNull ASTNode node) {
+  public SleecExprImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull SleecVisitor visitor) {
-    visitor.visitProperty(this);
+    visitor.visitExpr(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof SleecVisitor) accept((SleecVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @NotNull
-  public List<SleecPropert> getPropertList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, SleecPropert.class);
   }
 
 }

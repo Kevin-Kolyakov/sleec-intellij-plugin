@@ -5,9 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface SleecProperty extends PsiElement {
+public interface SleecLiteralExpr extends SleecExpr {
 
-  @NotNull
-  List<SleecPropert> getPropertList();
+  @Nullable
+  PsiElement getNumber();
+
+  @Nullable
+  PsiElement getString();
 
 }
