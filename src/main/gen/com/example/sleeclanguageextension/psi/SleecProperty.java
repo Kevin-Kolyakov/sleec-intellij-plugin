@@ -9,10 +9,10 @@ public interface SleecProperty extends PsiElement {
 
   //WARNING: getKey(...) is skipped
   //matching getKey(SleecProperty, ...)
-  //methods are not found in SimplePsiImplUtil
+  //methods are not found in SleecPsiImplUtil
 
   //WARNING: getValue(...) is skipped
   //matching getValue(SleecProperty, ...)
-  //methods are not found in SimplePsiImplUtil
+  //methods are not found in SleecPsiImplUtil
 
 }

@@ -13,8 +13,14 @@ public interface SleecTypes {
   IElementType COMMENT = new SleecTokenType("COMMENT");
   IElementType CRLF = new SleecTokenType("CRLF");
   IElementType KEY = new SleecTokenType("KEY");
+  IElementType DEF = new SleecTokenType("DEF");
   IElementType SEPARATOR = new SleecTokenType("SEPARATOR");
   IElementType VALUE = new SleecTokenType("VALUE");
+  IElementType NUMERIC = new SleecTokenType("NUMERIC");
+
+  IElementType OPERATOR = new SleecTokenType("OPERATOR");
+  IElementType IDENTIFIER = new SleecTokenType("IDENTIFIER");
+
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {

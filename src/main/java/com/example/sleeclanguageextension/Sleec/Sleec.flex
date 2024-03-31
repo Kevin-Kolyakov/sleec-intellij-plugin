@@ -1,5 +1,5 @@
 // Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
-package com.example.sleeclanguageextension.Sleec;
+package com.example.sleeclanguageextension;
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
@@ -17,12 +17,14 @@ import com.intellij.psi.TokenType;
 %eof}
 
 CRLF=\R
-WHITE_SPACE=[\ \n\t\f]
+//WHITE_SPACE=[\ \n\t\f]
+WHITE_SPACE=[\n\t\f]
 FIRST_VALUE_CHARACTER=[^ \n\f\\] | "\\"{CRLF} | "\\".
 VALUE_CHARACTER=[^\n\f\\] | "\\"{CRLF} | "\\".
-END_OF_LINE_COMMENT=("#"|"!")[^\r\n]*
-SEPARATOR=[:=]
+END_OF_LINE_COMMENT=("//")[^\r\n]*
+SEPARATOR=[:= ]
 KEY_CHARACTER=[^:=\ \n\t\f\\] | "\\ "
+DEF = "event"| "measure" | "constant"
 
 %state WAITING_VALUE
 
@@ -30,7 +32,7 @@ KEY_CHARACTER=[^:=\ \n\t\f\\] | "\\ "
 
 <YYINITIAL> {END_OF_LINE_COMMENT}                           { yybegin(YYINITIAL); return SleecTypes.COMMENT; }
 
-<YYINITIAL> {KEY_CHARACTER}+                                { yybegin(YYINITIAL); return SleecTypes.KEY; }
+<YYINITIAL> {DEF}+                                          { yybegin(YYINITIAL); return SleecTypes.DEF; }
 
 <YYINITIAL> {SEPARATOR}                                     { yybegin(WAITING_VALUE); return SleecTypes.SEPARATOR; }
 

@@ -55,8 +55,9 @@ class SleecLexer implements FlexLexer {
 
   /* The ZZ_CMAP_A table has 320 entries */
   static final char ZZ_CMAP_A[] = zzUnpackCMap(
-    "\11\0\1\4\1\2\1\1\1\5\1\3\22\0\1\7\1\10\1\0\1\10\26\0\1\11\2\0\1\11\36\0\1"+
-    "\6\50\0\1\1\242\0\2\1\26\0");
+    "\11\0\1\4\1\2\1\1\1\5\1\3\22\0\1\6\16\0\1\10\12\0\1\11\2\0\1\11\36\0\1\7\4"+
+    "\0\1\17\1\0\1\23\1\0\1\12\7\0\1\16\1\14\1\24\2\0\1\22\1\20\1\15\1\21\1\13"+
+    "\16\0\1\1\242\0\2\1\26\0");
 
   /** 
    * Translates DFA states to action switch labels.
@@ -64,11 +65,12 @@ class SleecLexer implements FlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\2\0\2\1\1\2\1\3\1\4\1\5\2\6\2\7"+
-    "\1\3\1\7\1\0\2\4\1\0\1\2\2\6";
+    "\2\0\1\1\1\2\1\3\4\1\2\4\2\5\1\1"+
+    "\1\6\4\0\1\2\1\4\1\5\1\4\6\0\1\7"+
+    "\6\0";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[21];
+    int [] result = new int[36];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -93,12 +95,14 @@ class SleecLexer implements FlexLexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\12\0\24\0\36\0\50\0\62\0\74\0\106"+
-    "\0\120\0\132\0\50\0\144\0\156\0\170\0\62\0\202"+
-    "\0\214\0\156\0\132\0\226\0\240";
+    "\0\0\0\25\0\52\0\77\0\52\0\124\0\151\0\176"+
+    "\0\223\0\250\0\275\0\77\0\322\0\347\0\374\0\u0111"+
+    "\0\u0126\0\u013b\0\347\0\275\0\u0150\0\u0165\0\u017a\0\u018f"+
+    "\0\u01a4\0\u01b9\0\u01ce\0\u01e3\0\u01f8\0\u020d\0\u0222\0\u0237"+
+    "\0\151\0\176\0\223\0\u024c";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[21];
+    int [] result = new int[36];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -121,22 +125,23 @@ class SleecLexer implements FlexLexer {
   private static final int [] ZZ_TRANS = zzUnpackTrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\3\1\4\1\5\1\4\2\5\1\6\1\5\1\7"+
-    "\1\10\1\11\1\12\1\13\1\12\1\14\1\13\1\15"+
-    "\1\16\2\11\2\3\1\0\1\3\2\0\1\17\1\0"+
-    "\1\3\1\0\1\3\1\4\1\5\1\4\2\5\1\17"+
-    "\1\5\1\3\2\0\5\5\1\0\1\5\11\0\1\3"+
-    "\2\0\2\7\1\0\1\3\2\20\1\21\1\20\1\7"+
-    "\1\20\12\0\2\11\1\0\2\11\1\0\1\22\4\11"+
-    "\1\23\1\5\2\23\1\5\1\22\1\23\3\11\1\24"+
-    "\1\16\1\24\1\14\1\16\1\22\1\14\5\11\1\25"+
-    "\6\11\1\0\1\5\1\16\1\5\2\16\1\0\1\16"+
-    "\2\0\2\20\2\0\10\20\2\0\3\20\1\7\2\20"+
-    "\1\11\1\24\1\5\2\24\1\5\1\22\1\24\7\11"+
-    "\1\0\1\22\3\11";
+    "\1\3\5\4\1\5\1\3\1\6\1\5\1\7\3\3"+
+    "\1\10\4\3\1\11\1\3\1\12\1\13\1\14\1\13"+
+    "\1\15\1\14\1\3\1\16\15\12\26\0\5\4\27\0"+
+    "\1\17\27\0\1\20\23\0\1\21\36\0\1\22\2\12"+
+    "\1\0\2\12\1\0\1\12\1\23\16\12\1\24\1\4"+
+    "\2\24\1\4\1\12\1\23\16\12\1\25\1\26\1\25"+
+    "\1\15\1\26\1\12\1\23\20\12\1\27\21\12\2\17"+
+    "\2\0\21\17\12\0\1\30\31\0\1\31\21\0\1\32"+
+    "\10\0\1\12\1\25\1\4\2\25\1\4\1\12\1\23"+
+    "\15\12\1\0\1\4\1\26\1\4\2\26\17\0\5\12"+
+    "\1\0\1\12\1\23\15\12\14\0\1\33\30\0\1\34"+
+    "\24\0\1\35\21\0\1\36\30\0\1\37\20\0\1\40"+
+    "\21\0\1\41\3\0\1\42\4\0\1\43\23\0\1\44"+
+    "\21\0\1\30\17\0\1\36\12\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[170];
+    int [] result = new int[609];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -174,10 +179,11 @@ class SleecLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\2\0\5\1\1\11\6\1\1\0\2\1\1\0\3\1";
+    "\2\0\1\11\1\1\1\11\12\1\4\0\4\1\6\0"+
+    "\1\1\6\0";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[21];
+    int [] result = new int[36];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -485,7 +491,7 @@ class SleecLexer implements FlexLexer {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1: 
-            { yybegin(YYINITIAL); return SleecTypes.KEY;
+            { return TokenType.BAD_CHARACTER;
             } 
             // fall through
           case 8: break;
@@ -495,27 +501,27 @@ class SleecLexer implements FlexLexer {
             // fall through
           case 9: break;
           case 3: 
-            { return TokenType.BAD_CHARACTER;
+            { yybegin(WAITING_VALUE); return SleecTypes.SEPARATOR;
             } 
             // fall through
           case 10: break;
           case 4: 
-            { yybegin(YYINITIAL); return SleecTypes.COMMENT;
+            { yybegin(YYINITIAL); return SleecTypes.VALUE;
             } 
             // fall through
           case 11: break;
           case 5: 
-            { yybegin(WAITING_VALUE); return SleecTypes.SEPARATOR;
+            { yybegin(WAITING_VALUE); return TokenType.WHITE_SPACE;
             } 
             // fall through
           case 12: break;
           case 6: 
-            { yybegin(YYINITIAL); return SleecTypes.VALUE;
+            { yybegin(YYINITIAL); return SleecTypes.COMMENT;
             } 
             // fall through
           case 13: break;
           case 7: 
-            { yybegin(WAITING_VALUE); return TokenType.WHITE_SPACE;
+            { yybegin(YYINITIAL); return SleecTypes.DEF;
             } 
             // fall through
           case 14: break;

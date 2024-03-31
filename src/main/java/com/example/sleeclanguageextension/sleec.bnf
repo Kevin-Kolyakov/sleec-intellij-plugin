@@ -12,7 +12,7 @@
   elementTypeClass="com.example.sleeclanguageextension.SleecElementType"
   tokenTypeClass="com.example.sleeclanguageextension.SleecTokenType"
 
-    psiImplUtilClass="com.example.sleeclanguageextension.SimplePsiImplUtil"
+    psiImplUtilClass="com.example.sleeclanguageextension.SleecPsiImplUtil"
 
 }
 
