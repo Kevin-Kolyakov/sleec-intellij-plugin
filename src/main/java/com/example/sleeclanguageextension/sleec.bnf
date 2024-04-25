@@ -16,9 +16,7 @@
 
   tokens=[
     SEMI=';'
-    EQ='='
-    LP='('
-    RP=')'
+
 
     space='regexp:\s+'
     comment='regexp://.*'
@@ -40,31 +38,140 @@
 
   ]
 
-  name(".*expr")='expression'
-  extends(".*expr")=expr
+  name(".*id")='id'
+  extends(".*id")=expr
 }
 
 
 root ::=  root_item *
-ender ::= def_end
 private root_item ::=  property  {pin=1 recoverWhile=property_recover}
 
-property ::= !<<eof>> propert* {pin=1}
-propert ::=  starter * properties* ender
-properties::= id '=' expr ';' {pin=2}
-private starter ::= def_start|rule_start|concern_start
+property ::= !<<eof>> propert {pin=1}
+
+propert::= Defblock RuleBlock (ConcernBlock)? (PurposeBlock)?
+
+Defblock::= "def_start" Definition* "def_end"
+
+Definition::= Measure|Constant|Event
+
+Event::= "event" id
+
+Measure::= ScalarMeasure|BoolMeasure
+
+
+BoolValue::= "true" | "false"
+BoolMeasure::= ("measure" id ":" (Boolean|Numeric)) {pin=2};
+
+NumMeasure::= ("measure" id ":" Numeric)|number
+Constant::= ("constant" id ":" number)|id //TODO: fix this to work with '=' instead of ':'
+ScalarMeasure::= ("measure" id ":" Scale)
+
+Boolean::= "boolean"
+
+Numeric::= "numeric"
+
+Scale::= "scale" "(" ScaleParam ("," ScaleParam)* ")"
+
+ScaleParam::= number|id
+
+RuleBlock::= "rule_start" Rule* "rule_end"
+
+Rule::= id "when" Trigger ("and" MBoolExpr)? "then" Response
+
+ConcernBlock::=
+    "concern_start" Concern* "concern_end"
+
+
+Concern::=
+    id "exists" Trigger ("and" '{'id'}')? ("while" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )? |
+    id "when" Trigger ("and" '{'id'}')? ("then" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )?
+
+Headless_Concern::=
+   "exists" Trigger ("and" '{'id'}')? ("while" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )? |
+    "when" Trigger ("and" '{'id'}')? ("then" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )?
+
+PurposeBlock::=
+    "purpose_start" Purpose* "purpose_end"
+
+Purpose::=
+    id "exists" Trigger ("and" '{'id'}')? ("while" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )?|
+    id "when" Trigger ("and" '{'id'}')? ("then" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )?
+
+Trigger::=
+    id
+
+BoolExp::=
+    Negation|BinaryOp|BoolTerminal
+
+BoolTerminal::=
+   "{" id "}"| BoolValue
+
+Negation::=
+    "(" "not"  '{'id'}' ")"
+
+BinaryOp::=
+    ScalarBinaryOp|BoolBinaryOp | NumericalOp
+
+ScalarBinaryOp::=
+    "(" ScalarTerminal RelOp ScalarTerminal ")"
+
+ScalarTerminal::=
+    ("{"id"}")| ScaleParam
+
+BoolBinaryOp::=
+    "(" BoolExp BoolOp BoolExp ")"
+
+NumericalOp::=
+    "(" NumExp RelOp NumExp ")"
+
+NumExp::=
+    NumBinOp|NumTerminal
+
+NumTerminal::=
+      number | "{" id "}" | Constant
+
+NumBinOp::=
+    "(" NumExp BinaryArth NumExp ")"
+
+BinaryArth::=
+    "+" | "-" | "*"
+
+MBoolExpr::=
+    BoolExp
+
+
+ExtendedResponse::=
+    Response ("while" ExtendedResponse)?
+
+
+Response::=
+   Occ (Alternative)?  (ND)? (Defeater*)?
+
+
+InnerResponse::=
+    "{" Occ (Alternative)? (ND)? ( (Defeater*) )? "}" |
+    Occ  (Alternative)? (ND)?
+
+Occ::= "not"? Trigger (TimeLimit)? (INF)?
+
+INF::= "eventually"
+
+TimeLimit::= "within" TimeValue  | "within" "[" TimeValue "," TimeValue "]"
+
+TimeValue::=NumExp TimeUnit
+
+Alternative::="otherwise" InnerResponse;
+
+ND::="else" InnerResponse;
+
+
+Defeater::="unless" MBoolExpr ("then" InnerResponse)?
+
+RelOp::="<=" | ">=" | "<>" | "<" | ">"  | "="
+
+
+BoolOp::="and" | "or"
+
+TimeUnit::="seconds" | "minutes" | "hours" | "days"
 
 private property_recover ::= !(';' | id '=')
-
-expr ::= factor plus_expr *
-left plus_expr ::= plus_op factor
-private plus_op ::= '+'|'-'
-private factor ::= primary mul_expr *
-left mul_expr  ::= mul_op primary
-private mul_op ::= '*'|'/'
-private primary ::= primary_inner factorial_expr ?
-left factorial_expr ::= '!'
-private primary_inner ::= literal_expr | ref_expr | paren_expr
-paren_expr ::= '(' expr ')' {pin=1}
-ref_expr ::= id
-literal_expr ::= number | string | float
