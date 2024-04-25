@@ -63,7 +63,7 @@ BoolValue::= "true" | "false"
 BoolMeasure::= ("measure" id ":" (Boolean|Numeric)) {pin=2};
 
 NumMeasure::= ("measure" id ":" Numeric)|number
-Constant::= ("constant" id ":" number)|id //TODO: fix this to work with '=' instead of ':'
+Constant::= ("constant" id "=" number)|id //TODO: fix this to work with '=' instead of ':'
 ScalarMeasure::= ("measure" id ":" Scale)
 
 Boolean::= "boolean"
