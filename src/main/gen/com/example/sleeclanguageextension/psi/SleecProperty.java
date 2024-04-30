@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface SleecProperty extends PsiElement {
 
-  @NotNull
-  List<SleecPropert> getPropertList();
+  @Nullable
+  SleecPropert getPropert();
 
 }

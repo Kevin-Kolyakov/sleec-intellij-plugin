@@ -36,9 +36,6 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
   {WHITE_SPACE}        { return WHITE_SPACE; }
 
   ";"                  { return SEMI; }
-  "="                  { return EQ; }
-  "("                  { return LP; }
-  ")"                  { return RP; }
   "def_start"          { return DEF_START; }
   "def_end"            { return DEF_END; }
   "rule_start"         { return RULE_START; }
@@ -50,7 +47,6 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
   "*"                  { return OP_3; }
   "/"                  { return OP_4; }
   "!"                  { return OP_5; }
-  "float"              { return FLOAT; }
 
   {SPACE}              { return SPACE; }
   {COMMENT}            { return COMMENT; }

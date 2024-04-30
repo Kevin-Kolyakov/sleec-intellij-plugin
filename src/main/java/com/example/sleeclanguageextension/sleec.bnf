@@ -1,5 +1,6 @@
 {
   parserClass="com.example.sleeclanguageextension.SleecParser"
+  parserUtilClass="com.example.sleeclanguageextension.SleecParserUtil"
 
   extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 
@@ -56,15 +57,18 @@ Definition::= Measure|Constant|Event
 
 Event::= "event" id
 
-Measure::= ScalarMeasure|BoolMeasure
+Measure::= NumMeasure|ScalarMeasure|BoolMeasure
 
 
 BoolValue::= "true" | "false"
-BoolMeasure::= ("measure" id ":" (Boolean|Numeric)) {pin=2};
+BoolMeasure::= ("measure" id ":" Boolean) {pin=2};
 
-NumMeasure::= ("measure" id ":" Numeric)|number
-Constant::= ("constant" id "=" number)|id //TODO: fix this to work with '=' instead of ':'
-ScalarMeasure::= ("measure" id ":" Scale)
+NumMeasure::= ("measure" NumVar ":" Numeric)|number
+NumVar::= id
+Constant::= ("constant" ConstantVar "=" number)|ConstantVar
+ConstantVar::= id
+ScalarMeasure::= ("measure" ScalarVar ":" Scale)
+ScalarVar::= id
 
 Boolean::= "boolean"
 
@@ -83,19 +87,21 @@ ConcernBlock::=
 
 
 Concern::=
-    id "exists" Trigger ("and" '{'id'}')? ("while" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )? |
-    id "when" Trigger ("and" '{'id'}')? ("then" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )?
+    ConcernName "exists" Trigger ("and" '{'BoolExpValue'}')? ("while" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )? |
+    ConcernName "when" Trigger ("and" '{'BoolExpValue'}')? ("then" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )?
+ConcernName::= id
 
 Headless_Concern::=
-   "exists" Trigger ("and" '{'id'}')? ("while" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )? |
-    "when" Trigger ("and" '{'id'}')? ("then" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )?
+   "exists" Trigger ("and" '{'BoolExpValue'}')? ("while" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )? |
+    "when" Trigger ("and" '{'BoolExpValue'}')? ("then" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )?
 
 PurposeBlock::=
     "purpose_start" Purpose* "purpose_end"
 
 Purpose::=
-    id "exists" Trigger ("and" '{'id'}')? ("while" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )?|
-    id "when" Trigger ("and" '{'id'}')? ("then" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )?
+    PurposeName "exists" Trigger ("and" '{'BoolExpValue'}')? ("while" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )?|
+    PurposeName "when" Trigger ("and" '{'BoolExpValue'}')? ("then" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )?
+PurposeName::= id
 
 Trigger::=
     id
@@ -103,11 +109,14 @@ Trigger::=
 BoolExp::=
     Negation|BinaryOp|BoolTerminal
 
+BoolExpValue::=
+    id
+
 BoolTerminal::=
-   "{" id "}"| BoolValue
+   "{" BoolExpValue "}"| BoolValue
 
 Negation::=
-    "(" "not"  '{'id'}' ")"
+    "(" "not"  '{'BoolExpValue'}' ")"
 
 BinaryOp::=
     ScalarBinaryOp|BoolBinaryOp | NumericalOp

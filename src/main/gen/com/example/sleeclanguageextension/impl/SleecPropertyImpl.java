@@ -29,9 +29,9 @@ public class SleecPropertyImpl extends ASTWrapperPsiElement implements SleecProp
   }
 
   @Override
-  @NotNull
-  public List<SleecPropert> getPropertList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, SleecPropert.class);
+  @Nullable
+  public SleecPropert getPropert() {
+    return findChildByClass(SleecPropert.class);
   }
 
 }

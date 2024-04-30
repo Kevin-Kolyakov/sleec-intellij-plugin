@@ -29,15 +29,27 @@ public class SleecPropertImpl extends ASTWrapperPsiElement implements SleecPrope
   }
 
   @Override
-  @NotNull
-  public SleecEnder getEnder() {
-    return findNotNullChildByClass(SleecEnder.class);
+  @Nullable
+  public SleecConcernBlock getConcernBlock() {
+    return findChildByClass(SleecConcernBlock.class);
   }
 
   @Override
   @NotNull
-  public List<SleecProperties> getPropertiesList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, SleecProperties.class);
+  public SleecDefblock getDefblock() {
+    return findNotNullChildByClass(SleecDefblock.class);
+  }
+
+  @Override
+  @Nullable
+  public SleecPurposeBlock getPurposeBlock() {
+    return findChildByClass(SleecPurposeBlock.class);
+  }
+
+  @Override
+  @NotNull
+  public SleecRuleBlock getRuleBlock() {
+    return findNotNullChildByClass(SleecRuleBlock.class);
   }
 
 }

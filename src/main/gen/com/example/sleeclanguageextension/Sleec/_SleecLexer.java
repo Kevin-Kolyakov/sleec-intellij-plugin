@@ -5,9 +5,10 @@ package com.example.sleeclanguageextension.Sleec;
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 
+import static com.example.sleeclanguageextension.SleecTypes.*;
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
 import static com.intellij.psi.TokenType.WHITE_SPACE;
-import static com.example.sleeclanguageextension.SleecTypes.*;
+import static org.intellij.lang.regexp.RegExpTT.EQ;
 
 
 /**
@@ -650,15 +651,6 @@ public class _SleecLexer implements FlexLexer {
             { return EQ;
             } 
             // fall through
-          case 29: break;
-          case 8: 
-            { return LP;
-            } 
-            // fall through
-          case 30: break;
-          case 9: 
-            { return RP;
-            } 
             // fall through
           case 31: break;
           case 10: 
@@ -689,11 +681,7 @@ public class _SleecLexer implements FlexLexer {
           case 15: 
             { return STRING;
             } 
-            // fall through
-          case 37: break;
-          case 16: 
-            { return FLOAT;
-            } 
+
             // fall through
           case 38: break;
           case 17: 

@@ -1,13 +1,12 @@
 package com.example.sleeclanguageextension;
-
 import com.intellij.lang.ASTNode;
-import com.example.sleeclanguageextension.SleecProperty;
+import com.example.sleeclanguageextension.psi.SleecProperty;
 import com.example.sleeclanguageextension.SleecTypes;
 
 public class SleecPsiImplUtil {
 
     public static String getKey(SleecProperty element) {
-        ASTNode keyNode = element.getNode().findChildByType(SleecTypes.KEY);
+        ASTNode keyNode = element.getNode().findChildByType(SleecTypes.COMMENT);
         if (keyNode != null) {
             // IMPORTANT: Convert embedded escaped spaces to simple spaces
             return keyNode.getText().replaceAll("\\\\ ", " ");
@@ -17,7 +16,7 @@ public class SleecPsiImplUtil {
     }
 
     public static String getValue(SleecProperty element) {
-        ASTNode valueNode = element.getNode().findChildByType(SleecTypes.VALUE);
+        ASTNode valueNode = element.getNode().findChildByType(SleecTypes.NUM_VAR);
         if (valueNode != null) {
             return valueNode.getText();
         } else {

@@ -15,8 +15,8 @@ public class SleecSyntaxHighlighter extends SyntaxHighlighterBase {
 
     public static final TextAttributesKey SEPARATOR =
             createTextAttributesKey("SLEEC_SEPARATOR", DefaultLanguageHighlighterColors.OPERATION_SIGN);
-    public static final TextAttributesKey KEY =
-            createTextAttributesKey("SLEEC_KEY", DefaultLanguageHighlighterColors.KEYWORD);
+    public static final TextAttributesKey ID =
+            createTextAttributesKey("SLEEC_ID", DefaultLanguageHighlighterColors.KEYWORD);
     public static final TextAttributesKey VALUE =
             createTextAttributesKey("SLEEC_VALUE", DefaultLanguageHighlighterColors.STRING);
     public static final TextAttributesKey COMMENT =
@@ -27,7 +27,7 @@ public class SleecSyntaxHighlighter extends SyntaxHighlighterBase {
 
     private static final TextAttributesKey[] BAD_CHAR_KEYS = new TextAttributesKey[]{BAD_CHARACTER};
     private static final TextAttributesKey[] SEPARATOR_KEYS = new TextAttributesKey[]{SEPARATOR};
-    private static final TextAttributesKey[] KEY_KEYS = new TextAttributesKey[]{KEY};
+    private static final TextAttributesKey[] ID_KEYS = new TextAttributesKey[]{ID};
     private static final TextAttributesKey[] VALUE_KEYS = new TextAttributesKey[]{VALUE};
     private static final TextAttributesKey[] COMMENT_KEYS = new TextAttributesKey[]{COMMENT};
     private static final TextAttributesKey[] EMPTY_KEYS = new TextAttributesKey[0];
@@ -40,14 +40,8 @@ public class SleecSyntaxHighlighter extends SyntaxHighlighterBase {
 
     @Override
     public TextAttributesKey @NotNull [] getTokenHighlights(IElementType tokenType) {
-        if (tokenType.equals(SleecTypes.SEPARATOR)) {
-            return SEPARATOR_KEYS;
-        }
-        if (tokenType.equals(SleecTypes.KEY)) {
-            return KEY_KEYS;
-        }
-        if (tokenType.equals(SleecTypes.VALUE)) {
-            return VALUE_KEYS;
+        if (tokenType.equals(SleecTypes.ID)) {
+            return ID_KEYS;
         }
         if (tokenType.equals(SleecTypes.COMMENT)) {
             return COMMENT_KEYS;

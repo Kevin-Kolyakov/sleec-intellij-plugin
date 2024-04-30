@@ -7,10 +7,16 @@ import com.intellij.psi.PsiElement;
 
 public interface SleecPropert extends PsiElement {
 
-  @NotNull
-  SleecEnder getEnder();
+  @Nullable
+  SleecConcernBlock getConcernBlock();
 
   @NotNull
-  List<SleecProperties> getPropertiesList();
+  SleecDefblock getDefblock();
+
+  @Nullable
+  SleecPurposeBlock getPurposeBlock();
+
+  @NotNull
+  SleecRuleBlock getRuleBlock();
 
 }
