@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface SleecNumMeasure extends PsiElement {
 
   @Nullable
+  SleecColon getColon();
+
+  @Nullable
   SleecNumVar getNumVar();
 
   @Nullable

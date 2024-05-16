@@ -19,7 +19,7 @@ public class SleecRefExprImpl extends SleecExprImpl implements SleecRefExpr {
 
   @Override
   public void accept(@NotNull SleecVisitor visitor) {
-    visitor.visitRefExpr(this);
+//    visitor.visitRefExpr(this);
   }
 
   @Override

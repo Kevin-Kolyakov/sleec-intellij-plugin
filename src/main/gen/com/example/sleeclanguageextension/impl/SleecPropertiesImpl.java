@@ -19,7 +19,7 @@ public class SleecPropertiesImpl extends ASTWrapperPsiElement implements SleecPr
   }
 
   public void accept(@NotNull SleecVisitor visitor) {
-    visitor.visitProperties(this);
+//    visitor.visitProperties(this);
   }
 
   @Override

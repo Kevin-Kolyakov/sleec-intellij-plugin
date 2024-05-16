@@ -15,6 +15,8 @@ public class SleecSyntaxHighlighter extends SyntaxHighlighterBase {
 
     public static final TextAttributesKey SEPARATOR =
             createTextAttributesKey("SLEEC_SEPARATOR", DefaultLanguageHighlighterColors.OPERATION_SIGN);
+    public static final TextAttributesKey COLON =
+            createTextAttributesKey("SLEEC_COLON", DefaultLanguageHighlighterColors.OPERATION_SIGN);
     public static final TextAttributesKey ID =
             createTextAttributesKey("SLEEC_ID", DefaultLanguageHighlighterColors.KEYWORD);
     public static final TextAttributesKey VALUE =
@@ -27,6 +29,7 @@ public class SleecSyntaxHighlighter extends SyntaxHighlighterBase {
 
     private static final TextAttributesKey[] BAD_CHAR_KEYS = new TextAttributesKey[]{BAD_CHARACTER};
     private static final TextAttributesKey[] SEPARATOR_KEYS = new TextAttributesKey[]{SEPARATOR};
+    private static final TextAttributesKey[] COLON_KEYS = new TextAttributesKey[]{COLON};
     private static final TextAttributesKey[] ID_KEYS = new TextAttributesKey[]{ID};
     private static final TextAttributesKey[] VALUE_KEYS = new TextAttributesKey[]{VALUE};
     private static final TextAttributesKey[] COMMENT_KEYS = new TextAttributesKey[]{COMMENT};
@@ -45,9 +48,6 @@ public class SleecSyntaxHighlighter extends SyntaxHighlighterBase {
         }
         if (tokenType.equals(SleecTypes.COMMENT)) {
             return COMMENT_KEYS;
-        }
-        if (tokenType.equals(TokenType.BAD_CHARACTER)) {
-            return BAD_CHAR_KEYS;
         }
         return EMPTY_KEYS;
     }

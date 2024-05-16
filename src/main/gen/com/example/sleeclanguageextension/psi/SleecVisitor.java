@@ -51,6 +51,10 @@ public class SleecVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitColon(@NotNull SleecColon o) {
+    visitPsiElement(o);
+  }
+
   public void visitConcern(@NotNull SleecConcern o) {
     visitPsiElement(o);
   }

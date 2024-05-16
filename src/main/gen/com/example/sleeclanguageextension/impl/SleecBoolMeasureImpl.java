@@ -35,6 +35,12 @@ public class SleecBoolMeasureImpl extends ASTWrapperPsiElement implements SleecB
   }
 
   @Override
+  @Nullable
+  public SleecColon getColon() {
+    return findChildByClass(SleecColon.class);
+  }
+
+  @Override
   @NotNull
   public PsiElement getId() {
     return findNotNullChildByType(ID);

@@ -19,7 +19,7 @@ public class SleecLiteralExprImpl extends SleecExprImpl implements SleecLiteralE
 
   @Override
   public void accept(@NotNull SleecVisitor visitor) {
-    visitor.visitLiteralExpr(this);
+//    visitor.visitLiteralExpr(this);
   }
 
   @Override

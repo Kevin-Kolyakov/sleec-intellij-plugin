@@ -19,7 +19,7 @@ public class SleecFactorialExprImpl extends SleecExprImpl implements SleecFactor
 
   @Override
   public void accept(@NotNull SleecVisitor visitor) {
-    visitor.visitFactorialExpr(this);
+//    visitor.visitFactorialExpr(this);
   }
 
   @Override

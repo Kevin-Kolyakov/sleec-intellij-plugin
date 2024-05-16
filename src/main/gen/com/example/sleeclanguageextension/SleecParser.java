@@ -114,7 +114,7 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // "measure" id ":" Boolean
+  // "measure" id Colon Boolean
   public static boolean BoolMeasure(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "BoolMeasure")) return false;
     boolean r, p;
@@ -122,7 +122,7 @@ public class SleecParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, "measure");
     r = r && consumeToken(b, ID);
     p = r; // pin = 2
-    r = r && report_error_(b, consumeToken(b, ":"));
+    r = r && report_error_(b, Colon(b, l + 1));
     r = p && Boolean(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
@@ -183,6 +183,17 @@ public class SleecParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, BOOLEAN, "<boolean>");
     r = consumeToken(b, "boolean");
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // ":"
+  public static boolean Colon(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Colon")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, COLON, "<colon>");
+    r = consumeToken(b, ":");
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -533,7 +544,7 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // "exists" Trigger ("and" '{'BoolExpValue'}')? ("while" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )? |
+  // "exists" Trigger ("and" "{"BoolExpValue"}")? ("while" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )? |
   //     "when" Trigger ("and" '{'BoolExpValue'}')? ("then" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )?
   public static boolean Headless_Concern(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Headless_Concern")) return false;
@@ -545,7 +556,7 @@ public class SleecParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // "exists" Trigger ("and" '{'BoolExpValue'}')? ("while" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )?
+  // "exists" Trigger ("and" "{"BoolExpValue"}")? ("while" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )?
   private static boolean Headless_Concern_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Headless_Concern_0")) return false;
     boolean r;
@@ -559,14 +570,14 @@ public class SleecParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ("and" '{'BoolExpValue'}')?
+  // ("and" "{"BoolExpValue"}")?
   private static boolean Headless_Concern_0_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Headless_Concern_0_2")) return false;
     Headless_Concern_0_2_0(b, l + 1);
     return true;
   }
 
-  // "and" '{'BoolExpValue'}'
+  // "and" "{"BoolExpValue"}"
   private static boolean Headless_Concern_0_2_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Headless_Concern_0_2_0")) return false;
     boolean r;
@@ -906,7 +917,7 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ("measure" NumVar ":" Numeric)|number
+  // ("measure" NumVar Colon Numeric)|number
   public static boolean NumMeasure(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NumMeasure")) return false;
     boolean r;
@@ -917,14 +928,14 @@ public class SleecParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // "measure" NumVar ":" Numeric
+  // "measure" NumVar Colon Numeric
   private static boolean NumMeasure_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NumMeasure_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, "measure");
     r = r && NumVar(b, l + 1);
-    r = r && consumeToken(b, ":");
+    r = r && Colon(b, l + 1);
     r = r && Numeric(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -1402,14 +1413,14 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // "measure" ScalarVar ":" Scale
+  // "measure" ScalarVar Colon Scale
   public static boolean ScalarMeasure(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ScalarMeasure")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, SCALAR_MEASURE, "<scalar measure>");
     r = consumeToken(b, "measure");
     r = r && ScalarVar(b, l + 1);
-    r = r && consumeToken(b, ":");
+    r = r && Colon(b, l + 1);
     r = r && Scale(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
@@ -1665,7 +1676,7 @@ public class SleecParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "property_recover_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, SEMI);
+    r = consumeToken(b, ";");
     if (!r) r = property_recover_0_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;

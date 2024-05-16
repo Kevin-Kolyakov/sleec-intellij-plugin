@@ -19,6 +19,7 @@ public interface SleecTypes {
   IElementType BOOL_OP = new SleecElementType("BOOL_OP");
   IElementType BOOL_TERMINAL = new SleecElementType("BOOL_TERMINAL");
   IElementType BOOL_VALUE = new SleecElementType("BOOL_VALUE");
+  IElementType COLON = new SleecElementType("COLON");
   IElementType CONCERN = new SleecElementType("CONCERN");
   IElementType CONCERN_BLOCK = new SleecElementType("CONCERN_BLOCK");
   IElementType CONCERN_NAME = new SleecElementType("CONCERN_NAME");
@@ -78,7 +79,6 @@ public interface SleecTypes {
   IElementType OP_5 = new SleecTokenType("!");
   IElementType RULE_END = new SleecTokenType("rule_end");
   IElementType RULE_START = new SleecTokenType("rule_start");
-  IElementType SEMI = new SleecTokenType(";");
   IElementType STRING = new SleecTokenType("string");
 
   class Factory {
@@ -116,6 +116,9 @@ public interface SleecTypes {
       }
       else if (type == BOOL_VALUE) {
         return new SleecBoolValueImpl(node);
+      }
+      else if (type == COLON) {
+        return new SleecColonImpl(node);
       }
       else if (type == CONCERN) {
         return new SleecConcernImpl(node);

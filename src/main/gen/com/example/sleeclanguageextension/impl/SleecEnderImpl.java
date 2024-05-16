@@ -19,7 +19,7 @@ public class SleecEnderImpl extends ASTWrapperPsiElement implements SleecEnder {
   }
 
   public void accept(@NotNull SleecVisitor visitor) {
-    visitor.visitEnder(this);
+//    visitor.visitEnder(this);
   }
 
   @Override

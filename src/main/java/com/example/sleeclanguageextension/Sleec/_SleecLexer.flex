@@ -35,7 +35,6 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
 <YYINITIAL> {
   {WHITE_SPACE}        { return WHITE_SPACE; }
 
-  ";"                  { return SEMI; }
   "def_start"          { return DEF_START; }
   "def_end"            { return DEF_END; }
   "rule_start"         { return RULE_START; }

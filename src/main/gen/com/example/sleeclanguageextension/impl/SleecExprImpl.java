@@ -19,7 +19,7 @@ public abstract class SleecExprImpl extends ASTWrapperPsiElement implements Slee
   }
 
   public void accept(@NotNull SleecVisitor visitor) {
-    visitor.visitExpr(this);
+//    visitor.visitExpr(this);
   }
 
   @Override

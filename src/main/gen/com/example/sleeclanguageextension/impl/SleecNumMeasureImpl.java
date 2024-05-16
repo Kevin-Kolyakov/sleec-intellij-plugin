@@ -30,6 +30,12 @@ public class SleecNumMeasureImpl extends ASTWrapperPsiElement implements SleecNu
 
   @Override
   @Nullable
+  public SleecColon getColon() {
+    return findChildByClass(SleecColon.class);
+  }
+
+  @Override
+  @Nullable
   public SleecNumVar getNumVar() {
     return findChildByClass(SleecNumVar.class);
   }

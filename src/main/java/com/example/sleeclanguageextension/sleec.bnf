@@ -16,7 +16,6 @@
     psiImplUtilClass="com.example.sleeclanguageextension.SleecPsiImplUtil"
 
   tokens=[
-    SEMI=';'
 
 
     space='regexp:\s+'
@@ -31,11 +30,13 @@
     id='regexp:\p{Alpha}\w*'
     string="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
 
+
     op_1='+'
     op_2='-'
     op_3='*'
     op_4='/'
     op_5='!'
+
 
   ]
 
@@ -46,7 +47,7 @@
 
 root ::=  root_item *
 private root_item ::=  property  {pin=1 recoverWhile=property_recover}
-
+Colon ::= ":"
 property ::= !<<eof>> propert {pin=1}
 
 propert::= Defblock RuleBlock (ConcernBlock)? (PurposeBlock)?
@@ -61,13 +62,13 @@ Measure::= NumMeasure|ScalarMeasure|BoolMeasure
 
 
 BoolValue::= "true" | "false"
-BoolMeasure::= ("measure" id ":" Boolean) {pin=2};
+BoolMeasure::= ("measure" id Colon Boolean) {pin=2};
 
-NumMeasure::= ("measure" NumVar ":" Numeric)|number
+NumMeasure::= ("measure" NumVar Colon Numeric)|number
 NumVar::= id
 Constant::= ("constant" ConstantVar "=" number)|ConstantVar
 ConstantVar::= id
-ScalarMeasure::= ("measure" ScalarVar ":" Scale)
+ScalarMeasure::= ("measure" ScalarVar Colon Scale)
 ScalarVar::= id
 
 Boolean::= "boolean"
@@ -92,7 +93,7 @@ Concern::=
 ConcernName::= id
 
 Headless_Concern::=
-   "exists" Trigger ("and" '{'BoolExpValue'}')? ("while" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )? |
+   "exists" Trigger ("and" "{"BoolExpValue"}")? ("while" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )? |
     "when" Trigger ("and" '{'BoolExpValue'}')? ("then" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )?
 
 PurposeBlock::=

@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface SleecScalarMeasure extends PsiElement {
 
   @NotNull
+  SleecColon getColon();
+
+  @NotNull
   SleecScalarVar getScalarVar();
 
   @NotNull
