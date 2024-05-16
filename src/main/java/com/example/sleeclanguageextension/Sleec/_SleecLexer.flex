@@ -41,6 +41,30 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
   "rule_end"           { return RULE_END; }
   "concern_start"      { return CONCERN_START; }
   "concern_end"        { return CONCERN_END; }
+  "boolean"            { return BOOLEAN; }
+  "numeric"            { return NUMERIC; }
+  "scale"              { return SCALE; }
+  "measure"            { return MEASURE; }
+  "constant"           { return CONSTANT; }
+  "event"              { return EVENT; }
+  "true"               { return TRUE; }
+  "false"              { return FALSE; }
+  "within"             { return WITHIN; }
+  "eventually"         { return EVENTUALLY; }
+  "seconds"            { return SECONDS; }
+  "minutes"            { return MINUTES; }
+  "hours"              { return HOURS; }
+  "days"               { return DAYS; }
+  "not"                { return NOT; }
+  "and"                { return AND; }
+  "or"                 { return OR; }
+  "when"               { return WHEN; }
+  "then"               { return THEN; }
+  "exists"             { return EXISTS; }
+  "while"              { return WHILE; }
+  "meanwhile"          { return MEANWHILE; }
+  "otherwise"          { return OTHERWISE; }
+  "else"               { return ELSE; }
   "+"                  { return OP_1; }
   "-"                  { return OP_2; }
   "*"                  { return OP_3; }

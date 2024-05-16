@@ -11,7 +11,6 @@ public interface SleecTypes {
   IElementType ALTERNATIVE = new SleecElementType("ALTERNATIVE");
   IElementType BINARY_ARTH = new SleecElementType("BINARY_ARTH");
   IElementType BINARY_OP = new SleecElementType("BINARY_OP");
-  IElementType BOOLEAN = new SleecElementType("BOOLEAN");
   IElementType BOOL_BINARY_OP = new SleecElementType("BOOL_BINARY_OP");
   IElementType BOOL_EXP = new SleecElementType("BOOL_EXP");
   IElementType BOOL_EXP_VALUE = new SleecElementType("BOOL_EXP_VALUE");
@@ -23,21 +22,18 @@ public interface SleecTypes {
   IElementType CONCERN = new SleecElementType("CONCERN");
   IElementType CONCERN_BLOCK = new SleecElementType("CONCERN_BLOCK");
   IElementType CONCERN_NAME = new SleecElementType("CONCERN_NAME");
-  IElementType CONSTANT = new SleecElementType("CONSTANT");
   IElementType CONSTANT_VAR = new SleecElementType("CONSTANT_VAR");
   IElementType DEFBLOCK = new SleecElementType("DEFBLOCK");
   IElementType DEFEATER = new SleecElementType("DEFEATER");
   IElementType DEFINITION = new SleecElementType("DEFINITION");
-  IElementType EVENT = new SleecElementType("EVENT");
+
   IElementType EXTENDED_RESPONSE = new SleecElementType("EXTENDED_RESPONSE");
   IElementType HEADLESS_CONCERN = new SleecElementType("HEADLESS_CONCERN");
   IElementType INF = new SleecElementType("INF");
   IElementType INNER_RESPONSE = new SleecElementType("INNER_RESPONSE");
-  IElementType MEASURE = new SleecElementType("MEASURE");
   IElementType M_BOOL_EXPR = new SleecElementType("M_BOOL_EXPR");
   IElementType ND = new SleecElementType("ND");
   IElementType NEGATION = new SleecElementType("NEGATION");
-  IElementType NUMERIC = new SleecElementType("NUMERIC");
   IElementType NUMERICAL_OP = new SleecElementType("NUMERICAL_OP");
   IElementType NUM_BIN_OP = new SleecElementType("NUM_BIN_OP");
   IElementType NUM_EXP = new SleecElementType("NUM_EXP");
@@ -58,28 +54,51 @@ public interface SleecTypes {
   IElementType SCALAR_MEASURE = new SleecElementType("SCALAR_MEASURE");
   IElementType SCALAR_TERMINAL = new SleecElementType("SCALAR_TERMINAL");
   IElementType SCALAR_VAR = new SleecElementType("SCALAR_VAR");
-  IElementType SCALE = new SleecElementType("SCALE");
   IElementType SCALE_PARAM = new SleecElementType("SCALE_PARAM");
   IElementType TIME_LIMIT = new SleecElementType("TIME_LIMIT");
   IElementType TIME_UNIT = new SleecElementType("TIME_UNIT");
   IElementType TIME_VALUE = new SleecElementType("TIME_VALUE");
   IElementType TRIGGER = new SleecElementType("TRIGGER");
 
+  IElementType AND = new SleecTokenType("and");
+  IElementType BOOLEAN = new SleecTokenType("boolean");
   IElementType COMMENT = new SleecTokenType("comment");
   IElementType CONCERN_END = new SleecTokenType("concern_end");
   IElementType CONCERN_START = new SleecTokenType("concern_start");
+  IElementType CONSTANT = new SleecTokenType("constant");
+  IElementType DAYS = new SleecTokenType("days");
   IElementType DEF_END = new SleecTokenType("def_end");
   IElementType DEF_START = new SleecTokenType("def_start");
+  IElementType ELSE = new SleecTokenType("else");
+  IElementType EVENT = new SleecTokenType("event");
+  IElementType EVENTUALLY = new SleecTokenType("eventually");
+  IElementType EXISTS = new SleecTokenType("exists");
+  IElementType FALSE = new SleecTokenType("false");
+  IElementType HOURS = new SleecTokenType("hours");
   IElementType ID = new SleecTokenType("id");
+  IElementType MEANWHILE = new SleecTokenType("meanwhile");
+  IElementType MEASURE = new SleecTokenType("measure");
+  IElementType MINUTES = new SleecTokenType("minutes");
+  IElementType NOT = new SleecTokenType("not");
   IElementType NUMBER = new SleecTokenType("number");
+  IElementType NUMERIC = new SleecTokenType("numeric");
   IElementType OP_1 = new SleecTokenType("+");
   IElementType OP_2 = new SleecTokenType("-");
   IElementType OP_3 = new SleecTokenType("*");
   IElementType OP_4 = new SleecTokenType("/");
   IElementType OP_5 = new SleecTokenType("!");
+  IElementType OR = new SleecTokenType("or");
+  IElementType OTHERWISE = new SleecTokenType("otherwise");
   IElementType RULE_END = new SleecTokenType("rule_end");
   IElementType RULE_START = new SleecTokenType("rule_start");
+  IElementType SCALE = new SleecTokenType("scale");
+  IElementType SECONDS = new SleecTokenType("seconds");
   IElementType STRING = new SleecTokenType("string");
+  IElementType THEN = new SleecTokenType("then");
+  IElementType TRUE = new SleecTokenType("true");
+  IElementType WHEN = new SleecTokenType("when");
+  IElementType WHILE = new SleecTokenType("while");
+  IElementType WITHIN = new SleecTokenType("within");
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {

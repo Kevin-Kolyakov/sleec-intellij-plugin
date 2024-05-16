@@ -30,6 +30,31 @@
     id='regexp:\p{Alpha}\w*'
     string="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
 
+    boolean='boolean'
+    numeric='numeric'
+    scale='scale'
+    measure='measure'
+    constant='constant'
+    event='event'
+    true='true'
+    false='false'
+    within='within'
+    eventually='eventually'
+    seconds='seconds'
+    minutes='minutes'
+    hours='hours'
+    days='days'
+    not='not'
+    and='and'
+    or='or'
+    when='when'
+    then='then'
+    exists='exists'
+    while='while'
+    meanwhile='meanwhile'
+    otherwise='otherwise'
+    else='else'
+
 
     op_1='+'
     op_2='-'
@@ -56,52 +81,52 @@ Defblock::= "def_start" Definition* "def_end"
 
 Definition::= Measure|Constant|Event
 
-Event::= "event" id
+Event::= event id
 
 Measure::= NumMeasure|ScalarMeasure|BoolMeasure
 
 
-BoolValue::= "true" | "false"
-BoolMeasure::= ("measure" id Colon Boolean) {pin=2};
+BoolValue::= true | false
+BoolMeasure::= (measure id Colon Boolean) {pin=2};
 
-NumMeasure::= ("measure" NumVar Colon Numeric)|number
+NumMeasure::= (measure NumVar Colon Numeric)|number
 NumVar::= id
-Constant::= ("constant" ConstantVar "=" number)|ConstantVar
+Constant::= (constant ConstantVar "=" number)|ConstantVar
 ConstantVar::= id
-ScalarMeasure::= ("measure" ScalarVar Colon Scale)
+ScalarMeasure::= (measure ScalarVar Colon Scale)
 ScalarVar::= id
 
-Boolean::= "boolean"
+Boolean::= boolean
 
-Numeric::= "numeric"
+Numeric::= numeric
 
-Scale::= "scale" "(" ScaleParam ("," ScaleParam)* ")"
+Scale::= scale "(" ScaleParam ("," ScaleParam)* ")"
 
 ScaleParam::= number|id
 
 RuleBlock::= "rule_start" Rule* "rule_end"
 
-Rule::= id "when" Trigger ("and" MBoolExpr)? "then" Response
+Rule::= id when Trigger (and MBoolExpr)? then Response
 
 ConcernBlock::=
     "concern_start" Concern* "concern_end"
 
 
 Concern::=
-    ConcernName "exists" Trigger ("and" '{'BoolExpValue'}')? ("while" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )? |
-    ConcernName "when" Trigger ("and" '{'BoolExpValue'}')? ("then" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )?
+    ConcernName "exists" Trigger ("and" '{'BoolExpValue'}')? ("while" ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )? |
+    ConcernName "when" Trigger ("and" '{'BoolExpValue'}')? ("then" ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
 ConcernName::= id
 
 Headless_Concern::=
-   "exists" Trigger ("and" "{"BoolExpValue"}")? ("while" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )? |
-    "when" Trigger ("and" '{'BoolExpValue'}')? ("then" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )?
+   exists Trigger (and "{"BoolExpValue"}")? (while ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )? |
+    when Trigger (and '{'BoolExpValue'}')? (then ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
 
 PurposeBlock::=
     "purpose_start" Purpose* "purpose_end"
 
 Purpose::=
-    PurposeName "exists" Trigger ("and" '{'BoolExpValue'}')? ("while" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )?|
-    PurposeName "when" Trigger ("and" '{'BoolExpValue'}')? ("then" ExtendedResponse)? ("meanwhile" '(' Headless_Concern ')' )?
+    PurposeName exists Trigger (and '{'BoolExpValue'}')? (while ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?|
+    PurposeName when Trigger (and '{'BoolExpValue'}')? (then ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
 PurposeName::= id
 
 Trigger::=
@@ -117,7 +142,7 @@ BoolTerminal::=
    "{" BoolExpValue "}"| BoolValue
 
 Negation::=
-    "(" "not"  '{'BoolExpValue'}' ")"
+    "(" not  '{'BoolExpValue'}' ")"
 
 BinaryOp::=
     ScalarBinaryOp|BoolBinaryOp | NumericalOp
@@ -162,26 +187,26 @@ InnerResponse::=
     "{" Occ (Alternative)? (ND)? ( (Defeater*) )? "}" |
     Occ  (Alternative)? (ND)?
 
-Occ::= "not"? Trigger (TimeLimit)? (INF)?
+Occ::= not? Trigger (TimeLimit)? (INF)?
 
-INF::= "eventually"
+INF::= eventually
 
-TimeLimit::= "within" TimeValue  | "within" "[" TimeValue "," TimeValue "]"
+TimeLimit::= within TimeValue  | within "[" TimeValue "," TimeValue "]"
 
 TimeValue::=NumExp TimeUnit
 
-Alternative::="otherwise" InnerResponse;
+Alternative::=otherwise InnerResponse;
 
-ND::="else" InnerResponse;
+ND::= else InnerResponse;
 
 
-Defeater::="unless" MBoolExpr ("then" InnerResponse)?
+Defeater::="unless" MBoolExpr (then InnerResponse)?
 
 RelOp::="<=" | ">=" | "<>" | "<" | ">"  | "="
 
 
-BoolOp::="and" | "or"
+BoolOp::=and | or
 
-TimeUnit::="seconds" | "minutes" | "hours" | "days"
+TimeUnit::=seconds | minutes | hours | days
 
 private property_recover ::= !(';' | id '=')
