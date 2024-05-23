@@ -29,27 +29,21 @@ public class SleecNumMeasureImpl extends ASTWrapperPsiElement implements SleecNu
   }
 
   @Override
-  @Nullable
+  @NotNull
   public SleecColon getColon() {
-    return findChildByClass(SleecColon.class);
+    return findNotNullChildByClass(SleecColon.class);
   }
 
   @Override
-  @Nullable
+  @NotNull
   public SleecNumVar getNumVar() {
-    return findChildByClass(SleecNumVar.class);
+    return findNotNullChildByClass(SleecNumVar.class);
   }
 
   @Override
-  @Nullable
+  @NotNull
   public SleecNumeric getNumeric() {
-    return findChildByClass(SleecNumeric.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getNumber() {
-    return findChildByType(NUMBER);
+    return findNotNullChildByClass(SleecNumeric.class);
   }
 
 }

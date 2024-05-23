@@ -89,9 +89,9 @@ Measure::= NumMeasure|ScalarMeasure|BoolMeasure
 BoolValue::= true | false
 BoolMeasure::= (measure id Colon Boolean) {pin=2};
 
-NumMeasure::= (measure NumVar Colon Numeric)|number
+NumMeasure::= (measure NumVar Colon Numeric)
 NumVar::= id
-Constant::= (constant ConstantVar "=" number)|ConstantVar
+Constant::= (constant ConstantVar "=" number)
 ConstantVar::= id
 ScalarMeasure::= (measure ScalarVar Colon Scale)
 ScalarVar::= id
@@ -163,7 +163,7 @@ NumExp::=
     NumBinOp|NumTerminal
 
 NumTerminal::=
-      number | "{" id "}" | Constant
+      number | "{" id "}" | ConstantVar
 
 NumBinOp::=
     "(" NumExp BinaryArth NumExp ")"

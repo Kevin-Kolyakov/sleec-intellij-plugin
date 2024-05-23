@@ -400,28 +400,17 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (constant ConstantVar "=" number)|ConstantVar
+  // constant ConstantVar "=" number
   public static boolean Constant(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Constant")) return false;
-    if (!nextTokenIs(b, "<constant>", CONSTANT, ID)) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, CONSTANT, "<constant>");
-    r = Constant_0(b, l + 1);
-    if (!r) r = ConstantVar(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // constant ConstantVar "=" number
-  private static boolean Constant_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Constant_0")) return false;
+    if (!nextTokenIs(b, CONSTANT)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, CONSTANT);
     r = r && ConstantVar(b, l + 1);
     r = r && consumeToken(b, "=");
     r = r && consumeToken(b, NUMBER);
-    exit_section_(b, m, null, r);
+    exit_section_(b, m, CONSTANT, r);
     return r;
   }
 
@@ -860,13 +849,13 @@ public class SleecParser implements PsiParser, LightPsiParser {
   // NumMeasure|ScalarMeasure|BoolMeasure
   public static boolean Measure(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Measure")) return false;
-    if (!nextTokenIs(b, "<measure>", MEASURE, NUMBER)) return false;
+    if (!nextTokenIs(b, MEASURE)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, MEASURE, "<measure>");
+    Marker m = enter_section_(b);
     r = NumMeasure(b, l + 1);
     if (!r) r = ScalarMeasure(b, l + 1);
     if (!r) r = BoolMeasure(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
+    exit_section_(b, m, MEASURE, r);
     return r;
   }
 
@@ -927,40 +916,29 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (measure NumVar Colon Numeric)|number
+  // measure NumVar Colon Numeric
   public static boolean NumMeasure(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NumMeasure")) return false;
-    if (!nextTokenIs(b, "<num measure>", MEASURE, NUMBER)) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, NUM_MEASURE, "<num measure>");
-    r = NumMeasure_0(b, l + 1);
-    if (!r) r = consumeToken(b, NUMBER);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // measure NumVar Colon Numeric
-  private static boolean NumMeasure_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "NumMeasure_0")) return false;
+    if (!nextTokenIs(b, MEASURE)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, MEASURE);
     r = r && NumVar(b, l + 1);
     r = r && Colon(b, l + 1);
     r = r && Numeric(b, l + 1);
-    exit_section_(b, m, null, r);
+    exit_section_(b, m, NUM_MEASURE, r);
     return r;
   }
 
   /* ********************************************************** */
-  // number | "{" id "}" | Constant
+  // number | "{" id "}" | ConstantVar
   public static boolean NumTerminal(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NumTerminal")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, NUM_TERMINAL, "<num terminal>");
     r = consumeToken(b, NUMBER);
     if (!r) r = NumTerminal_1(b, l + 1);
-    if (!r) r = Constant(b, l + 1);
+    if (!r) r = ConstantVar(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }

@@ -10,7 +10,7 @@ public interface SleecConstant extends PsiElement {
   @NotNull
   SleecConstantVar getConstantVar();
 
-  @Nullable
+  @NotNull
   PsiElement getNumber();
 
 }

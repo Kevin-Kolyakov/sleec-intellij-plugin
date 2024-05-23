@@ -30,8 +30,8 @@ public class SleecNumTerminalImpl extends ASTWrapperPsiElement implements SleecN
 
   @Override
   @Nullable
-  public SleecConstant getConstant() {
-    return findChildByClass(SleecConstant.class);
+  public SleecConstantVar getConstantVar() {
+    return findChildByClass(SleecConstantVar.class);
   }
 
   @Override

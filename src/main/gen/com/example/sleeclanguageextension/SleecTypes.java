@@ -26,7 +26,6 @@ public interface SleecTypes {
   IElementType DEFBLOCK = new SleecElementType("DEFBLOCK");
   IElementType DEFEATER = new SleecElementType("DEFEATER");
   IElementType DEFINITION = new SleecElementType("DEFINITION");
-
   IElementType EXTENDED_RESPONSE = new SleecElementType("EXTENDED_RESPONSE");
   IElementType HEADLESS_CONCERN = new SleecElementType("HEADLESS_CONCERN");
   IElementType INF = new SleecElementType("INF");

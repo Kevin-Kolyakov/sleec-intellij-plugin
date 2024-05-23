@@ -7,16 +7,13 @@ import com.intellij.psi.PsiElement;
 
 public interface SleecNumMeasure extends PsiElement {
 
-  @Nullable
+  @NotNull
   SleecColon getColon();
 
-  @Nullable
+  @NotNull
   SleecNumVar getNumVar();
 
-  @Nullable
+  @NotNull
   SleecNumeric getNumeric();
-
-  @Nullable
-  PsiElement getNumber();
 
 }
