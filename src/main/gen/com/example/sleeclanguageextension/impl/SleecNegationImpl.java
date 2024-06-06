@@ -30,8 +30,8 @@ public class SleecNegationImpl extends ASTWrapperPsiElement implements SleecNega
 
   @Override
   @NotNull
-  public SleecBoolExpValue getBoolExpValue() {
-    return findNotNullChildByClass(SleecBoolExpValue.class);
+  public SleecMBoolExpr getMBoolExpr() {
+    return findNotNullChildByClass(SleecMBoolExpr.class);
   }
 
 }

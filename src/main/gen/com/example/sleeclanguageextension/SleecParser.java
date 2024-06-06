@@ -203,8 +203,8 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ConcernName "exists" Trigger ("and" '{'BoolExpValue'}')? ("while" ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )? |
-  //     ConcernName "when" Trigger ("and" '{'BoolExpValue'}')? ("then" ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
+  // ConcernName "exists" Trigger ("and" MBoolExpr)? ("while" ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )? |
+  //     ConcernName "when" Trigger ("and" MBoolExpr)? ("then" ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
   public static boolean Concern(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Concern")) return false;
     if (!nextTokenIs(b, ID)) return false;
@@ -216,7 +216,7 @@ public class SleecParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ConcernName "exists" Trigger ("and" '{'BoolExpValue'}')? ("while" ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
+  // ConcernName "exists" Trigger ("and" MBoolExpr)? ("while" ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
   private static boolean Concern_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Concern_0")) return false;
     boolean r;
@@ -231,22 +231,20 @@ public class SleecParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ("and" '{'BoolExpValue'}')?
+  // ("and" MBoolExpr)?
   private static boolean Concern_0_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Concern_0_3")) return false;
     Concern_0_3_0(b, l + 1);
     return true;
   }
 
-  // "and" '{'BoolExpValue'}'
+  // "and" MBoolExpr
   private static boolean Concern_0_3_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Concern_0_3_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, AND);
-    r = r && consumeToken(b, "{");
-    r = r && BoolExpValue(b, l + 1);
-    r = r && consumeToken(b, "}");
+    r = r && MBoolExpr(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -289,7 +287,7 @@ public class SleecParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ConcernName "when" Trigger ("and" '{'BoolExpValue'}')? ("then" ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
+  // ConcernName "when" Trigger ("and" MBoolExpr)? ("then" ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
   private static boolean Concern_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Concern_1")) return false;
     boolean r;
@@ -304,22 +302,20 @@ public class SleecParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ("and" '{'BoolExpValue'}')?
+  // ("and" MBoolExpr)?
   private static boolean Concern_1_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Concern_1_3")) return false;
     Concern_1_3_0(b, l + 1);
     return true;
   }
 
-  // "and" '{'BoolExpValue'}'
+  // "and" MBoolExpr
   private static boolean Concern_1_3_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Concern_1_3_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, AND);
-    r = r && consumeToken(b, "{");
-    r = r && BoolExpValue(b, l + 1);
-    r = r && consumeToken(b, "}");
+    r = r && MBoolExpr(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -539,8 +535,8 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // exists Trigger (and "{"BoolExpValue"}")? (while ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )? |
-  //     when Trigger (and '{'BoolExpValue'}')? (then ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
+  // exists Trigger (and MBoolExpr)? (while ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )? |
+  //     when Trigger (and MBoolExpr)? (then ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
   public static boolean Headless_Concern(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Headless_Concern")) return false;
     if (!nextTokenIs(b, "<headless concern>", EXISTS, WHEN)) return false;
@@ -552,7 +548,7 @@ public class SleecParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // exists Trigger (and "{"BoolExpValue"}")? (while ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
+  // exists Trigger (and MBoolExpr)? (while ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
   private static boolean Headless_Concern_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Headless_Concern_0")) return false;
     boolean r;
@@ -566,22 +562,20 @@ public class SleecParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (and "{"BoolExpValue"}")?
+  // (and MBoolExpr)?
   private static boolean Headless_Concern_0_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Headless_Concern_0_2")) return false;
     Headless_Concern_0_2_0(b, l + 1);
     return true;
   }
 
-  // and "{"BoolExpValue"}"
+  // and MBoolExpr
   private static boolean Headless_Concern_0_2_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Headless_Concern_0_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, AND);
-    r = r && consumeToken(b, "{");
-    r = r && BoolExpValue(b, l + 1);
-    r = r && consumeToken(b, "}");
+    r = r && MBoolExpr(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -624,7 +618,7 @@ public class SleecParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // when Trigger (and '{'BoolExpValue'}')? (then ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
+  // when Trigger (and MBoolExpr)? (then ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
   private static boolean Headless_Concern_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Headless_Concern_1")) return false;
     boolean r;
@@ -638,22 +632,20 @@ public class SleecParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (and '{'BoolExpValue'}')?
+  // (and MBoolExpr)?
   private static boolean Headless_Concern_1_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Headless_Concern_1_2")) return false;
     Headless_Concern_1_2_0(b, l + 1);
     return true;
   }
 
-  // and '{'BoolExpValue'}'
+  // and MBoolExpr
   private static boolean Headless_Concern_1_2_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Headless_Concern_1_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, AND);
-    r = r && consumeToken(b, "{");
-    r = r && BoolExpValue(b, l + 1);
-    r = r && consumeToken(b, "}");
+    r = r && MBoolExpr(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -873,16 +865,14 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // "(" not  '{'BoolExpValue'}' ")"
+  // "(" not  MBoolExpr ")"
   public static boolean Negation(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Negation")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, NEGATION, "<negation>");
     r = consumeToken(b, "(");
     r = r && consumeToken(b, NOT);
-    r = r && consumeToken(b, "{");
-    r = r && BoolExpValue(b, l + 1);
-    r = r && consumeToken(b, "}");
+    r = r && MBoolExpr(b, l + 1);
     r = r && consumeToken(b, ")");
     exit_section_(b, l, m, r, false, null);
     return r;
@@ -1051,8 +1041,8 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PurposeName exists Trigger (and '{'BoolExpValue'}')? (while ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?|
-  //     PurposeName when Trigger (and '{'BoolExpValue'}')? (then ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
+  // PurposeName exists Trigger (and MBoolExpr)? (while ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?|
+  //     PurposeName when Trigger (and MBoolExpr)? (then ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
   public static boolean Purpose(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Purpose")) return false;
     if (!nextTokenIs(b, ID)) return false;
@@ -1064,7 +1054,7 @@ public class SleecParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // PurposeName exists Trigger (and '{'BoolExpValue'}')? (while ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
+  // PurposeName exists Trigger (and MBoolExpr)? (while ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
   private static boolean Purpose_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Purpose_0")) return false;
     boolean r;
@@ -1079,22 +1069,20 @@ public class SleecParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (and '{'BoolExpValue'}')?
+  // (and MBoolExpr)?
   private static boolean Purpose_0_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Purpose_0_3")) return false;
     Purpose_0_3_0(b, l + 1);
     return true;
   }
 
-  // and '{'BoolExpValue'}'
+  // and MBoolExpr
   private static boolean Purpose_0_3_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Purpose_0_3_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, AND);
-    r = r && consumeToken(b, "{");
-    r = r && BoolExpValue(b, l + 1);
-    r = r && consumeToken(b, "}");
+    r = r && MBoolExpr(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -1137,7 +1125,7 @@ public class SleecParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // PurposeName when Trigger (and '{'BoolExpValue'}')? (then ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
+  // PurposeName when Trigger (and MBoolExpr)? (then ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
   private static boolean Purpose_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Purpose_1")) return false;
     boolean r;
@@ -1152,22 +1140,20 @@ public class SleecParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (and '{'BoolExpValue'}')?
+  // (and MBoolExpr)?
   private static boolean Purpose_1_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Purpose_1_3")) return false;
     Purpose_1_3_0(b, l + 1);
     return true;
   }
 
-  // and '{'BoolExpValue'}'
+  // and MBoolExpr
   private static boolean Purpose_1_3_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Purpose_1_3_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, AND);
-    r = r && consumeToken(b, "{");
-    r = r && BoolExpValue(b, l + 1);
-    r = r && consumeToken(b, "}");
+    r = r && MBoolExpr(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }

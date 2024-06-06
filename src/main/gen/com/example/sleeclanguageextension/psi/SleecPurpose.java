@@ -8,13 +8,13 @@ import com.intellij.psi.PsiElement;
 public interface SleecPurpose extends PsiElement {
 
   @Nullable
-  SleecBoolExpValue getBoolExpValue();
-
-  @Nullable
   SleecExtendedResponse getExtendedResponse();
 
   @Nullable
   SleecHeadlessConcern getHeadlessConcern();
+
+  @Nullable
+  SleecMBoolExpr getMBoolExpr();
 
   @NotNull
   SleecPurposeName getPurposeName();

@@ -29,12 +29,6 @@ public class SleecConcernImpl extends ASTWrapperPsiElement implements SleecConce
   }
 
   @Override
-  @Nullable
-  public SleecBoolExpValue getBoolExpValue() {
-    return findChildByClass(SleecBoolExpValue.class);
-  }
-
-  @Override
   @NotNull
   public SleecConcernName getConcernName() {
     return findNotNullChildByClass(SleecConcernName.class);
@@ -50,6 +44,12 @@ public class SleecConcernImpl extends ASTWrapperPsiElement implements SleecConce
   @Nullable
   public SleecHeadlessConcern getHeadlessConcern() {
     return findChildByClass(SleecHeadlessConcern.class);
+  }
+
+  @Override
+  @Nullable
+  public SleecMBoolExpr getMBoolExpr() {
+    return findChildByClass(SleecMBoolExpr.class);
   }
 
   @Override

@@ -518,6 +518,7 @@ public class _SleecLexer implements FlexLexer {
   public final int getTokenEnd() {
     return getTokenStart() + yylength();
   }
+
   boolean zzAtBOL;
   public void reset(CharSequence buffer, int start, int end, int initialState) {
     zzBuffer = buffer;

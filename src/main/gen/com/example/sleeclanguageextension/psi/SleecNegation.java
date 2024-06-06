@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface SleecNegation extends PsiElement {
 
   @NotNull
-  SleecBoolExpValue getBoolExpValue();
+  SleecMBoolExpr getMBoolExpr();
 
 }

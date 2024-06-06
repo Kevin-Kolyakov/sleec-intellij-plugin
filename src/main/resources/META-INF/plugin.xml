@@ -36,10 +36,15 @@
         <lang.syntaxHighlighterFactory
                 language="sleec"
                 implementationClass="com.example.sleeclanguageextension.SleecSyntaxHighlighterFactory"/>
-        <completion.contributor
-                language="sleec"
-                implementationClass="com.example.sleeclanguageextension.SleecCompletionContributor"/>
+        <configurationType
+                implementation="com.example.sleeclanguageextension.SleecRunConfigurationType"/>
+        <projectTemplatesFactory implementation="com.example.sleeclanguageextension.SleecTemplatesFactory"/>
     </extensions>
-
+    <actions>
+        <action id="your.action.id" class="com.example.sleeclanguageextension.PythonRun"
+                text="Some label" description="Runs python" icon="AllIcons.General.AddJdk">
+            <add-to-group group-id="ToolbarRunGroup" anchor="first" />
+        </action>
+    </actions>
 
 </idea-plugin>

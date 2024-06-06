@@ -7,9 +7,6 @@ import com.intellij.psi.PsiElement;
 
 public interface SleecConcern extends PsiElement {
 
-  @Nullable
-  SleecBoolExpValue getBoolExpValue();
-
   @NotNull
   SleecConcernName getConcernName();
 
@@ -18,6 +15,9 @@ public interface SleecConcern extends PsiElement {
 
   @Nullable
   SleecHeadlessConcern getHeadlessConcern();
+
+  @Nullable
+  SleecMBoolExpr getMBoolExpr();
 
   @NotNull
   SleecTrigger getTrigger();

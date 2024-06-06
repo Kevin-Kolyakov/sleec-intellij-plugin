@@ -30,12 +30,6 @@ public class SleecPurposeImpl extends ASTWrapperPsiElement implements SleecPurpo
 
   @Override
   @Nullable
-  public SleecBoolExpValue getBoolExpValue() {
-    return findChildByClass(SleecBoolExpValue.class);
-  }
-
-  @Override
-  @Nullable
   public SleecExtendedResponse getExtendedResponse() {
     return findChildByClass(SleecExtendedResponse.class);
   }
@@ -44,6 +38,12 @@ public class SleecPurposeImpl extends ASTWrapperPsiElement implements SleecPurpo
   @Nullable
   public SleecHeadlessConcern getHeadlessConcern() {
     return findChildByClass(SleecHeadlessConcern.class);
+  }
+
+  @Override
+  @Nullable
+  public SleecMBoolExpr getMBoolExpr() {
+    return findChildByClass(SleecMBoolExpr.class);
   }
 
   @Override

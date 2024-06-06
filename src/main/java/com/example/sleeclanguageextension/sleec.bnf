@@ -82,7 +82,6 @@ Defblock::= "def_start" Definition* "def_end"
 Definition::= Measure|Constant|Event
 
 Event::= event id
-
 Measure::= NumMeasure|ScalarMeasure|BoolMeasure
 
 
@@ -113,20 +112,20 @@ ConcernBlock::=
 
 
 Concern::=
-    ConcernName "exists" Trigger ("and" '{'BoolExpValue'}')? ("while" ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )? |
-    ConcernName "when" Trigger ("and" '{'BoolExpValue'}')? ("then" ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
+    ConcernName "exists" Trigger ("and" MBoolExpr)? ("while" ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )? |
+    ConcernName "when" Trigger ("and" MBoolExpr)? ("then" ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
 ConcernName::= id
 
 Headless_Concern::=
-   exists Trigger (and "{"BoolExpValue"}")? (while ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )? |
-    when Trigger (and '{'BoolExpValue'}')? (then ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
+   exists Trigger (and MBoolExpr)? (while ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )? |
+    when Trigger (and MBoolExpr)? (then ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
 
 PurposeBlock::=
     "purpose_start" Purpose* "purpose_end"
 
 Purpose::=
-    PurposeName exists Trigger (and '{'BoolExpValue'}')? (while ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?|
-    PurposeName when Trigger (and '{'BoolExpValue'}')? (then ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
+    PurposeName exists Trigger (and MBoolExpr)? (while ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?|
+    PurposeName when Trigger (and MBoolExpr)? (then ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
 PurposeName::= id
 
 Trigger::=
@@ -142,7 +141,7 @@ BoolTerminal::=
    "{" BoolExpValue "}"| BoolValue
 
 Negation::=
-    "(" not  '{'BoolExpValue'}' ")"
+    "(" not  MBoolExpr ")"
 
 BinaryOp::=
     ScalarBinaryOp|BoolBinaryOp | NumericalOp
