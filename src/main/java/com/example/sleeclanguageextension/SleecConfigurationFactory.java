@@ -16,7 +16,7 @@ public class SleecConfigurationFactory extends ConfigurationFactory {
 
     @Override
     public @NotNull String getId() {
-        return SleecRunConfigurationType.ID;
+        return null;
     }
 
     @NotNull

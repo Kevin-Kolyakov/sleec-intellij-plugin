@@ -39,10 +39,11 @@
         <configurationType
                 implementation="com.example.sleeclanguageextension.SleecRunConfigurationType"/>
         <projectTemplatesFactory implementation="com.example.sleeclanguageextension.SleecTemplatesFactory"/>
+        <applicationConfigurable instance="com.example.sleeclanguageextension.SleecSettingsConfigurable" displayName="Sleec Settings"/>
     </extensions>
     <actions>
         <action id="your.action.id" class="com.example.sleeclanguageextension.PythonRun"
-                text="Some label" description="Runs python" icon="AllIcons.General.AddJdk">
+                text="Run .sleec Files" description="Runs .sleec Files" icon="AllIcons.General.AddJdk">
             <add-to-group group-id="ToolbarRunGroup" anchor="first" />
         </action>
     </actions>

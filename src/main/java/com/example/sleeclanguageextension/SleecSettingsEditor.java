@@ -23,13 +23,13 @@ public class SleecSettingsEditor extends SettingsEditor<SleecRunConfiguration> {
     }
 
     @Override
-    protected void resetEditorFrom(SleecRunConfiguration demoRunConfiguration) {
-        scriptPathField.setText(demoRunConfiguration.getScriptName());
+    protected void resetEditorFrom(SleecRunConfiguration sleecRunConfiguration) {
+        scriptPathField.setText(sleecRunConfiguration.getScriptName());
     }
 
     @Override
-    protected void applyEditorTo(@NotNull SleecRunConfiguration demoRunConfiguration) {
-        demoRunConfiguration.setScriptName(scriptPathField.getText());
+    protected void applyEditorTo(@NotNull SleecRunConfiguration sleecRunConfiguration) {
+        sleecRunConfiguration.setScriptName(scriptPathField.getText());
     }
 
     @NotNull
@@ -37,5 +37,4 @@ public class SleecSettingsEditor extends SettingsEditor<SleecRunConfiguration> {
     protected JComponent createEditor() {
         return myPanel;
     }
-
 }
