@@ -1,5 +1,6 @@
 package com.example.sleeclanguageextension;
 
+import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 
@@ -16,66 +17,65 @@ import java.nio.file.Path;
 import java.io.File;
 
 import java.io.*;
-
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.fileChooser.FileChooser;
-import com.intellij.openapi.fileChooser.FileChooserDescriptor;
+
+
+import com.intellij.execution.ui.ConsoleView;
+import com.intellij.execution.ui.ConsoleViewContentType;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import com.intellij.ui.content.Content;
+import com.intellij.ui.content.ContentFactory;
+import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.ToolWindowManager;
 
 public class PythonRun extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
+        Project project = e.getProject();
+        if (project == null) {
+            return;
+        }
+
         // Define what files can be selected
         FileChooserDescriptor descriptor = new FileChooserDescriptor(true, false, false, false, false, false);
         descriptor.setTitle("Select a SLEEC File");
 
         // Open the file chooser dialog
-        VirtualFile file = FileChooser.chooseFile(descriptor, e.getProject(), null);
+        VirtualFile file = FileChooser.chooseFile(descriptor, project, null);
         if (file != null) {
             // Read the file content
             Path filePath = Path.of(file.getPath());
             try {
                 String content = Files.readString(filePath);
-                // Process the file content (e.g., call your check_concern function)
-                String response = checkConcernWithPython(content);
-                // Display the response
-                Messages.showMessageDialog(e.getProject(), response, "SLEEC Check Result", Messages.getInformationIcon());
+
+                // Get the ToolWindow instance
+                ToolWindow toolWindow = ToolWindowManager.getInstance(project).getToolWindow("SleecToolWindow");
+                if (toolWindow != null) {
+                    SleecToolWindowPanel panel = (SleecToolWindowPanel) toolWindow.getContentManager().getContent(0).getComponent();
+
+                    // Process the file content (e.g., call your check_concern function)
+                    String response = checkConcernWithPython(content, panel);
+
+                    // Print the response to the console
+                    panel.print(response);
+                } else {
+                    Messages.showErrorDialog(project, "Tool window not found", "Error");
+                    return;
+                }
             } catch (IOException ioException) {
-                Messages.showErrorDialog(e.getProject(), "Error reading file: " + ioException.getMessage(), "Error");
+                Messages.showErrorDialog(project, "Error reading file: " + ioException.getMessage(), "Error");
             }
         }
     }
 
-    private String checkConcernWithPython(String content) throws IOException {
+    private String checkConcernWithPython(String content, SleecToolWindowPanel panel) throws IOException {
         // Create a temporary directory
         File tempDir = Files.createTempDirectory("sleec_scripts").toFile();
         tempDir.deleteOnExit();
@@ -127,7 +127,7 @@ public class PythonRun extends AnAction {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(installProcess.getInputStream()))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+                panel.print(line);
             }
         }
 
@@ -176,5 +176,3 @@ public class PythonRun extends AnAction {
         }
     }
 }
-
-

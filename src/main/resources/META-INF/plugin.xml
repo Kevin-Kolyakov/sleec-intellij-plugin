@@ -40,6 +40,7 @@
                 implementation="com.example.sleeclanguageextension.SleecRunConfigurationType"/>
         <projectTemplatesFactory implementation="com.example.sleeclanguageextension.SleecTemplatesFactory"/>
         <applicationConfigurable instance="com.example.sleeclanguageextension.SleecSettingsConfigurable" displayName="Sleec Settings"/>
+        <toolWindow id="SleecToolWindow" anchor="bottom" factoryClass="com.example.sleeclanguageextension.SleecToolWindowFactory"/>
     </extensions>
     <actions>
         <action id="your.action.id" class="com.example.sleeclanguageextension.PythonRun"
