@@ -16,9 +16,6 @@ from SleecNorm import check_situational_conflict
 script_dir = dirname(__file__)
 sys.path.append(script_dir)
 
-# Print sys.path for debugging purposes
-print("sys.path:", sys.path)
-
 # Ensure the directory containing `sleecParser` is in `sys.path`
 sleec_dir = join(script_dir, 'Analyzer')  # Adjust this to the correct path
 sys.path.append(sleec_dir)

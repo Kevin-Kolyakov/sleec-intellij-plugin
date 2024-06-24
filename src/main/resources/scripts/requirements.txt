@@ -1,0 +1,3 @@
+termcolor
+pysmt
+textx

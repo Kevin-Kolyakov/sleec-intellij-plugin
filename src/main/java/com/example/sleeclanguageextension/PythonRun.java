@@ -5,17 +5,31 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 
 import java.io.InputStreamReader;
-import java.net.URL;
-import java.nio.file.Paths;
+import com.intellij.openapi.fileChooser.FileChooser;
+import com.intellij.openapi.fileChooser.FileChooserDescriptor;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.io.File;
 
+import java.io.*;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.fileChooser.FileChooser;
@@ -23,20 +37,18 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Objects;
-
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class PythonRun extends AnAction {
@@ -50,9 +62,9 @@ public class PythonRun extends AnAction {
         VirtualFile file = FileChooser.chooseFile(descriptor, e.getProject(), null);
         if (file != null) {
             // Read the file content
-            Path filePath = Paths.get(file.getPath());
+            Path filePath = Path.of(file.getPath());
             try {
-                String content = new String(Files.readAllBytes(filePath));
+                String content = Files.readString(filePath);
                 // Process the file content (e.g., call your check_concern function)
                 String response = checkConcernWithPython(content);
                 // Display the response
@@ -64,18 +76,73 @@ public class PythonRun extends AnAction {
     }
 
     private String checkConcernWithPython(String content) throws IOException {
-        // Get the path to the Python script from resources
-        String scriptContent = new String(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("scripts/runSleec.py")).readAllBytes());
+        // Create a temporary directory
+        File tempDir = Files.createTempDirectory("sleec_scripts").toFile();
+        tempDir.deleteOnExit();
 
-        // Write the script to a temporary file
-        File tempScript = File.createTempFile("runSleec", ".py");
-        tempScript.deleteOnExit();
-        try (FileWriter writer = new FileWriter(tempScript)) {
-            writer.write(scriptContent);
+        // List of files to copy from resources to the temporary directory
+        List<String> filesToCopy = Arrays.asList(
+                "scripts/Analyzer/__init__.py",
+                "scripts/Analyzer/abstraction.py",
+                "scripts/Analyzer/analyzer.py",
+                "scripts/Analyzer/CHC_interpolate.py",
+                "scripts/Analyzer/COMM_NET_domain.py",
+                "scripts/Analyzer/constraint_solver.py",
+                "scripts/Analyzer/derivation_rule.py",
+                "scripts/Analyzer/domain.py",
+                "scripts/Analyzer/logic_operator.py",
+                "scripts/Analyzer/proof_reader.py",
+                "scripts/Analyzer/read_trace.py",
+                "scripts/Analyzer/resource_type.py",
+                "scripts/Analyzer/routes.py",
+                "scripts/Analyzer/sleecOp.py",
+                "scripts/Analyzer/template_domain.py",
+                "scripts/Analyzer/template_rules.py",
+                "scripts/Analyzer/test_domain.py",
+                "scripts/Analyzer/test_rules.py",
+                "scripts/Analyzer/trace_ult.py",
+                "scripts/Analyzer/type_constructor.py",
+                "scripts/Analyzer/type_query.py",
+                "scripts/commandline_tool.py",
+                "scripts/launch_perf_exp.py",
+                "scripts/proof.txt",
+                "scripts/runSleec.py",
+                "scripts/simplified.txt",
+                "scripts/sleec-gramar.tx",
+                "scripts/sleecFrontEnd.py",
+                "scripts/SleecNorm.py",
+                "scripts/sleecParser.py",
+                "scripts/requirements.txt"
+        );
+
+        // Copy each file from resources to the temporary directory
+        for (String resourcePath : filesToCopy) {
+            copyResourceToDirectory(resourcePath, tempDir);
         }
 
-        // Execute the temporary Python script
-        ProcessBuilder processBuilder = new ProcessBuilder("python", tempScript.getAbsolutePath(), content);
+        // Install the required Python packages
+        ProcessBuilder installProcessBuilder = new ProcessBuilder("pip", "install", "-r", new File(tempDir, "requirements.txt").getAbsolutePath());
+        installProcessBuilder.redirectErrorStream(true);
+        Process installProcess = installProcessBuilder.start();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(installProcess.getInputStream()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        }
+
+        // Write content to a temporary file
+        File tempContentFile = File.createTempFile("sleec_content", ".sleec", tempDir);
+        try (FileWriter writer = new FileWriter(tempContentFile)) {
+            writer.write(content);
+        }
+
+        // Path to the main script to run
+        File mainScript = new File(tempDir, "runSleec.py");
+
+        // Execute the temporary Python script with the path to the content file
+        ProcessBuilder processBuilder = new ProcessBuilder("python", mainScript.getAbsolutePath(), tempContentFile.getAbsolutePath());
+        processBuilder.directory(tempDir);  // Set the working directory to the temp directory
         processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
 
@@ -90,10 +157,24 @@ public class PythonRun extends AnAction {
         return output.toString();
     }
 
+    private void copyResourceToDirectory(String resourcePath, File destinationDir) throws IOException {
+        InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(resourcePath);
+        if (resourceStream == null) {
+            throw new FileNotFoundException("Resource not found: " + resourcePath);
+        }
+
+        File destinationFile = new File(destinationDir, new File(resourcePath).getName());
+        destinationFile.deleteOnExit();
+
+        try (InputStream inStream = resourceStream;
+             OutputStream outStream = new FileOutputStream(destinationFile)) {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inStream.read(buffer)) != -1) {
+                outStream.write(buffer, 0, bytesRead);
+            }
+        }
+    }
 }
-
-
-
-
 
 
