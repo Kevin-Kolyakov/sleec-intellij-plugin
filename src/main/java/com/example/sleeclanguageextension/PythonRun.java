@@ -1,6 +1,4 @@
 package com.example.sleeclanguageextension;
-
-import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 
@@ -23,15 +21,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
-
-
-import com.intellij.execution.ui.ConsoleView;
-import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.ui.content.Content;
-import com.intellij.ui.content.ContentFactory;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 
@@ -64,7 +54,7 @@ public class PythonRun extends AnAction {
                     String response = checkConcernWithPython(content, panel);
 
                     // Print the response to the console
-                    panel.print(response);
+                    panel.print(processResponse(response));
                 } else {
                     Messages.showErrorDialog(project, "Tool window not found", "Error");
                     return;
@@ -111,24 +101,12 @@ public class PythonRun extends AnAction {
                 "scripts/sleec-gramar.tx",
                 "scripts/sleecFrontEnd.py",
                 "scripts/SleecNorm.py",
-                "scripts/sleecParser.py",
-                "scripts/requirements.txt"
+                "scripts/sleecParser.py"
         );
 
         // Copy each file from resources to the temporary directory
         for (String resourcePath : filesToCopy) {
             copyResourceToDirectory(resourcePath, tempDir);
-        }
-
-        // Install the required Python packages
-        ProcessBuilder installProcessBuilder = new ProcessBuilder("pip", "install", "-r", new File(tempDir, "requirements.txt").getAbsolutePath());
-        installProcessBuilder.redirectErrorStream(true);
-        Process installProcess = installProcessBuilder.start();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(installProcess.getInputStream()))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                panel.print(line);
-            }
         }
 
         // Write content to a temporary file
@@ -174,5 +152,10 @@ public class PythonRun extends AnAction {
                 outStream.write(buffer, 0, bytesRead);
             }
         }
+    }
+
+    private String processResponse(String response) {
+        response = response.replace("\\n", "\n");
+        return response;
     }
 }

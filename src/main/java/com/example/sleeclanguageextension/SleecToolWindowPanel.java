@@ -23,5 +23,6 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
 
     public void print(String text) {
         textArea.append(text + "\n");
+        textArea.setCaretPosition(textArea.getDocument().getLength()); // Scroll to the bottom
     }
 }
