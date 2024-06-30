@@ -88,6 +88,8 @@ public interface SleecTypes {
   IElementType OP_5 = new SleecTokenType("!");
   IElementType OR = new SleecTokenType("or");
   IElementType OTHERWISE = new SleecTokenType("otherwise");
+  IElementType PURPOSE_END = new SleecTokenType("purpose_end");
+  IElementType PURPOSE_START = new SleecTokenType("purpose_start");
   IElementType RULE_END = new SleecTokenType("rule_end");
   IElementType RULE_START = new SleecTokenType("rule_start");
   IElementType SCALE = new SleecTokenType("scale");

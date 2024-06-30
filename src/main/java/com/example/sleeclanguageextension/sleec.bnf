@@ -27,6 +27,8 @@
     rule_end = 'rule_end'
     concern_start = 'concern_start'
     concern_end = 'concern_end'
+    purpose_start = 'purpose_start'
+    purpose_end = 'purpose_end'
     id='regexp:\p{Alpha}\w*'
     string="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
 

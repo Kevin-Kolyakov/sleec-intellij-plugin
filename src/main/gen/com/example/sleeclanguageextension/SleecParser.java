@@ -1197,15 +1197,16 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // "purpose_start" Purpose* "purpose_end"
+  // purpose_start Purpose* purpose_end
   public static boolean PurposeBlock(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PurposeBlock")) return false;
+    if (!nextTokenIs(b, PURPOSE_START)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, PURPOSE_BLOCK, "<purpose block>");
-    r = consumeToken(b, "purpose_start");
+    Marker m = enter_section_(b);
+    r = consumeToken(b, PURPOSE_START);
     r = r && PurposeBlock_1(b, l + 1);
-    r = r && consumeToken(b, "purpose_end");
-    exit_section_(b, l, m, r, false, null);
+    r = r && consumeToken(b, PURPOSE_END);
+    exit_section_(b, m, PURPOSE_BLOCK, r);
     return r;
   }
 
