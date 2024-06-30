@@ -43,8 +43,24 @@
         <toolWindow id="SleecToolWindow" anchor="bottom" factoryClass="com.example.sleeclanguageextension.SleecToolWindowFactory"/>
     </extensions>
     <actions>
-        <action id="your.action.id" class="com.example.sleeclanguageextension.PythonRun"
-                text="Run .sleec Files" description="Runs .sleec Files" icon="AllIcons.General.AddJdk">
+        <action id="concern" class="com.example.sleeclanguageextension.PythonRun"
+                text="Run .sleec Files" description="Runs .sleec Files" icon="AllIcons.General.BalloonWarning">
+            <add-to-group group-id="ToolbarRunGroup" anchor="first" />
+        </action>
+        <action id="redundancy" class="com.example.sleeclanguageextension.PythonRun2"
+                text="Checks for Redundancy" description="Checks for Redundancy" icon="AllIcons.General.LayoutEditorOnly">
+            <add-to-group group-id="ToolbarRunGroup" anchor="first" />
+        </action>
+        <action id="conflicts" class="com.example.sleeclanguageextension.PythonRun3"
+                text="Checks for Conflicts" description="Checks for Conflicts" icon="AllIcons.General.ExclMark">
+            <add-to-group group-id="ToolbarRunGroup" anchor="first" />
+        </action>
+        <action id="purpose" class="com.example.sleeclanguageextension.PythonRun4"
+                text="Checks for Purpose" description="Checks for Purpose" icon="AllIcons.General.TodoQuestion">
+            <add-to-group group-id="ToolbarRunGroup" anchor="first" />
+        </action>
+        <action id="situational.conflicts" class="com.example.sleeclanguageextension.PythonRun5"
+                text="Checks for Situational Conflicts" description="Checks for situational conflicts" icon="AllIcons.General.InspectionsMixed">
             <add-to-group group-id="ToolbarRunGroup" anchor="first" />
         </action>
     </actions>
