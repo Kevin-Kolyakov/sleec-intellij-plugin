@@ -41,6 +41,8 @@
         <projectTemplatesFactory implementation="com.example.sleeclanguageextension.SleecTemplatesFactory"/>
         <applicationConfigurable instance="com.example.sleeclanguageextension.SleecSettingsConfigurable" displayName="Sleec Settings"/>
         <toolWindow id="SleecToolWindow" anchor="bottom" factoryClass="com.example.sleeclanguageextension.SleecToolWindowFactory"/>
+        <lang.foldingBuilder language="sleec" implementationClass="com.example.sleeclanguageextension.SleecFoldingBuilder"/>
+        <completion.contributor language="sleec" implementationClass="com.example.sleeclanguageextension.SleecCompletionContributor"/>
     </extensions>
     <actions>
         <action id="concern" class="com.example.sleeclanguageextension.PythonRun"
