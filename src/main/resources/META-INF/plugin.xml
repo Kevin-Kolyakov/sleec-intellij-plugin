@@ -43,6 +43,7 @@
         <toolWindow id="SleecToolWindow" anchor="bottom" factoryClass="com.example.sleeclanguageextension.SleecToolWindowFactory"/>
         <lang.foldingBuilder language="sleec" implementationClass="com.example.sleeclanguageextension.SleecFoldingBuilder"/>
         <completion.contributor language="sleec" implementationClass="com.example.sleeclanguageextension.SleecCompletionContributor"/>
+        <annotator language="sleec" implementationClass="com.example.sleeclanguageextension.reference.SleecAnnotator"/>
     </extensions>
     <actions>
         <action id="concern" class="com.example.sleeclanguageextension.PythonRun"
