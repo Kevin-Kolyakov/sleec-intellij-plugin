@@ -13,11 +13,9 @@
   elementTypeClass="com.example.sleeclanguageextension.SleecElementType"
   tokenTypeClass="com.example.sleeclanguageextension.SleecTokenType"
 
-    psiImplUtilClass="com.example.sleeclanguageextension.SleecPsiImplUtil"
+  psiImplUtilClass="com.example.sleeclanguageextension.SleecPsiImplUtil"
 
   tokens=[
-
-
     space='regexp:\s+'
     comment='regexp://.*'
     number='regexp:\d+(\.\d*)?'
@@ -57,44 +55,40 @@
     otherwise='otherwise'
     else='else'
 
-
     op_1='+'
     op_2='-'
     op_3='*'
     op_4='/'
     op_5='!'
-
-
   ]
 
   name(".*id")='id'
   extends(".*id")=expr
 }
 
-
-root ::=  root_item *
-private root_item ::=  property  {pin=1 recoverWhile=property_recover}
+root ::= root_item *
+private root_item ::= property {pin=1 recoverWhile=property_recover}
 Colon ::= ":"
 property ::= !<<eof>> propert {pin=1}
 
 propert::= Defblock RuleBlock (ConcernBlock)? (PurposeBlock)?
 
-Defblock::= "def_start" Definition* "def_end"
+Defblock::= "def_start" Definition* "def_end" {pin=1 recoverWhile=Defblock_recover}
+private Defblock_recover ::= !(def_end | rule_start | concern_start | purpose_start | <<eof>>)
 
-Definition::= Measure|Constant|Event
+Definition::= Measure | Constant | Event
 
 Event::= event id
-Measure::= NumMeasure|ScalarMeasure|BoolMeasure
-
+Measure::= NumMeasure | ScalarMeasure | BoolMeasure
 
 BoolValue::= true | false
-BoolMeasure::= (measure id Colon Boolean) {pin=2};
+BoolMeasure::= measure id Colon Boolean {pin=2}
 
-NumMeasure::= (measure NumVar Colon Numeric)
+NumMeasure::= measure NumVar Colon Numeric
 NumVar::= id
-Constant::= (constant ConstantVar "=" number)
+Constant::= constant ConstantVar "=" number {pin=2}
 ConstantVar::= id
-ScalarMeasure::= (measure ScalarVar Colon Scale)
+ScalarMeasure::= measure ScalarVar Colon Scale
 ScalarVar::= id
 
 Boolean::= boolean
@@ -103,15 +97,16 @@ Numeric::= numeric
 
 Scale::= scale "(" ScaleParam ("," ScaleParam)* ")"
 
-ScaleParam::= number|id
+ScaleParam::= number | id
 
-RuleBlock::= "rule_start" Rule* "rule_end"
+RuleBlock::= "rule_start" Rule* "rule_end" {pin=1 recoverWhile=RuleBlock_recover}
+private RuleBlock_recover ::= !(rule_end | def_start | concern_start | purpose_start | <<eof>>)
 
 Rule::= id when Trigger (and MBoolExpr)? then Response
 
 ConcernBlock::=
-    "concern_start" Concern* "concern_end"
-
+    "concern_start" Concern* "concern_end" {pin=1 recoverWhile=ConcernBlock_recover}
+private ConcernBlock_recover ::= !(concern_end | def_start | rule_start | purpose_start | <<eof>>)
 
 Concern::=
     ConcernName "exists" Trigger ("and" MBoolExpr)? ("while" ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )? |
@@ -119,95 +114,72 @@ Concern::=
 ConcernName::= id
 
 Headless_Concern::=
-   exists Trigger (and MBoolExpr)? (while ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )? |
+    exists Trigger (and MBoolExpr)? (while ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )? |
     when Trigger (and MBoolExpr)? (then ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
 
 PurposeBlock::=
-    "purpose_start" Purpose* "purpose_end"
+    "purpose_start" Purpose* "purpose_end" {pin=1 recoverWhile=PurposeBlock_recover}
+private PurposeBlock_recover ::= !(purpose_end | def_start | rule_start | concern_start | <<eof>>)
 
 Purpose::=
-    PurposeName exists Trigger (and MBoolExpr)? (while ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?|
+    PurposeName exists Trigger (and MBoolExpr)? (while ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )? |
     PurposeName when Trigger (and MBoolExpr)? (then ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
 PurposeName::= id
 
-Trigger::=
-    id
+Trigger::= id
 
-BoolExp::=
-    Negation|BinaryOp|BoolTerminal
+BoolExp::= Negation | BinaryOp | BoolTerminal
 
-BoolExpValue::=
-    id
+BoolExpValue::= id
 
-BoolTerminal::=
-   "{" BoolExpValue "}"| BoolValue
+BoolTerminal::= "{" BoolExpValue "}" | BoolValue
 
-Negation::=
-    "(" not  MBoolExpr ")"
+Negation::= "(" not MBoolExpr ")"
 
-BinaryOp::=
-    ScalarBinaryOp|BoolBinaryOp | NumericalOp
+BinaryOp::= ScalarBinaryOp | BoolBinaryOp | NumericalOp
 
-ScalarBinaryOp::=
-    "(" ScalarTerminal RelOp ScalarTerminal ")"
+ScalarBinaryOp::= "(" ScalarTerminal RelOp ScalarTerminal ")"
 
-ScalarTerminal::=
-    ("{"id"}")| ScaleParam
+ScalarTerminal::= ("{" id "}") | ScaleParam
 
-BoolBinaryOp::=
-    "(" BoolExp BoolOp BoolExp ")"
+BoolBinaryOp::= "(" BoolExp BoolOp BoolExp ")"
 
-NumericalOp::=
-    "(" NumExp RelOp NumExp ")"
+NumericalOp::= "(" NumExp RelOp NumExp ")"
 
-NumExp::=
-    NumBinOp|NumTerminal
+NumExp::= NumBinOp | NumTerminal
 
-NumTerminal::=
-      number | "{" id "}" | ConstantVar
+NumTerminal::= number | "{" id "}" | ConstantVar
 
-NumBinOp::=
-    "(" NumExp BinaryArth NumExp ")"
+NumBinOp::= "(" NumExp BinaryArth NumExp ")"
 
-BinaryArth::=
-    "+" | "-" | "*"
+BinaryArth::= "+" | "-" | "*"
 
-MBoolExpr::=
-    BoolExp
+MBoolExpr::= BoolExp
 
+ExtendedResponse::= Response ("while" ExtendedResponse)?
 
-ExtendedResponse::=
-    Response ("while" ExtendedResponse)?
+Response::= Occ (Alternative)? (ND)? (Defeater*)?
 
-
-Response::=
-   Occ (Alternative)?  (ND)? (Defeater*)?
-
-
-InnerResponse::=
-    "{" Occ (Alternative)? (ND)? ( (Defeater*) )? "}" |
-    Occ  (Alternative)? (ND)?
+InnerResponse::= "{" Occ (Alternative)? (ND)? ( (Defeater*) )? "}" | Occ (Alternative)? (ND)?
 
 Occ::= not? Trigger (TimeLimit)? (INF)?
 
 INF::= eventually
 
-TimeLimit::= within TimeValue  | within "[" TimeValue "," TimeValue "]"
+TimeLimit::= within TimeValue | within "[" TimeValue "," TimeValue "]"
 
-TimeValue::=NumExp TimeUnit
+TimeValue::= NumExp TimeUnit
 
-Alternative::=otherwise InnerResponse;
+Alternative::= otherwise InnerResponse
 
-ND::= else InnerResponse;
+ND::= else InnerResponse
 
+Defeater::= "unless" MBoolExpr (then InnerResponse)?
 
-Defeater::="unless" MBoolExpr (then InnerResponse)?
+RelOp::= "<=" | ">=" | "<>" | "<" | ">" | "="
 
-RelOp::="<=" | ">=" | "<>" | "<" | ">"  | "="
+BoolOp::= and | or
 
-
-BoolOp::=and | or
-
-TimeUnit::=seconds | minutes | hours | days
+TimeUnit::= seconds | minutes | hours | days
 
 private property_recover ::= !(';' | id '=')

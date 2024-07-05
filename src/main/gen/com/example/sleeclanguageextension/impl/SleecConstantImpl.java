@@ -35,9 +35,9 @@ public class SleecConstantImpl extends ASTWrapperPsiElement implements SleecCons
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getNumber() {
-    return findNotNullChildByType(NUMBER);
+    return findChildByType(NUMBER);
   }
 
 }
