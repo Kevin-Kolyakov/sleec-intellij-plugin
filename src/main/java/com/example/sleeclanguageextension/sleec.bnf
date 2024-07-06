@@ -66,6 +66,18 @@
   extends(".*id")=expr
 }
 
+/*
+To change grammar:
+1. Change the grammar in the .bnf file
+2. Generate JFlex lexer by right clicking on this file
+3. Run Jflex Generator by right clicking at the generated lexer file
+4. Copy the generated file to the sleeclanguageextension package
+5. Define the ZZatBol boolean in the generated lexer file
+6. Run the parser generator by right clicking on this file
+7. There will be an error where there are multiple duplicates in the parser. Delete the ElementTypes duplicates, not the SleecTypes
+8. When trying to run, there will be an error in the generated parser. This is because the parser has an incorrect import,
+   change it to the one in the previously generated one
+ */
 root ::= root_item *
 private root_item ::= property {pin=1 recoverWhile=property_recover}
 Colon ::= ":"
