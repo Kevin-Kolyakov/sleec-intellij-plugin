@@ -8,10 +8,10 @@ import com.intellij.psi.PsiElement;
 public interface SleecNumTerminal extends PsiElement {
 
   @Nullable
-  SleecConstantVar getConstantVar();
+  SleecConstantName getConstantName();
 
   @Nullable
-  PsiElement getId();
+  SleecNumName getNumName();
 
   @Nullable
   PsiElement getNumber();

@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface SleecConstant extends PsiElement {
 
   @NotNull
-  SleecConstantVar getConstantVar();
+  SleecConstantName getConstantName();
 
   @Nullable
   PsiElement getNumber();

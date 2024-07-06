@@ -17,15 +17,49 @@ public class SleecAnnotator implements Annotator {
         SleecDefinitionVisitor definitionVisitor = new SleecDefinitionVisitor();
         file.accept(definitionVisitor);
 
-        Set<String> definedDefs = definitionVisitor.getDefinedDefs();
+        Set<String> definedBools = definitionVisitor.getDefinedBools();
+        Set<String> definedNums = definitionVisitor.getDefinedNums();
+        Set<String> definedEvents = definitionVisitor.getDefinedEvents();
+        Set<String> definedConsts = definitionVisitor.getDefinedConsts();
+        Set<String> definedScales = definitionVisitor.getDefinedScales();
+        Set<String> definedScaleVals = definitionVisitor.getDefinedScaleVals();
 
-        if (element.getNode().getElementType() == SleecTypes.TRIGGER || element.getNode().getElementType() == SleecTypes.BOOL_EXP_VALUE) {
+        if (element.getNode().getElementType() == SleecTypes.TRIGGER) {
             String elementText = element.getText();
-            if (!definedDefs.contains(elementText)) {
-                holder.newAnnotation(HighlightSeverity.ERROR, "Undefined definition")
+            if (!definedEvents.contains(elementText)) {
+                holder.newAnnotation(HighlightSeverity.ERROR, "Undefined or incorrect type: " + elementText + " (expected event)")
                         .range(element)
                         .create();
             }
+        } else if (element.getNode().getElementType() == SleecTypes.BOOL_NAME) {
+            String elementText = element.getText();
+            if (!definedBools.contains(elementText)) {
+                holder.newAnnotation(HighlightSeverity.ERROR, "Undefined or incorrect type: " + elementText + " (expected boolean)")
+                        .range(element)
+                        .create();
+            }
+        } else if (element.getNode().getElementType() == SleecTypes.NUM_NAME) {
+            String elementText = element.getText();
+            if (!definedNums.contains(elementText) && !definedConsts.contains(elementText)) {
+                holder.newAnnotation(HighlightSeverity.ERROR, "Undefined or incorrect type: " + elementText + " (expected numeric or constant)")
+                        .range(element)
+                        .create();
+            }
+        } else if (element.getNode().getElementType() == SleecTypes.SCALAR_NAME) {
+            String elementText = element.getText();
+            if (!definedScales.contains(elementText)) {
+                holder.newAnnotation(HighlightSeverity.ERROR, "Undefined or incorrect type: " + elementText + " (expected scale)")
+                        .range(element)
+                        .create();
+            }
+        } else if (element.getNode().getElementType() == SleecTypes.SCALE_PARAM) {
+            String elementText = element.getText();
+                if (!(definedScaleVals.contains(elementText))&& !(definedScales.contains(elementText)) && !(definedConsts.contains(elementText))) {
+                    holder.newAnnotation(HighlightSeverity.ERROR, "Undefined or incorrect type: " + elementText + " (expected scale value or scalar or constant)")
+                            .range(element)
+                            .create();
+                }
         }
     }
 }
+

@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface SleecEvent extends PsiElement {
 
   @NotNull
-  PsiElement getId();
+  SleecEventName getEventName();
 
 }

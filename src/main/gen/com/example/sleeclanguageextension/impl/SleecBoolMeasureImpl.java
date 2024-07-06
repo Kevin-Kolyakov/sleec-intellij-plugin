@@ -29,6 +29,12 @@ public class SleecBoolMeasureImpl extends ASTWrapperPsiElement implements SleecB
   }
 
   @Override
+  @NotNull
+  public SleecBoolName getBoolName() {
+    return findNotNullChildByClass(SleecBoolName.class);
+  }
+
+  @Override
   @Nullable
   public SleecBoolean getBoolean() {
     return findChildByClass(SleecBoolean.class);
@@ -38,12 +44,6 @@ public class SleecBoolMeasureImpl extends ASTWrapperPsiElement implements SleecB
   @Nullable
   public SleecColon getColon() {
     return findChildByClass(SleecColon.class);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getId() {
-    return findNotNullChildByType(ID);
   }
 
 }

@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface SleecBoolTerminal extends PsiElement {
 
   @Nullable
-  SleecBoolExpValue getBoolExpValue();
+  SleecBoolName getBoolName();
 
   @Nullable
   SleecBoolValue getBoolValue();

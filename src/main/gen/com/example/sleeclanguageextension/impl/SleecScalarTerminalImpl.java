@@ -30,14 +30,14 @@ public class SleecScalarTerminalImpl extends ASTWrapperPsiElement implements Sle
 
   @Override
   @Nullable
-  public SleecScaleParam getScaleParam() {
-    return findChildByClass(SleecScaleParam.class);
+  public SleecScalarName getScalarName() {
+    return findChildByClass(SleecScalarName.class);
   }
 
   @Override
   @Nullable
-  public PsiElement getId() {
-    return findChildByType(ID);
+  public SleecScaleParam getScaleParam() {
+    return findChildByClass(SleecScaleParam.class);
   }
 
 }

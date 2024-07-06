@@ -8,9 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface SleecScalarTerminal extends PsiElement {
 
   @Nullable
-  SleecScaleParam getScaleParam();
+  SleecScalarName getScalarName();
 
   @Nullable
-  PsiElement getId();
+  SleecScaleParam getScaleParam();
 
 }

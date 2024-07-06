@@ -11,7 +11,7 @@ public interface SleecNumMeasure extends PsiElement {
   SleecColon getColon();
 
   @NotNull
-  SleecNumVar getNumVar();
+  SleecNumName getNumName();
 
   @NotNull
   SleecNumeric getNumeric();

@@ -30,8 +30,8 @@ public class SleecBoolTerminalImpl extends ASTWrapperPsiElement implements Sleec
 
   @Override
   @Nullable
-  public SleecBoolExpValue getBoolExpValue() {
-    return findChildByClass(SleecBoolExpValue.class);
+  public SleecBoolName getBoolName() {
+    return findChildByClass(SleecBoolName.class);
   }
 
   @Override

@@ -16,7 +16,7 @@ public class SleecPsiImplUtil {
     }
 
     public static String getValue(SleecProperty element) {
-        ASTNode valueNode = element.getNode().findChildByType(SleecTypes.NUM_VAR);
+        ASTNode valueNode = element.getNode().findChildByType(SleecTypes.NUM_NAME);
         if (valueNode != null) {
             return valueNode.getText();
         } else {

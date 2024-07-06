@@ -78,18 +78,19 @@ private Defblock_recover ::= !(def_end | rule_start | concern_start | purpose_st
 
 Definition::= Measure | Constant | Event
 
-Event::= event id
+Event::= event EventName
+EventName::= id
 Measure::= NumMeasure | ScalarMeasure | BoolMeasure
 
 BoolValue::= true | false
-BoolMeasure::= measure id Colon Boolean {pin=2}
-
-NumMeasure::= measure NumVar Colon Numeric
-NumVar::= id
-Constant::= constant ConstantVar "=" number {pin=2}
-ConstantVar::= id
-ScalarMeasure::= measure ScalarVar Colon Scale
-ScalarVar::= id
+BoolMeasure::= measure BoolName Colon Boolean {pin=2}
+BoolName ::= id
+NumMeasure::= measure NumName Colon Numeric
+NumName::= id
+Constant::= constant ConstantName "=" number {pin=2}
+ConstantName::= id
+ScalarMeasure::= measure ScalarName Colon Scale
+ScalarName::= id
 
 Boolean::= boolean
 
@@ -126,13 +127,11 @@ Purpose::=
     PurposeName when Trigger (and MBoolExpr)? (then ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
 PurposeName::= id
 
-Trigger::= id
+Trigger::= EventName
 
 BoolExp::= Negation | BinaryOp | BoolTerminal
 
-BoolExpValue::= id
-
-BoolTerminal::= "{" BoolExpValue "}" | BoolValue
+BoolTerminal::= "{" BoolName "}" | BoolValue
 
 Negation::= "(" not MBoolExpr ")"
 
@@ -140,7 +139,7 @@ BinaryOp::= ScalarBinaryOp | BoolBinaryOp | NumericalOp
 
 ScalarBinaryOp::= "(" ScalarTerminal RelOp ScalarTerminal ")"
 
-ScalarTerminal::= ("{" id "}") | ScaleParam
+ScalarTerminal::= ("{" ScalarName "}") | ScaleParam
 
 BoolBinaryOp::= "(" BoolExp BoolOp BoolExp ")"
 
@@ -148,7 +147,7 @@ NumericalOp::= "(" NumExp RelOp NumExp ")"
 
 NumExp::= NumBinOp | NumTerminal
 
-NumTerminal::= number | "{" id "}" | ConstantVar
+NumTerminal::= number | "{" NumName "}" | ConstantName
 
 NumBinOp::= "(" NumExp BinaryArth NumExp ")"
 

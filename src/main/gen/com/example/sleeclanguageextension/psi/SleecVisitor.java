@@ -27,11 +27,11 @@ public class SleecVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitBoolExpValue(@NotNull SleecBoolExpValue o) {
+  public void visitBoolMeasure(@NotNull SleecBoolMeasure o) {
     visitPsiElement(o);
   }
 
-  public void visitBoolMeasure(@NotNull SleecBoolMeasure o) {
+  public void visitBoolName(@NotNull SleecBoolName o) {
     visitPsiElement(o);
   }
 
@@ -71,7 +71,7 @@ public class SleecVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitConstantVar(@NotNull SleecConstantVar o) {
+  public void visitConstantName(@NotNull SleecConstantName o) {
     visitPsiElement(o);
   }
 
@@ -88,6 +88,10 @@ public class SleecVisitor extends PsiElementVisitor {
   }
 
   public void visitEvent(@NotNull SleecEvent o) {
+    visitPsiElement(o);
+  }
+
+  public void visitEventName(@NotNull SleecEventName o) {
     visitPsiElement(o);
   }
 
@@ -135,11 +139,11 @@ public class SleecVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitNumTerminal(@NotNull SleecNumTerminal o) {
+  public void visitNumName(@NotNull SleecNumName o) {
     visitPsiElement(o);
   }
 
-  public void visitNumVar(@NotNull SleecNumVar o) {
+  public void visitNumTerminal(@NotNull SleecNumTerminal o) {
     visitPsiElement(o);
   }
 
@@ -191,11 +195,11 @@ public class SleecVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitScalarTerminal(@NotNull SleecScalarTerminal o) {
+  public void visitScalarName(@NotNull SleecScalarName o) {
     visitPsiElement(o);
   }
 
-  public void visitScalarVar(@NotNull SleecScalarVar o) {
+  public void visitScalarTerminal(@NotNull SleecScalarTerminal o) {
     visitPsiElement(o);
   }
 

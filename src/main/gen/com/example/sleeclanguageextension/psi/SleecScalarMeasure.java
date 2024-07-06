@@ -11,7 +11,7 @@ public interface SleecScalarMeasure extends PsiElement {
   SleecColon getColon();
 
   @NotNull
-  SleecScalarVar getScalarVar();
+  SleecScalarName getScalarName();
 
   @NotNull
   SleecScale getScale();

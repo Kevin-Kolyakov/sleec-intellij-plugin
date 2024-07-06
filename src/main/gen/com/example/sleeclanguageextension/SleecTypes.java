@@ -13,8 +13,8 @@ public interface SleecTypes {
   IElementType BINARY_OP = new SleecElementType("BINARY_OP");
   IElementType BOOL_BINARY_OP = new SleecElementType("BOOL_BINARY_OP");
   IElementType BOOL_EXP = new SleecElementType("BOOL_EXP");
-  IElementType BOOL_EXP_VALUE = new SleecElementType("BOOL_EXP_VALUE");
   IElementType BOOL_MEASURE = new SleecElementType("BOOL_MEASURE");
+  IElementType BOOL_NAME = new SleecElementType("BOOL_NAME");
   IElementType BOOL_OP = new SleecElementType("BOOL_OP");
   IElementType BOOL_TERMINAL = new SleecElementType("BOOL_TERMINAL");
   IElementType BOOL_VALUE = new SleecElementType("BOOL_VALUE");
@@ -22,10 +22,11 @@ public interface SleecTypes {
   IElementType CONCERN = new SleecElementType("CONCERN");
   IElementType CONCERN_BLOCK = new SleecElementType("CONCERN_BLOCK");
   IElementType CONCERN_NAME = new SleecElementType("CONCERN_NAME");
-  IElementType CONSTANT_VAR = new SleecElementType("CONSTANT_VAR");
+  IElementType CONSTANT_NAME = new SleecElementType("CONSTANT_NAME");
   IElementType DEFBLOCK = new SleecElementType("DEFBLOCK");
   IElementType DEFEATER = new SleecElementType("DEFEATER");
   IElementType DEFINITION = new SleecElementType("DEFINITION");
+  IElementType EVENT_NAME = new SleecElementType("EVENT_NAME");
   IElementType EXTENDED_RESPONSE = new SleecElementType("EXTENDED_RESPONSE");
   IElementType HEADLESS_CONCERN = new SleecElementType("HEADLESS_CONCERN");
   IElementType INF = new SleecElementType("INF");
@@ -37,8 +38,8 @@ public interface SleecTypes {
   IElementType NUM_BIN_OP = new SleecElementType("NUM_BIN_OP");
   IElementType NUM_EXP = new SleecElementType("NUM_EXP");
   IElementType NUM_MEASURE = new SleecElementType("NUM_MEASURE");
+  IElementType NUM_NAME = new SleecElementType("NUM_NAME");
   IElementType NUM_TERMINAL = new SleecElementType("NUM_TERMINAL");
-  IElementType NUM_VAR = new SleecElementType("NUM_VAR");
   IElementType OCC = new SleecElementType("OCC");
   IElementType PROPERT = new SleecElementType("PROPERT");
   IElementType PROPERTY = new SleecElementType("PROPERTY");
@@ -51,8 +52,8 @@ public interface SleecTypes {
   IElementType RULE_BLOCK = new SleecElementType("RULE_BLOCK");
   IElementType SCALAR_BINARY_OP = new SleecElementType("SCALAR_BINARY_OP");
   IElementType SCALAR_MEASURE = new SleecElementType("SCALAR_MEASURE");
+  IElementType SCALAR_NAME = new SleecElementType("SCALAR_NAME");
   IElementType SCALAR_TERMINAL = new SleecElementType("SCALAR_TERMINAL");
-  IElementType SCALAR_VAR = new SleecElementType("SCALAR_VAR");
   IElementType SCALE_PARAM = new SleecElementType("SCALE_PARAM");
   IElementType TIME_LIMIT = new SleecElementType("TIME_LIMIT");
   IElementType TIME_UNIT = new SleecElementType("TIME_UNIT");
@@ -122,11 +123,11 @@ public interface SleecTypes {
       else if (type == BOOL_EXP) {
         return new SleecBoolExpImpl(node);
       }
-      else if (type == BOOL_EXP_VALUE) {
-        return new SleecBoolExpValueImpl(node);
-      }
       else if (type == BOOL_MEASURE) {
         return new SleecBoolMeasureImpl(node);
+      }
+      else if (type == BOOL_NAME) {
+        return new SleecBoolNameImpl(node);
       }
       else if (type == BOOL_OP) {
         return new SleecBoolOpImpl(node);
@@ -152,8 +153,8 @@ public interface SleecTypes {
       else if (type == CONSTANT) {
         return new SleecConstantImpl(node);
       }
-      else if (type == CONSTANT_VAR) {
-        return new SleecConstantVarImpl(node);
+      else if (type == CONSTANT_NAME) {
+        return new SleecConstantNameImpl(node);
       }
       else if (type == DEFBLOCK) {
         return new SleecDefblockImpl(node);
@@ -166,6 +167,9 @@ public interface SleecTypes {
       }
       else if (type == EVENT) {
         return new SleecEventImpl(node);
+      }
+      else if (type == EVENT_NAME) {
+        return new SleecEventNameImpl(node);
       }
       else if (type == EXTENDED_RESPONSE) {
         return new SleecExtendedResponseImpl(node);
@@ -206,11 +210,11 @@ public interface SleecTypes {
       else if (type == NUM_MEASURE) {
         return new SleecNumMeasureImpl(node);
       }
+      else if (type == NUM_NAME) {
+        return new SleecNumNameImpl(node);
+      }
       else if (type == NUM_TERMINAL) {
         return new SleecNumTerminalImpl(node);
-      }
-      else if (type == NUM_VAR) {
-        return new SleecNumVarImpl(node);
       }
       else if (type == OCC) {
         return new SleecOccImpl(node);
@@ -248,11 +252,11 @@ public interface SleecTypes {
       else if (type == SCALAR_MEASURE) {
         return new SleecScalarMeasureImpl(node);
       }
+      else if (type == SCALAR_NAME) {
+        return new SleecScalarNameImpl(node);
+      }
       else if (type == SCALAR_TERMINAL) {
         return new SleecScalarTerminalImpl(node);
-      }
-      else if (type == SCALAR_VAR) {
-        return new SleecScalarVarImpl(node);
       }
       else if (type == SCALE) {
         return new SleecScaleImpl(node);

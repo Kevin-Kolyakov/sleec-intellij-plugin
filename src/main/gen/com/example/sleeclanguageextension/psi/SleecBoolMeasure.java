@@ -7,13 +7,13 @@ import com.intellij.psi.PsiElement;
 
 public interface SleecBoolMeasure extends PsiElement {
 
+  @NotNull
+  SleecBoolName getBoolName();
+
   @Nullable
   SleecBoolean getBoolean();
 
   @Nullable
   SleecColon getColon();
-
-  @NotNull
-  PsiElement getId();
 
 }

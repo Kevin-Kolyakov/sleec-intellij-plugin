@@ -36,8 +36,8 @@ public class SleecScalarMeasureImpl extends ASTWrapperPsiElement implements Slee
 
   @Override
   @NotNull
-  public SleecScalarVar getScalarVar() {
-    return findNotNullChildByClass(SleecScalarVar.class);
+  public SleecScalarName getScalarName() {
+    return findNotNullChildByClass(SleecScalarName.class);
   }
 
   @Override

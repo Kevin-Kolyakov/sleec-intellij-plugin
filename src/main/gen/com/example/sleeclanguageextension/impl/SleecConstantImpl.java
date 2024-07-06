@@ -30,8 +30,8 @@ public class SleecConstantImpl extends ASTWrapperPsiElement implements SleecCons
 
   @Override
   @NotNull
-  public SleecConstantVar getConstantVar() {
-    return findNotNullChildByClass(SleecConstantVar.class);
+  public SleecConstantName getConstantName() {
+    return findNotNullChildByClass(SleecConstantName.class);
   }
 
   @Override

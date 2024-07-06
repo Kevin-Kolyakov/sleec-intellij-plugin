@@ -30,8 +30,8 @@ public class SleecEventImpl extends ASTWrapperPsiElement implements SleecEvent {
 
   @Override
   @NotNull
-  public PsiElement getId() {
-    return findNotNullChildByType(ID);
+  public SleecEventName getEventName() {
+    return findNotNullChildByClass(SleecEventName.class);
   }
 
 }
