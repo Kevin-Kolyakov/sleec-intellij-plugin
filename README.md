@@ -22,6 +22,6 @@
 ### Step 4: Access the Sleec Template
 1. In the project tab, click on the **default Sleec Template** to access all the necessary scripts and example files.
 2. Follow the instructions provided in the ReadMe file within the template for further guidance.
-3. To run the Sleec template, click on the any of the icons in the top right corner of the screen and select a SLEEC file.
+3. To run the Sleec files in the template, click on the any of the icons in the top right corner of the screen and select a SLEEC file.
 
 Enjoy using the Sleec IntelliJ Plugin!
