@@ -48,7 +48,7 @@ public class SleecAnnotator implements Annotator {
         } else if (element.getNode().getElementType() == SleecTypes.SCALAR_NAME) {
             String elementText = element.getText();
             if (!definedScales.contains(elementText) && !definedConsts.contains(elementText) && !definedNums.contains(elementText) && !isNumeric(elementText)) {
-                holder.newAnnotation(HighlightSeverity.ERROR, "Undefined or incorrect type: " + elementText + " (expected scale)")
+                holder.newAnnotation(HighlightSeverity.ERROR, "Undefined or incorrect type: " + elementText)
                         .range(element)
                         .create();
             }
