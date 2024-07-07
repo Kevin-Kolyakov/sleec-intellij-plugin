@@ -47,19 +47,28 @@ public class SleecAnnotator implements Annotator {
             }
         } else if (element.getNode().getElementType() == SleecTypes.SCALAR_NAME) {
             String elementText = element.getText();
-            if (!definedScales.contains(elementText)) {
+            if (!definedScales.contains(elementText) && !definedConsts.contains(elementText) && !definedNums.contains(elementText) && !isNumeric(elementText)) {
                 holder.newAnnotation(HighlightSeverity.ERROR, "Undefined or incorrect type: " + elementText + " (expected scale)")
                         .range(element)
                         .create();
             }
         } else if (element.getNode().getElementType() == SleecTypes.SCALE_PARAM) {
             String elementText = element.getText();
-                if (!(definedScaleVals.contains(elementText))&& !(definedScales.contains(elementText)) && !(definedConsts.contains(elementText))) {
+                if (!(definedScaleVals.contains(elementText))&& !(definedScales.contains(elementText)) && !(definedConsts.contains(elementText)) && !(definedNums.contains(elementText))&& !(isNumeric(elementText))) {
                     holder.newAnnotation(HighlightSeverity.ERROR, "Undefined or incorrect type: " + elementText + " (expected scale value or scalar or constant)")
                             .range(element)
                             .create();
                 }
         }
     }
+    public static boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
+        }
+    }
 }
+
 
