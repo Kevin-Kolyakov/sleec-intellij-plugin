@@ -8,12 +8,12 @@ import com.intellij.psi.PsiElement;
 public interface SleecDefinition extends PsiElement {
 
   @Nullable
-  SleecConstant getConstant();
+  SleecConstantRule getConstantRule();
 
   @Nullable
-  SleecEvent getEvent();
+  SleecEventRule getEventRule();
 
   @Nullable
-  SleecMeasure getMeasure();
+  SleecMeasureRule getMeasureRule();
 
 }

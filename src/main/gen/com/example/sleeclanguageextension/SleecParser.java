@@ -103,7 +103,7 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // measure BoolName Colon Boolean
+  // measure BoolName Colon BooleanRule
   public static boolean BoolMeasure(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "BoolMeasure")) return false;
     if (!nextTokenIs(b, MEASURE)) return false;
@@ -113,7 +113,7 @@ public class SleecParser implements PsiParser, LightPsiParser {
     r = r && BoolName(b, l + 1);
     p = r; // pin = 2
     r = r && report_error_(b, Colon(b, l + 1));
-    r = p && Boolean(b, l + 1) && r;
+    r = p && BooleanRule(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -182,13 +182,13 @@ public class SleecParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // boolean
-  public static boolean Boolean(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Boolean")) return false;
+  public static boolean BooleanRule(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BooleanRule")) return false;
     if (!nextTokenIs(b, BOOLEAN)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, BOOLEAN);
-    exit_section_(b, m, BOOLEAN, r);
+    exit_section_(b, m, BOOLEAN_RULE, r);
     return r;
   }
 
@@ -422,22 +422,6 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // constant ConstantName "=" number
-  public static boolean Constant(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Constant")) return false;
-    if (!nextTokenIs(b, CONSTANT)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, CONSTANT, null);
-    r = consumeToken(b, CONSTANT);
-    r = r && ConstantName(b, l + 1);
-    p = r; // pin = 2
-    r = r && report_error_(b, consumeToken(b, "="));
-    r = p && consumeToken(b, NUMBER) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  /* ********************************************************** */
   // id
   public static boolean ConstantName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ConstantName")) return false;
@@ -447,6 +431,22 @@ public class SleecParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, ID);
     exit_section_(b, m, CONSTANT_NAME, r);
     return r;
+  }
+
+  /* ********************************************************** */
+  // constant ConstantName "=" number
+  public static boolean ConstantRule(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ConstantRule")) return false;
+    if (!nextTokenIs(b, CONSTANT)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, CONSTANT_RULE, null);
+    r = consumeToken(b, CONSTANT);
+    r = r && ConstantName(b, l + 1);
+    p = r; // pin = 2
+    r = r && report_error_(b, consumeToken(b, "="));
+    r = p && consumeToken(b, NUMBER) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -531,28 +531,15 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Measure | Constant | Event
+  // MeasureRule | ConstantRule | EventRule
   public static boolean Definition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Definition")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, DEFINITION, "<definition>");
-    r = Measure(b, l + 1);
-    if (!r) r = Constant(b, l + 1);
-    if (!r) r = Event(b, l + 1);
+    r = MeasureRule(b, l + 1);
+    if (!r) r = ConstantRule(b, l + 1);
+    if (!r) r = EventRule(b, l + 1);
     exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // event EventName
-  public static boolean Event(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Event")) return false;
-    if (!nextTokenIs(b, EVENT)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, EVENT);
-    r = r && EventName(b, l + 1);
-    exit_section_(b, m, EVENT, r);
     return r;
   }
 
@@ -565,6 +552,19 @@ public class SleecParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeToken(b, ID);
     exit_section_(b, m, EVENT_NAME, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // event EventName
+  public static boolean EventRule(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "EventRule")) return false;
+    if (!nextTokenIs(b, EVENT)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, EVENT);
+    r = r && EventName(b, l + 1);
+    exit_section_(b, m, EVENT_RULE, r);
     return r;
   }
 
@@ -903,15 +903,15 @@ public class SleecParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // NumMeasure | ScalarMeasure | BoolMeasure
-  public static boolean Measure(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Measure")) return false;
+  public static boolean MeasureRule(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MeasureRule")) return false;
     if (!nextTokenIs(b, MEASURE)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = NumMeasure(b, l + 1);
     if (!r) r = ScalarMeasure(b, l + 1);
     if (!r) r = BoolMeasure(b, l + 1);
-    exit_section_(b, m, MEASURE, r);
+    exit_section_(b, m, MEASURE_RULE, r);
     return r;
   }
 
@@ -970,7 +970,7 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // measure NumName Colon Numeric
+  // measure NumName Colon NumericRule
   public static boolean NumMeasure(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NumMeasure")) return false;
     if (!nextTokenIs(b, MEASURE)) return false;
@@ -979,7 +979,7 @@ public class SleecParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, MEASURE);
     r = r && NumName(b, l + 1);
     r = r && Colon(b, l + 1);
-    r = r && Numeric(b, l + 1);
+    r = r && NumericRule(b, l + 1);
     exit_section_(b, m, NUM_MEASURE, r);
     return r;
   }
@@ -1023,13 +1023,13 @@ public class SleecParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // numeric
-  public static boolean Numeric(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Numeric")) return false;
+  public static boolean NumericRule(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NumericRule")) return false;
     if (!nextTokenIs(b, NUMERIC)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, NUMERIC);
-    exit_section_(b, m, NUMERIC, r);
+    exit_section_(b, m, NUMERIC_RULE, r);
     return r;
   }
 
@@ -1505,7 +1505,7 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // measure ScalarName Colon Scale
+  // measure ScalarName Colon ScaleRule
   public static boolean ScalarMeasure(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ScalarMeasure")) return false;
     if (!nextTokenIs(b, MEASURE)) return false;
@@ -1514,7 +1514,7 @@ public class SleecParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, MEASURE);
     r = r && ScalarName(b, l + 1);
     r = r && Colon(b, l + 1);
-    r = r && Scale(b, l + 1);
+    r = r && ScaleRule(b, l + 1);
     exit_section_(b, m, SCALAR_MEASURE, r);
     return r;
   }
@@ -1556,44 +1556,6 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // scale "(" ScaleParam ("," ScaleParam)* ")"
-  public static boolean Scale(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Scale")) return false;
-    if (!nextTokenIs(b, SCALE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, SCALE);
-    r = r && consumeToken(b, "(");
-    r = r && ScaleParam(b, l + 1);
-    r = r && Scale_3(b, l + 1);
-    r = r && consumeToken(b, ")");
-    exit_section_(b, m, SCALE, r);
-    return r;
-  }
-
-  // ("," ScaleParam)*
-  private static boolean Scale_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Scale_3")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!Scale_3_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "Scale_3", c)) break;
-    }
-    return true;
-  }
-
-  // "," ScaleParam
-  private static boolean Scale_3_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Scale_3_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, ",");
-    r = r && ScaleParam(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  /* ********************************************************** */
   // number | id
   public static boolean ScaleParam(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ScaleParam")) return false;
@@ -1603,6 +1565,44 @@ public class SleecParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, NUMBER);
     if (!r) r = consumeToken(b, ID);
     exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // scale "(" ScaleParam ("," ScaleParam)* ")"
+  public static boolean ScaleRule(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ScaleRule")) return false;
+    if (!nextTokenIs(b, SCALE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, SCALE);
+    r = r && consumeToken(b, "(");
+    r = r && ScaleParam(b, l + 1);
+    r = r && ScaleRule_3(b, l + 1);
+    r = r && consumeToken(b, ")");
+    exit_section_(b, m, SCALE_RULE, r);
+    return r;
+  }
+
+  // ("," ScaleParam)*
+  private static boolean ScaleRule_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ScaleRule_3")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!ScaleRule_3_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "ScaleRule_3", c)) break;
+    }
+    return true;
+  }
+
+  // "," ScaleParam
+  private static boolean ScaleRule_3_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ScaleRule_3_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, ",");
+    r = r && ScaleParam(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 

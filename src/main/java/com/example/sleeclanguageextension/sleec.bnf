@@ -74,8 +74,7 @@ To change grammar:
 4. Copy the generated file to the sleeclanguageextension package
 5. Define the ZZatBol boolean in the generated lexer file
 6. Run the parser generator by right clicking on this file
-7. There will be an error where there are multiple duplicates in the parser. Delete the ElementTypes duplicates, not the SleecTypes
-8. When trying to run, there will be an error in the generated parser. This is because the parser has an incorrect import,
+7. When trying to run, there will be an error in the generated parser. This is because the parser has an incorrect import,
    change it to the one in the previously generated one
  */
 root ::= root_item *
@@ -88,27 +87,27 @@ propert::= Defblock RuleBlock (ConcernBlock)? (PurposeBlock)?
 Defblock::= "def_start" Definition* "def_end" {pin=1 recoverWhile=Defblock_recover}
 private Defblock_recover ::= !(def_end | rule_start | concern_start | purpose_start | <<eof>>)
 
-Definition::= Measure | Constant | Event
+Definition::= MeasureRule | ConstantRule | EventRule
 
-Event::= event EventName
+EventRule::= event EventName
 EventName::= id
-Measure::= NumMeasure | ScalarMeasure | BoolMeasure
+MeasureRule::= NumMeasure | ScalarMeasure | BoolMeasure
 
 BoolValue::= true | false
-BoolMeasure::= measure BoolName Colon Boolean {pin=2}
+BoolMeasure::= measure BoolName Colon BooleanRule {pin=2}
 BoolName ::= id
-NumMeasure::= measure NumName Colon Numeric
+NumMeasure::= measure NumName Colon NumericRule
 NumName::= id
-Constant::= constant ConstantName "=" number {pin=2}
+ConstantRule::= constant ConstantName "=" number {pin=2}
 ConstantName::= id
-ScalarMeasure::= measure ScalarName Colon Scale
+ScalarMeasure::= measure ScalarName Colon ScaleRule
 ScalarName::= id
 
-Boolean::= boolean
+BooleanRule::= boolean
 
-Numeric::= numeric
+NumericRule::= numeric
 
-Scale::= scale "(" ScaleParam ("," ScaleParam)* ")"
+ScaleRule::= scale "(" ScaleParam ("," ScaleParam)* ")"
 
 ScaleParam::= number | id
 

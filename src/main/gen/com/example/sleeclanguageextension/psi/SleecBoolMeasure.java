@@ -11,7 +11,7 @@ public interface SleecBoolMeasure extends PsiElement {
   SleecBoolName getBoolName();
 
   @Nullable
-  SleecBoolean getBoolean();
+  SleecBooleanRule getBooleanRule();
 
   @Nullable
   SleecColon getColon();

@@ -47,7 +47,7 @@ public class SleecVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitBoolean(@NotNull SleecBoolean o) {
+  public void visitBooleanRule(@NotNull SleecBooleanRule o) {
     visitPsiElement(o);
   }
 
@@ -67,11 +67,11 @@ public class SleecVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitConstant(@NotNull SleecConstant o) {
+  public void visitConstantName(@NotNull SleecConstantName o) {
     visitPsiElement(o);
   }
 
-  public void visitConstantName(@NotNull SleecConstantName o) {
+  public void visitConstantRule(@NotNull SleecConstantRule o) {
     visitPsiElement(o);
   }
 
@@ -87,11 +87,11 @@ public class SleecVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitEvent(@NotNull SleecEvent o) {
+  public void visitEventName(@NotNull SleecEventName o) {
     visitPsiElement(o);
   }
 
-  public void visitEventName(@NotNull SleecEventName o) {
+  public void visitEventRule(@NotNull SleecEventRule o) {
     visitPsiElement(o);
   }
 
@@ -115,7 +115,7 @@ public class SleecVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitMeasure(@NotNull SleecMeasure o) {
+  public void visitMeasureRule(@NotNull SleecMeasureRule o) {
     visitPsiElement(o);
   }
 
@@ -147,7 +147,7 @@ public class SleecVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitNumeric(@NotNull SleecNumeric o) {
+  public void visitNumericRule(@NotNull SleecNumericRule o) {
     visitPsiElement(o);
   }
 
@@ -203,11 +203,11 @@ public class SleecVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitScale(@NotNull SleecScale o) {
+  public void visitScaleParam(@NotNull SleecScaleParam o) {
     visitPsiElement(o);
   }
 
-  public void visitScaleParam(@NotNull SleecScaleParam o) {
+  public void visitScaleRule(@NotNull SleecScaleRule o) {
     visitPsiElement(o);
   }
 

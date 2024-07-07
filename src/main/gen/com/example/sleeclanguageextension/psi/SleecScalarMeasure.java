@@ -14,6 +14,6 @@ public interface SleecScalarMeasure extends PsiElement {
   SleecScalarName getScalarName();
 
   @NotNull
-  SleecScale getScale();
+  SleecScaleRule getScaleRule();
 
 }

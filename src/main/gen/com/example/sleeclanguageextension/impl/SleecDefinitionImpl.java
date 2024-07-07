@@ -30,20 +30,20 @@ public class SleecDefinitionImpl extends ASTWrapperPsiElement implements SleecDe
 
   @Override
   @Nullable
-  public SleecConstant getConstant() {
-    return findChildByClass(SleecConstant.class);
+  public SleecConstantRule getConstantRule() {
+    return findChildByClass(SleecConstantRule.class);
   }
 
   @Override
   @Nullable
-  public SleecEvent getEvent() {
-    return findChildByClass(SleecEvent.class);
+  public SleecEventRule getEventRule() {
+    return findChildByClass(SleecEventRule.class);
   }
 
   @Override
   @Nullable
-  public SleecMeasure getMeasure() {
-    return findChildByClass(SleecMeasure.class);
+  public SleecMeasureRule getMeasureRule() {
+    return findChildByClass(SleecMeasureRule.class);
   }
 
 }

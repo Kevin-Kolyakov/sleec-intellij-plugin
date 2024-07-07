@@ -36,8 +36,8 @@ public class SleecBoolMeasureImpl extends ASTWrapperPsiElement implements SleecB
 
   @Override
   @Nullable
-  public SleecBoolean getBoolean() {
-    return findChildByClass(SleecBoolean.class);
+  public SleecBooleanRule getBooleanRule() {
+    return findChildByClass(SleecBooleanRule.class);
   }
 
   @Override

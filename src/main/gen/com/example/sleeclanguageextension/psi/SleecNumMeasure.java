@@ -14,6 +14,6 @@ public interface SleecNumMeasure extends PsiElement {
   SleecNumName getNumName();
 
   @NotNull
-  SleecNumeric getNumeric();
+  SleecNumericRule getNumericRule();
 
 }
