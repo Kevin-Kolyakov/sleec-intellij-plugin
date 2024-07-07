@@ -8,13 +8,13 @@
     <name>SleecLanguageExtension</name>
 
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
-    <vendor email="kevinkolyakov@gmail.com" url="https://www.yourcompany.com">UofT</vendor>
+    <vendor email="kevinkolyakov@gmail.com" url="">Kevin K.</vendor>
 
     <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-    SLEEC language support for IntelliJ IDEA.
+    SLEEC language support for IntelliJ IDEA with a default project as well as multiple language editing features.
   ]]></description>
 
     <!-- Product and plugin compatibility requirements.
@@ -47,23 +47,23 @@
     </extensions>
     <actions>
         <action id="concern" class="com.example.sleeclanguageextension.PythonRun"
-                text="Run .sleec Files" description="Runs .sleec Files" icon="AllIcons.General.BalloonWarning">
+                text="Checks for Concerns in Sleec Files" description="Checks for concerns in sleec files" icon="AllIcons.General.BalloonWarning">
             <add-to-group group-id="ToolbarRunGroup" anchor="first" />
         </action>
         <action id="redundancy" class="com.example.sleeclanguageextension.PythonRun2"
-                text="Checks for Redundancy" description="Checks for Redundancy" icon="AllIcons.General.LayoutEditorOnly">
+                text="Checks for Redundancies in Sleec Files" description="Checks for redundancies in sleec files" icon="AllIcons.General.LayoutEditorOnly">
             <add-to-group group-id="ToolbarRunGroup" anchor="first" />
         </action>
         <action id="conflicts" class="com.example.sleeclanguageextension.PythonRun3"
-                text="Checks for Conflicts" description="Checks for Conflicts" icon="AllIcons.General.ExclMark">
+                text="Checks for Conflicts in Sleec Files" description="Checks for conflicts in sleec files" icon="AllIcons.General.ExclMark">
             <add-to-group group-id="ToolbarRunGroup" anchor="first" />
         </action>
         <action id="purpose" class="com.example.sleeclanguageextension.PythonRun4"
-                text="Checks for Purpose" description="Checks for Purpose" icon="AllIcons.General.TodoQuestion">
+                text="Checks for Purpose in Sleec Files" description="Checks for purpose in sleec files" icon="AllIcons.General.TodoQuestion">
             <add-to-group group-id="ToolbarRunGroup" anchor="first" />
         </action>
         <action id="situational.conflicts" class="com.example.sleeclanguageextension.PythonRun5"
-                text="Checks for Situational Conflicts" description="Checks for situational conflicts" icon="AllIcons.General.InspectionsMixed">
+                text="Checks for Situational Conflicts in Sleec Files" description="Checks for situational conflicts in sleec files" icon="AllIcons.General.InspectionsMixed">
             <add-to-group group-id="ToolbarRunGroup" anchor="first" />
         </action>
     </actions>
