@@ -84,8 +84,8 @@ property ::= !<<eof>> propert {pin=1}
 
 propert::= Defblock RuleBlock (ConcernBlock)? (PurposeBlock)?
 
-Defblock::= "def_start" Definition* "def_end" {pin=1 recoverWhile=Defblock_recover}
-private Defblock_recover ::= !(def_end | rule_start | concern_start | purpose_start | <<eof>>)
+Defblock::= "def_start" Definition* "def_end" /*{pin=1 recoverWhile=Defblock_recover}
+private Defblock_recover ::= !(def_end | rule_start | concern_start | purpose_start | <<eof>>)*/
 
 Definition::= MeasureRule | ConstantRule | EventRule
 

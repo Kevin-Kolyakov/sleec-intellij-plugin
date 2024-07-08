@@ -453,14 +453,14 @@ public class SleecParser implements PsiParser, LightPsiParser {
   // "def_start" Definition* "def_end"
   public static boolean Defblock(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Defblock")) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, DEFBLOCK, "<defblock>");
+    if (!nextTokenIs(b, DEF_START)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
     r = consumeToken(b, DEF_START);
-    p = r; // pin = 1
-    r = r && report_error_(b, Defblock_1(b, l + 1));
-    r = p && consumeToken(b, DEF_END) && r;
-    exit_section_(b, l, m, r, p, SleecParser::Defblock_recover);
-    return r || p;
+    r = r && Defblock_1(b, l + 1);
+    r = r && consumeToken(b, DEF_END);
+    exit_section_(b, m, DEFBLOCK, r);
+    return r;
   }
 
   // Definition*
@@ -472,31 +472,6 @@ public class SleecParser implements PsiParser, LightPsiParser {
       if (!empty_element_parsed_guard_(b, "Defblock_1", c)) break;
     }
     return true;
-  }
-
-  /* ********************************************************** */
-  // !(def_end | rule_start | concern_start | purpose_start | <<eof>>)
-  static boolean Defblock_recover(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Defblock_recover")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NOT_);
-    r = !Defblock_recover_0(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // def_end | rule_start | concern_start | purpose_start | <<eof>>
-  private static boolean Defblock_recover_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Defblock_recover_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, DEF_END);
-    if (!r) r = consumeToken(b, RULE_START);
-    if (!r) r = consumeToken(b, CONCERN_START);
-    if (!r) r = consumeToken(b, PURPOSE_START);
-    if (!r) r = eof(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */
