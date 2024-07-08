@@ -24,6 +24,7 @@ public class SleecCompletionContributor extends CompletionContributor {
 
                         // Keywords for rules
                         resultSet.addElement(LookupElementBuilder.create("when"));
+                        resultSet.addElement(LookupElementBuilder.create("unless"));
                         resultSet.addElement(LookupElementBuilder.create("then"));
                         resultSet.addElement(LookupElementBuilder.create("unless"));
                         resultSet.addElement(LookupElementBuilder.create("eventually"));

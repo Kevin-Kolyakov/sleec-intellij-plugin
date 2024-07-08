@@ -227,6 +227,10 @@ public class SleecVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitUnlessRule(@NotNull SleecUnlessRule o) {
+    visitPsiElement(o);
+  }
+
   public void visitPropert(@NotNull SleecPropert o) {
     visitPsiElement(o);
   }

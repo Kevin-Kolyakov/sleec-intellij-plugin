@@ -31,6 +31,7 @@
     string="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
 
     boolean='boolean'
+    unless='unless'
     numeric='numeric'
     scale='scale'
     measure='measure'
@@ -76,6 +77,7 @@ To change grammar:
 6. Run the parser generator by right clicking on this file
 7. When trying to run, there will be an error in the generated parser. This is because the parser has an incorrect import,
    change it to the one in the previously generated one
+   import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
  */
 root ::= root_item *
 private root_item ::= property {pin=1 recoverWhile=property_recover}
@@ -144,7 +146,7 @@ BoolExp::= Negation | BinaryOp | BoolTerminal
 
 BoolTerminal::= "{" BoolName "}" | BoolValue
 
-Negation::= "(" not MBoolExpr ")"
+Negation::= "(" "not" MBoolExpr ")"
 
 BinaryOp::= ScalarBinaryOp | BoolBinaryOp | NumericalOp
 
@@ -182,9 +184,11 @@ TimeValue::= NumExp TimeUnit
 
 Alternative::= otherwise InnerResponse
 
-ND::= else InnerResponse
+ND::= "else" InnerResponse
 
-Defeater::= "unless" MBoolExpr (then InnerResponse)?
+Defeater::= UnlessRule MBoolExpr (then InnerResponse)?
+
+UnlessRule::= unless
 
 RelOp::= "<=" | ">=" | "<>" | "<" | ">" | "="
 

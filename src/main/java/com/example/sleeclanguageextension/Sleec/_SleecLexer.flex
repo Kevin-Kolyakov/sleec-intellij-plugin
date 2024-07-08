@@ -44,6 +44,7 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
   "purpose_start"      { return PURPOSE_START; }
   "purpose_end"        { return PURPOSE_END; }
   "boolean"            { return BOOLEAN; }
+  "unless"             { return UNLESS; }
   "numeric"            { return NUMERIC; }
   "scale"              { return SCALE; }
   "measure"            { return MEASURE; }

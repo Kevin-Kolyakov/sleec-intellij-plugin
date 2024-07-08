@@ -12,38 +12,20 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.example.sleeclanguageextension.psi.*;
 import com.example.sleeclanguageextension.SleecPsiImplUtil;
 
-public class SleecDefeaterImpl extends ASTWrapperPsiElement implements SleecDefeater {
+public class SleecUnlessRuleImpl extends ASTWrapperPsiElement implements SleecUnlessRule {
 
-  public SleecDefeaterImpl(@NotNull ASTNode node) {
+  public SleecUnlessRuleImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull SleecVisitor visitor) {
-    visitor.visitDefeater(this);
+    visitor.visitUnlessRule(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof SleecVisitor) accept((SleecVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public SleecInnerResponse getInnerResponse() {
-    return findChildByClass(SleecInnerResponse.class);
-  }
-
-  @Override
-  @NotNull
-  public SleecMBoolExpr getMBoolExpr() {
-    return findNotNullChildByClass(SleecMBoolExpr.class);
-  }
-
-  @Override
-  @NotNull
-  public SleecUnlessRule getUnlessRule() {
-    return findNotNullChildByClass(SleecUnlessRule.class);
   }
 
 }

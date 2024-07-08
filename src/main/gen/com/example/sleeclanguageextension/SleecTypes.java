@@ -65,6 +65,7 @@ public interface SleecTypes {
   IElementType TIME_UNIT = new SleecElementType("TIME_UNIT");
   IElementType TIME_VALUE = new SleecElementType("TIME_VALUE");
   IElementType TRIGGER = new SleecElementType("TRIGGER");
+  IElementType UNLESS_RULE = new SleecElementType("UNLESS_RULE");
 
   IElementType AND = new SleecTokenType("and");
   IElementType BOOLEAN = new SleecTokenType("boolean");
@@ -104,6 +105,7 @@ public interface SleecTypes {
   IElementType STRING = new SleecTokenType("string");
   IElementType THEN = new SleecTokenType("then");
   IElementType TRUE = new SleecTokenType("true");
+  IElementType UNLESS = new SleecTokenType("unless");
   IElementType WHEN = new SleecTokenType("when");
   IElementType WHILE = new SleecTokenType("while");
   IElementType WITHIN = new SleecTokenType("within");
@@ -281,6 +283,9 @@ public interface SleecTypes {
       }
       else if (type == TRIGGER) {
         return new SleecTriggerImpl(node);
+      }
+      else if (type == UNLESS_RULE) {
+        return new SleecUnlessRuleImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

@@ -475,15 +475,16 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // "unless" MBoolExpr (then InnerResponse)?
+  // UnlessRule MBoolExpr (then InnerResponse)?
   public static boolean Defeater(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Defeater")) return false;
+    if (!nextTokenIs(b, UNLESS)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, DEFEATER, "<defeater>");
-    r = consumeToken(b, "unless");
+    Marker m = enter_section_(b);
+    r = UnlessRule(b, l + 1);
     r = r && MBoolExpr(b, l + 1);
     r = r && Defeater_2(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
+    exit_section_(b, m, DEFEATER, r);
     return r;
   }
 
@@ -891,7 +892,7 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // else InnerResponse
+  // "else" InnerResponse
   public static boolean ND(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ND")) return false;
     if (!nextTokenIs(b, ELSE)) return false;
@@ -904,7 +905,7 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // "(" not MBoolExpr ")"
+  // "(" "not" MBoolExpr ")"
   public static boolean Negation(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Negation")) return false;
     boolean r;
@@ -1655,6 +1656,18 @@ public class SleecParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = EventName(b, l + 1);
     exit_section_(b, m, TRIGGER, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // unless
+  public static boolean UnlessRule(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UnlessRule")) return false;
+    if (!nextTokenIs(b, UNLESS)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, UNLESS);
+    exit_section_(b, m, UNLESS_RULE, r);
     return r;
   }
 
