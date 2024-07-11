@@ -44,6 +44,7 @@
         <lang.foldingBuilder language="sleec" implementationClass="com.example.sleeclanguageextension.SleecFoldingBuilder"/>
         <completion.contributor language="sleec" implementationClass="com.example.sleeclanguageextension.SleecCompletionContributor"/>
         <annotator language="sleec" implementationClass="com.example.sleeclanguageextension.reference.SleecAnnotator"/>
+        <gotoDeclarationHandler implementation="com.example.sleeclanguageextension.finder.SleecGotoDeclarationHandler"/>
         <typedHandler implementation="com.example.sleeclanguageextension.SleecTypedHandler"/>
     </extensions>
     <actions>
