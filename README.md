@@ -22,6 +22,20 @@
 ### Step 4: Access the Sleec Template
 1. In the project tab, click on the **default Sleec Template** to access all the necessary scripts and example files.
 2. Follow the instructions provided in the ReadMe file within the template for further guidance.
-3. To run the Sleec files in the template, click on the any of the icons in the top right corner of the screen and select a SLEEC file.
+3. To run the Sleec files in the template, click on any of the icons in the top right corner of the screen and select a SLEEC file.
+
+### Step 5: Update the Project
+1. Open IntelliJ IDEA and navigate to the **Terminal** tab at the bottom of the screen.
+2. Ensure you are in the project's root directory. If not, navigate to it using:
+   ```
+   cd path/to/your/sleec-intellij-plugin
+   ```
+3. Pull the latest updates from the repository by running:
+   ```
+   git pull origin master
+   ```
+4. Wait for the project to update and reconfigure if necessary.
 
 Enjoy using the Sleec IntelliJ Plugin!
+
+---
