@@ -4,6 +4,8 @@ import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.util.ProcessingContext;
+import com.intellij.psi.PsiFile;
+import com.example.sleeclanguageextension.reference.SleecDefinitionVisitor;
 import org.jetbrains.annotations.NotNull;
 
 public class SleecCompletionContributor extends CompletionContributor {
@@ -46,18 +48,34 @@ public class SleecCompletionContributor extends CompletionContributor {
                         addEvents(resultSet);
                         addMeasures(resultSet);
                         addConstants(resultSet);
+
+                        // Add previously defined variables
+                        addDefinedVariables(parameters, resultSet);
                     }
 
                     private void addEvents(CompletionResultSet resultSet) {
-                            resultSet.addElement(LookupElementBuilder.create("event"));
+                        resultSet.addElement(LookupElementBuilder.create("event"));
                     }
 
                     private void addMeasures(CompletionResultSet resultSet) {
-                            resultSet.addElement(LookupElementBuilder.create("measure"));
+                        resultSet.addElement(LookupElementBuilder.create("measure"));
                     }
 
                     private void addConstants(CompletionResultSet resultSet) {
-                            resultSet.addElement(LookupElementBuilder.create("constant"));
+                        resultSet.addElement(LookupElementBuilder.create("constant"));
+                    }
+
+                    private void addDefinedVariables(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet resultSet) {
+                        PsiFile file = parameters.getOriginalFile();
+                        SleecDefinitionVisitor visitor = new SleecDefinitionVisitor();
+                        file.accept(visitor);
+
+                        visitor.getDefinedBools().forEach(var -> resultSet.addElement(LookupElementBuilder.create(var)));
+                        visitor.getDefinedNums().forEach(var -> resultSet.addElement(LookupElementBuilder.create(var)));
+                        visitor.getDefinedEvents().forEach(var -> resultSet.addElement(LookupElementBuilder.create(var)));
+                        visitor.getDefinedConsts().forEach(var -> resultSet.addElement(LookupElementBuilder.create(var)));
+                        visitor.getDefinedScales().forEach(var -> resultSet.addElement(LookupElementBuilder.create(var)));
+                        visitor.getDefinedScaleVals().forEach(var -> resultSet.addElement(LookupElementBuilder.create(var)));
                     }
                 });
     }
