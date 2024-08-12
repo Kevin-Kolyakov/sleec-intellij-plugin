@@ -24,25 +24,40 @@ public class SleecCompletionContributor extends CompletionContributor {
                         resultSet.addElement(LookupElementBuilder.create("purpose_start"));
                         resultSet.addElement(LookupElementBuilder.create("purpose_end"));
 
-                        // Keywords for rules
+                        // Generic grammar suggestions
+                        resultSet.addElement(LookupElementBuilder.create("event"));
+                        resultSet.addElement(LookupElementBuilder.create("measure"));
+                        resultSet.addElement(LookupElementBuilder.create("constant"));
+                        resultSet.addElement(LookupElementBuilder.create("boolean"));
+                        resultSet.addElement(LookupElementBuilder.create("scale"));
+                        resultSet.addElement(LookupElementBuilder.create("numeric"));
+                        resultSet.addElement(LookupElementBuilder.create("true"));
+                        resultSet.addElement(LookupElementBuilder.create("false"));
                         resultSet.addElement(LookupElementBuilder.create("when"));
-                        resultSet.addElement(LookupElementBuilder.create("unless"));
                         resultSet.addElement(LookupElementBuilder.create("then"));
                         resultSet.addElement(LookupElementBuilder.create("unless"));
-                        resultSet.addElement(LookupElementBuilder.create("eventually"));
-                        resultSet.addElement(LookupElementBuilder.create("within"));
                         resultSet.addElement(LookupElementBuilder.create("and"));
                         resultSet.addElement(LookupElementBuilder.create("or"));
                         resultSet.addElement(LookupElementBuilder.create("not"));
                         resultSet.addElement(LookupElementBuilder.create("exists"));
+                        resultSet.addElement(LookupElementBuilder.create("within"));
+                        resultSet.addElement(LookupElementBuilder.create("eventually"));
                         resultSet.addElement(LookupElementBuilder.create("while"));
                         resultSet.addElement(LookupElementBuilder.create("meanwhile"));
                         resultSet.addElement(LookupElementBuilder.create("otherwise"));
                         resultSet.addElement(LookupElementBuilder.create("else"));
 
-                        // Boolean literals
-                        resultSet.addElement(LookupElementBuilder.create("true"));
-                        resultSet.addElement(LookupElementBuilder.create("false"));
+                        // Operators
+                        resultSet.addElement(LookupElementBuilder.create("+"));
+                        resultSet.addElement(LookupElementBuilder.create("-"));
+                        resultSet.addElement(LookupElementBuilder.create("*"));
+                        resultSet.addElement(LookupElementBuilder.create("/"));
+                        resultSet.addElement(LookupElementBuilder.create("<"));
+                        resultSet.addElement(LookupElementBuilder.create(">"));
+                        resultSet.addElement(LookupElementBuilder.create("="));
+                        resultSet.addElement(LookupElementBuilder.create("<="));
+                        resultSet.addElement(LookupElementBuilder.create(">="));
+                        resultSet.addElement(LookupElementBuilder.create("<>"));
 
                         // Sample events and measures from the example
                         addEvents(resultSet);
@@ -54,15 +69,20 @@ public class SleecCompletionContributor extends CompletionContributor {
                     }
 
                     private void addEvents(CompletionResultSet resultSet) {
-                        resultSet.addElement(LookupElementBuilder.create("event"));
+                        // Suggest event declaration format
+                        resultSet.addElement(LookupElementBuilder.create("event EventName"));
                     }
 
                     private void addMeasures(CompletionResultSet resultSet) {
-                        resultSet.addElement(LookupElementBuilder.create("measure"));
+                        // Suggest measure declaration formats
+                        resultSet.addElement(LookupElementBuilder.create("measure MeasureName: boolean"));
+                        resultSet.addElement(LookupElementBuilder.create("measure MeasureName: scale(param1, param2, ...)"));
+                        resultSet.addElement(LookupElementBuilder.create("measure MeasureName: numeric"));
                     }
 
                     private void addConstants(CompletionResultSet resultSet) {
-                        resultSet.addElement(LookupElementBuilder.create("constant"));
+                        // Suggest constant declaration format
+                        resultSet.addElement(LookupElementBuilder.create("constant ConstantName = value"));
                     }
 
                     private void addDefinedVariables(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet resultSet) {
