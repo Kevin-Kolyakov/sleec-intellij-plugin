@@ -1,8 +1,14 @@
 package com.example.sleeclanguageextension;
 
+import com.example.sleeclanguageextension.impl.SleecDefblockImpl;
+import com.example.sleeclanguageextension.psi.SleecConcern;
+import com.example.sleeclanguageextension.psi.SleecPurpose;
+import com.example.sleeclanguageextension.psi.SleecRuleBlock;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PlatformPatterns;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import com.intellij.psi.PsiFile;
 import com.example.sleeclanguageextension.reference.SleecDefinitionVisitor;
@@ -14,6 +20,14 @@ public class SleecCompletionContributor extends CompletionContributor {
                 new CompletionProvider<CompletionParameters>() {
                     @Override
                     protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet resultSet) {
+                        PsiElement element = parameters.getPosition();
+                        if (isInsideDefBlock(element)){
+                            // Sample events and measures from the example
+                            addEvents(resultSet);
+                            addMeasures(resultSet);
+                            addConstants(resultSet);
+                        }
+
                         // Keywords
                         resultSet.addElement(LookupElementBuilder.create("def_start"));
                         resultSet.addElement(LookupElementBuilder.create("def_end"));
@@ -59,10 +73,7 @@ public class SleecCompletionContributor extends CompletionContributor {
                         resultSet.addElement(LookupElementBuilder.create(">="));
                         resultSet.addElement(LookupElementBuilder.create("<>"));
 
-                        // Sample events and measures from the example
-                        addEvents(resultSet);
-                        addMeasures(resultSet);
-                        addConstants(resultSet);
+
 
                         // Add previously defined variables
                         addDefinedVariables(parameters, resultSet);
@@ -99,4 +110,10 @@ public class SleecCompletionContributor extends CompletionContributor {
                     }
                 });
     }
+
+    private boolean isInsideDefBlock(PsiElement element) {
+        // Traverse up the tree to see if we are inside a DEF_BLOCK
+        return !((PsiTreeUtil.getParentOfType(element, SleecRuleBlock.class) != null) || (PsiTreeUtil.getParentOfType(element, SleecConcern.class) != null) || (PsiTreeUtil.getParentOfType(element, SleecPurpose.class) != null));
+    }
+
 }
