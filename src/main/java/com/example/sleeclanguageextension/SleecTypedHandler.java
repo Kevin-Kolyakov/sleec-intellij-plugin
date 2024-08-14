@@ -17,12 +17,12 @@ public class SleecTypedHandler extends TypedHandlerDelegate {
     }
 
     private void insertPairedBracket(@NotNull Editor editor, char c) {
-        String pairedBracket = getPairedBracket(c);
-        if (pairedBracket != null) {
-            int offset = editor.getCaretModel().getOffset();
-            editor.getDocument().insertString(offset, pairedBracket);
-            editor.getCaretModel().moveToOffset(offset);
-        }
+//        String pairedBracket = getPairedBracket(c);
+//        if (pairedBracket != null) {
+//            int offset = editor.getCaretModel().getOffset();
+//            editor.getDocument().insertString(offset, pairedBracket);
+//            editor.getCaretModel().moveToOffset(offset);
+//        }
     }
 
     private String getPairedBracket(char c) {
