@@ -35,8 +35,11 @@ public class SleecCompletionContributor extends CompletionContributor {
                         if (isAfterThenClause(element)) {
                             addUnlessSuggestions(resultSet);
                         }
-                        if (isAfterAndCondition(element)) {
+                        if (isAfterAndCondition(element)||isAfterUnlessCondition(element)) {
                             addAndSuggestions(resultSet);
+                        }
+                        if (isAfterAndOrCondition(element) || isAfterAndCondition(element)) {
+                            addThenSuggestions(resultSet);
                         }
 
                         // Keywords
@@ -137,6 +140,15 @@ public class SleecCompletionContributor extends CompletionContributor {
         );
     }
 
+    private void addThenSuggestions(CompletionResultSet resultSet) {
+        // Suggest a basic 'and' condition
+        resultSet.addElement(LookupElementBuilder.create("then Action")
+                .withInsertHandler((context, item) -> {
+                    context.getEditor().getCaretModel().moveCaretRelatively(-1, 0, false, false, true); // Position the caret inside the braces
+                })
+        );
+    }
+
     private void addUnlessSuggestions(CompletionResultSet resultSet) {
         // Basic unless clause suggestion
         resultSet.addElement(LookupElementBuilder.create("unless {Condition}")
@@ -206,7 +218,37 @@ public class SleecCompletionContributor extends CompletionContributor {
         }
         return false;
     }
+    private boolean isAfterAndOrCondition(PsiElement element) {
+        PsiElement prevElement = PsiTreeUtil.prevLeaf(element);
+        int wordCount = 0;
 
+        while (prevElement != null) {
+            if (!prevElement.getText().trim().isEmpty()) {
+                wordCount++;
+                if (wordCount == 2 && prevElement.getText().equals("and")) {
+                    return true;
+                }
+            }
+            prevElement = PsiTreeUtil.prevLeaf(prevElement);
+        }
+        return false;
+    }
+
+    private boolean isAfterUnlessCondition(PsiElement element) {
+        PsiElement prevElement = PsiTreeUtil.prevLeaf(element);
+        int wordCount = 0;
+
+        while (prevElement != null) {
+            if (!prevElement.getText().trim().isEmpty()) {
+                wordCount++;
+                if (wordCount == 4 && prevElement.getText().equals("unless")) {
+                    return true;
+                }
+            }
+            prevElement = PsiTreeUtil.prevLeaf(prevElement);
+        }
+        return false;
+    }
 
     private void addRuleSuggestions(CompletionResultSet resultSet) {
 
