@@ -28,9 +28,9 @@ WHITE_SPACE=\s+
 SPACE=[ \t\n\x0B\f\r]+
 COMMENT="//".*
 NUMBER=[0-9]+(\.[0-9]*)?
-CONSTANT_ID=[A-Z]+
-EVENT_ID=[A-Z]([:letter:]|[:digit:])*
-MEASURE_ID=[a-z]([:letter:]|[:digit:])*
+CONSTANT_ID=[A-Z][_A-Z]*
+EVENT_ID=[A-Z][\p{Alnum}_]*
+MEASURE_ID=[a-z][\p{Alnum}_]*
 STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
 ID=[:letter:][a-zA-Z_0-9]*
 

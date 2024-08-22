@@ -28,9 +28,10 @@
     purpose_start = 'purpose_start'
     purpose_end = 'purpose_end'
 
-      constant_id='regexp:[A-Z]+'         // For constants that are fully capitalized
-    event_id='regexp:[A-Z]\p{Alnum}*'   // For events with the first letter capitalized
-      measure_id='regexp:[a-z]\p{Alnum}*' // For measures with the first letter lowercase
+      constant_id='regexp:[A-Z][_A-Z]*'      // For constants: fully capitalized letters and underscores
+    event_id='regexp:[A-Z][\p{Alnum}_]*'   // For events: capitalized first letter, followed by alphanumeric characters or underscores
+      measure_id='regexp:[a-z][\p{Alnum}_]*' // For measures: lowercase first letter, followed by alphanumeric characters or underscores
+
     string="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
 
     boolean='boolean'

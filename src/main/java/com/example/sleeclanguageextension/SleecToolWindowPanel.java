@@ -39,7 +39,7 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
 
         // Style for keywords (e.g., when, then, unless, within)
         Style keywordStyle = doc.addStyle("keyword", regular);
-        StyleConstants.setForeground(keywordStyle, new Color(128, 0, 128)); // Purple
+        StyleConstants.setForeground(keywordStyle, new Color(201, 3, 201)); // Purple
         StyleConstants.setBold(keywordStyle, true);
 
         // Style for events (e.g., PatientFallen, ProvideCompanionship)
