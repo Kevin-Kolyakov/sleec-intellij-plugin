@@ -8,7 +8,16 @@ import com.intellij.psi.PsiElement;
 public interface SleecScaleParam extends PsiElement {
 
   @Nullable
+  PsiElement getConstantId();
+
+  @Nullable
+  PsiElement getEventId();
+
+  @Nullable
   PsiElement getId();
+
+  @Nullable
+  PsiElement getMeasureId();
 
   @Nullable
   PsiElement getNumber();

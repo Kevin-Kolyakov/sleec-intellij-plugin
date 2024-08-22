@@ -27,7 +27,10 @@
     concern_end = 'concern_end'
     purpose_start = 'purpose_start'
     purpose_end = 'purpose_end'
-    id='regexp:\p{Alpha}\w*'
+
+      constant_id='regexp:[A-Z]+'         // For constants that are fully capitalized
+    event_id='regexp:[A-Z]\p{Alnum}*'   // For events with the first letter capitalized
+      measure_id='regexp:[a-z]\p{Alnum}*' // For measures with the first letter lowercase
     string="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
 
     boolean='boolean'
@@ -55,7 +58,7 @@
     meanwhile='meanwhile'
     otherwise='otherwise'
     else='else'
-
+    id='regexp:\p{Alpha}\w*'
     op_1='+'
     op_2='-'
     op_3='*'
@@ -90,20 +93,19 @@ Defblock::= "def_start" Definition* "def_end" /*{pin=1 recoverWhile=Defblock_rec
 private Defblock_recover ::= !(def_end | rule_start | concern_start | purpose_start | <<eof>>)*/
 
 Definition::= MeasureRule | ConstantRule | EventRule
-
 EventRule::= event EventName
-EventName::= id
+EventName ::= event_id
 MeasureRule::= NumMeasure | ScalarMeasure | BoolMeasure
 
 BoolValue::= true | false
 BoolMeasure::= measure BoolName Colon BooleanRule {pin=2}
-BoolName ::= id
+BoolName ::= measure_id
 NumMeasure::= measure NumName Colon NumericRule
-NumName::= id
+NumName::= measure_id
 ConstantRule::= constant ConstantName "=" number {pin=2}
-ConstantName::= id
+ConstantName::= constant_id
 ScalarMeasure::= measure ScalarName Colon ScaleRule
-ScalarName::= id
+ScalarName::= measure_id
 
 BooleanRule::= boolean
 
@@ -111,12 +113,12 @@ NumericRule::= numeric
 
 ScaleRule::= scale "(" ScaleParam ("," ScaleParam)* ")"
 
-ScaleParam::= number | id
+ScaleParam::= number | id | measure_id | constant_id | event_id
 
 RuleBlock::= "rule_start" Rule* "rule_end" {pin=1 recoverWhile=RuleBlock_recover}
 private RuleBlock_recover ::= !(rule_end | def_start | concern_start | purpose_start | <<eof>>)
 
-Rule::= id when Trigger (and MBoolExpr)? then Response
+Rule::= (id | measure_id | constant_id | event_id) when Trigger (and MBoolExpr)? then Response
 
 ConcernBlock::=
     "concern_start" Concern* "concern_end" {pin=1 recoverWhile=ConcernBlock_recover}
@@ -125,7 +127,7 @@ private ConcernBlock_recover ::= !(concern_end | def_start | rule_start | purpos
 Concern::=
     ConcernName "exists" Trigger ("and" MBoolExpr)? ("while" ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )? |
     ConcernName "when" Trigger ("and" MBoolExpr)? ("then" ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
-ConcernName::= id
+ConcernName::= id | measure_id | constant_id | event_id
 
 Headless_Concern::=
     exists Trigger (and MBoolExpr)? (while ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )? |
@@ -138,7 +140,7 @@ private PurposeBlock_recover ::= !(purpose_end | def_start | rule_start | concer
 Purpose::=
     PurposeName exists Trigger (and MBoolExpr)? (while ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )? |
     PurposeName when Trigger (and MBoolExpr)? (then ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
-PurposeName::= id
+PurposeName::= id | measure_id | constant_id | event_id
 
 Trigger::= EventName
 

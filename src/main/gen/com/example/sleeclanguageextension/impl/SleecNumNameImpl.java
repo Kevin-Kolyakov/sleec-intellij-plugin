@@ -30,8 +30,8 @@ public class SleecNumNameImpl extends ASTWrapperPsiElement implements SleecNumNa
 
   @Override
   @NotNull
-  public PsiElement getId() {
-    return findNotNullChildByType(ID);
+  public PsiElement getMeasureId() {
+    return findNotNullChildByType(MEASURE_ID);
   }
 
 }

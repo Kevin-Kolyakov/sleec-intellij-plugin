@@ -30,8 +30,8 @@ public class SleecConstantNameImpl extends ASTWrapperPsiElement implements Sleec
 
   @Override
   @NotNull
-  public PsiElement getId() {
-    return findNotNullChildByType(ID);
+  public PsiElement getConstantId() {
+    return findNotNullChildByType(CONSTANT_ID);
   }
 
 }

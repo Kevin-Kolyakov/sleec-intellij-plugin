@@ -28,8 +28,11 @@ WHITE_SPACE=\s+
 SPACE=[ \t\n\x0B\f\r]+
 COMMENT="//".*
 NUMBER=[0-9]+(\.[0-9]*)?
-ID=[:letter:][a-zA-Z_0-9]*
+CONSTANT_ID=[A-Z]+
+EVENT_ID=[A-Z]([:letter:]|[:digit:])*
+MEASURE_ID=[a-z]([:letter:]|[:digit:])*
 STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
+ID=[:letter:][a-zA-Z_0-9]*
 
 %%
 <YYINITIAL> {
@@ -77,8 +80,11 @@ STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
   {SPACE}              { return SPACE; }
   {COMMENT}            { return COMMENT; }
   {NUMBER}             { return NUMBER; }
-  {ID}                 { return ID; }
+  {CONSTANT_ID}        { return CONSTANT_ID; }
+  {EVENT_ID}           { return EVENT_ID; }
+  {MEASURE_ID}         { return MEASURE_ID; }
   {STRING}             { return STRING; }
+  {ID}                 { return ID; }
 
 }
 

@@ -119,13 +119,13 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // id
+  // measure_id
   public static boolean BoolName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "BoolName")) return false;
-    if (!nextTokenIs(b, ID)) return false;
+    if (!nextTokenIs(b, MEASURE_ID)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, ID);
+    r = consumeToken(b, MEASURE_ID);
     exit_section_(b, m, BOOL_NAME, r);
     return r;
   }
@@ -208,12 +208,11 @@ public class SleecParser implements PsiParser, LightPsiParser {
   //     ConcernName "when" Trigger ("and" MBoolExpr)? ("then" ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
   public static boolean Concern(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Concern")) return false;
-    if (!nextTokenIs(b, ID)) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, CONCERN, "<concern>");
     r = Concern_0(b, l + 1);
     if (!r) r = Concern_1(b, l + 1);
-    exit_section_(b, m, CONCERN, r);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -410,25 +409,27 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // id
+  // id | measure_id | constant_id | event_id
   public static boolean ConcernName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ConcernName")) return false;
-    if (!nextTokenIs(b, ID)) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, CONCERN_NAME, "<concern name>");
     r = consumeToken(b, ID);
-    exit_section_(b, m, CONCERN_NAME, r);
+    if (!r) r = consumeToken(b, MEASURE_ID);
+    if (!r) r = consumeToken(b, CONSTANT_ID);
+    if (!r) r = consumeToken(b, EVENT_ID);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   /* ********************************************************** */
-  // id
+  // constant_id
   public static boolean ConstantName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ConstantName")) return false;
-    if (!nextTokenIs(b, ID)) return false;
+    if (!nextTokenIs(b, CONSTANT_ID)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, ID);
+    r = consumeToken(b, CONSTANT_ID);
     exit_section_(b, m, CONSTANT_NAME, r);
     return r;
   }
@@ -520,13 +521,13 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // id
+  // event_id
   public static boolean EventName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "EventName")) return false;
-    if (!nextTokenIs(b, ID)) return false;
+    if (!nextTokenIs(b, EVENT_ID)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, ID);
+    r = consumeToken(b, EVENT_ID);
     exit_section_(b, m, EVENT_NAME, r);
     return r;
   }
@@ -548,7 +549,7 @@ public class SleecParser implements PsiParser, LightPsiParser {
   // Response ("while" ExtendedResponse)?
   public static boolean ExtendedResponse(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExtendedResponse")) return false;
-    if (!nextTokenIs(b, "<extended response>", ID, NOT)) return false;
+    if (!nextTokenIs(b, "<extended response>", EVENT_ID, NOT)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, EXTENDED_RESPONSE, "<extended response>");
     r = Response(b, l + 1);
@@ -961,13 +962,13 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // id
+  // measure_id
   public static boolean NumName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NumName")) return false;
-    if (!nextTokenIs(b, ID)) return false;
+    if (!nextTokenIs(b, MEASURE_ID)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, ID);
+    r = consumeToken(b, MEASURE_ID);
     exit_section_(b, m, NUM_NAME, r);
     return r;
   }
@@ -1028,7 +1029,7 @@ public class SleecParser implements PsiParser, LightPsiParser {
   // not? Trigger (TimeLimit)? (INF)?
   public static boolean Occ(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Occ")) return false;
-    if (!nextTokenIs(b, "<occ>", ID, NOT)) return false;
+    if (!nextTokenIs(b, "<occ>", EVENT_ID, NOT)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, OCC, "<occ>");
     r = Occ_0(b, l + 1);
@@ -1085,12 +1086,11 @@ public class SleecParser implements PsiParser, LightPsiParser {
   //     PurposeName when Trigger (and MBoolExpr)? (then ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
   public static boolean Purpose(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Purpose")) return false;
-    if (!nextTokenIs(b, ID)) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, PURPOSE, "<purpose>");
     r = Purpose_0(b, l + 1);
     if (!r) r = Purpose_1(b, l + 1);
-    exit_section_(b, m, PURPOSE, r);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -1287,14 +1287,16 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // id
+  // id | measure_id | constant_id | event_id
   public static boolean PurposeName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PurposeName")) return false;
-    if (!nextTokenIs(b, ID)) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, PURPOSE_NAME, "<purpose name>");
     r = consumeToken(b, ID);
-    exit_section_(b, m, PURPOSE_NAME, r);
+    if (!r) r = consumeToken(b, MEASURE_ID);
+    if (!r) r = consumeToken(b, CONSTANT_ID);
+    if (!r) r = consumeToken(b, EVENT_ID);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -1318,7 +1320,7 @@ public class SleecParser implements PsiParser, LightPsiParser {
   // Occ (Alternative)? (ND)? (Defeater*)?
   public static boolean Response(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Response")) return false;
-    if (!nextTokenIs(b, "<response>", ID, NOT)) return false;
+    if (!nextTokenIs(b, "<response>", EVENT_ID, NOT)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, RESPONSE, "<response>");
     r = Occ(b, l + 1);
@@ -1382,18 +1384,29 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // id when Trigger (and MBoolExpr)? then Response
+  // (id | measure_id | constant_id | event_id) when Trigger (and MBoolExpr)? then Response
   public static boolean Rule(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Rule")) return false;
-    if (!nextTokenIs(b, ID)) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, ID, WHEN);
+    Marker m = enter_section_(b, l, _NONE_, RULE, "<rule>");
+    r = Rule_0(b, l + 1);
+    r = r && consumeToken(b, WHEN);
     r = r && Trigger(b, l + 1);
     r = r && Rule_3(b, l + 1);
     r = r && consumeToken(b, THEN);
     r = r && Response(b, l + 1);
-    exit_section_(b, m, RULE, r);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // id | measure_id | constant_id | event_id
+  private static boolean Rule_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Rule_0")) return false;
+    boolean r;
+    r = consumeToken(b, ID);
+    if (!r) r = consumeToken(b, MEASURE_ID);
+    if (!r) r = consumeToken(b, CONSTANT_ID);
+    if (!r) r = consumeToken(b, EVENT_ID);
     return r;
   }
 
@@ -1496,13 +1509,13 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // id
+  // measure_id
   public static boolean ScalarName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ScalarName")) return false;
-    if (!nextTokenIs(b, ID)) return false;
+    if (!nextTokenIs(b, MEASURE_ID)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, ID);
+    r = consumeToken(b, MEASURE_ID);
     exit_section_(b, m, SCALAR_NAME, r);
     return r;
   }
@@ -1532,14 +1545,16 @@ public class SleecParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // number | id
+  // number | id | measure_id | constant_id | event_id
   public static boolean ScaleParam(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ScaleParam")) return false;
-    if (!nextTokenIs(b, "<scale param>", ID, NUMBER)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, SCALE_PARAM, "<scale param>");
     r = consumeToken(b, NUMBER);
     if (!r) r = consumeToken(b, ID);
+    if (!r) r = consumeToken(b, MEASURE_ID);
+    if (!r) r = consumeToken(b, CONSTANT_ID);
+    if (!r) r = consumeToken(b, EVENT_ID);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -1651,7 +1666,7 @@ public class SleecParser implements PsiParser, LightPsiParser {
   // EventName
   public static boolean Trigger(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Trigger")) return false;
-    if (!nextTokenIs(b, ID)) return false;
+    if (!nextTokenIs(b, EVENT_ID)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = EventName(b, l + 1);

@@ -30,8 +30,26 @@ public class SleecScaleParamImpl extends ASTWrapperPsiElement implements SleecSc
 
   @Override
   @Nullable
+  public PsiElement getConstantId() {
+    return findChildByType(CONSTANT_ID);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getEventId() {
+    return findChildByType(EVENT_ID);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getId() {
     return findChildByType(ID);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getMeasureId() {
+    return findChildByType(MEASURE_ID);
   }
 
   @Override

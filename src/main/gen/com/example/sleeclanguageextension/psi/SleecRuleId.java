@@ -5,9 +5,18 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface SleecBoolName extends PsiElement {
+public interface SleecRuleId extends PsiElement {
 
-  @NotNull
+  @Nullable
+  PsiElement getConstantId();
+
+  @Nullable
+  PsiElement getEventId();
+
+  @Nullable
+  PsiElement getId();
+
+  @Nullable
   PsiElement getMeasureId();
 
 }

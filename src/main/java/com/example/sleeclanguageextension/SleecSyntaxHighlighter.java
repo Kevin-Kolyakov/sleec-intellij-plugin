@@ -43,7 +43,7 @@ public class SleecSyntaxHighlighter extends SyntaxHighlighterBase {
 
     @Override
     public TextAttributesKey @NotNull [] getTokenHighlights(IElementType tokenType) {
-        if (tokenType.equals(SleecTypes.ID)) {
+        if (tokenType.equals(SleecTypes.ID)||tokenType.equals(SleecTypes.CONSTANT_ID)||tokenType.equals(SleecTypes.EVENT_ID)||tokenType.equals(SleecTypes.MEASURE_ID)) {
             return ID_KEYS;
         }
         if (tokenType.equals(SleecTypes.UNLESS)|tokenType.equals(SleecTypes.BOOLEAN)|tokenType.equals(SleecTypes.NUMERIC)|tokenType.equals(SleecTypes.SCALE)|tokenType.equals(SleecTypes.MEASURE)|tokenType.equals(SleecTypes.STRING)|tokenType.equals(SleecTypes.CONSTANT)|tokenType.equals(SleecTypes.EVENT)|tokenType.equals(SleecTypes.TRUE)|tokenType.equals(SleecTypes.FALSE)|tokenType.equals(SleecTypes.WITHIN)|tokenType.equals(SleecTypes.EVENTUALLY)|tokenType.equals(SleecTypes.SECONDS)|tokenType.equals(SleecTypes.MINUTES)|tokenType.equals(SleecTypes.HOURS)|tokenType.equals(SleecTypes.DAYS)|tokenType.equals(SleecTypes.NOT)|tokenType.equals(SleecTypes.AND)|tokenType.equals(SleecTypes.OR)|tokenType.equals(SleecTypes.WHEN)|tokenType.equals(SleecTypes.THEN)|tokenType.equals(SleecTypes.EXISTS)|tokenType.equals(SleecTypes.WHILE)|tokenType.equals(SleecTypes.MEANWHILE)|tokenType.equals(SleecTypes.OTHERWISE)|tokenType.equals(SleecTypes.ELSE)) {

@@ -29,9 +29,27 @@ public class SleecPurposeNameImpl extends ASTWrapperPsiElement implements SleecP
   }
 
   @Override
-  @NotNull
+  @Nullable
+  public PsiElement getConstantId() {
+    return findChildByType(CONSTANT_ID);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getEventId() {
+    return findChildByType(EVENT_ID);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getId() {
-    return findNotNullChildByType(ID);
+    return findChildByType(ID);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getMeasureId() {
+    return findChildByType(MEASURE_ID);
   }
 
 }

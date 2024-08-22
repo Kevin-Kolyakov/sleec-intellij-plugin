@@ -27,7 +27,7 @@ public class SleecGotoDeclarationHandler implements GotoDeclarationHandler {
         // Find the first target element with the same id
            PsiElement targetElement = findFirstTargetElement(file, idText, elementType);
 
-        if (targetElement != null && targetElement.getNode().getElementType()== SleecTypes.ID) {
+        if (targetElement != null && (targetElement.getNode().getElementType()== SleecTypes.ID||targetElement.getNode().getElementType()==SleecTypes.MEASURE_ID||targetElement.getNode().getElementType()==SleecTypes.CONSTANT_ID||targetElement.getNode().getElementType()==SleecTypes.EVENT_ID)) {
             return new PsiElement[]{targetElement};
         }
 

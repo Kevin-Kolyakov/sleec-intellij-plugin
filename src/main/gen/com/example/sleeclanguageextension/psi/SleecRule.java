@@ -16,7 +16,16 @@ public interface SleecRule extends PsiElement {
   @NotNull
   SleecTrigger getTrigger();
 
-  @NotNull
+  @Nullable
+  PsiElement getConstantId();
+
+  @Nullable
+  PsiElement getEventId();
+
+  @Nullable
   PsiElement getId();
+
+  @Nullable
+  PsiElement getMeasureId();
 
 }

@@ -5,9 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface SleecBoolName extends PsiElement {
-
-  @NotNull
-  PsiElement getMeasureId();
+public interface SleecMeasureId extends PsiElement {
 
 }

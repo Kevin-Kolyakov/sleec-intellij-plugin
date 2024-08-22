@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface SleecNumName extends PsiElement {
 
   @NotNull
-  PsiElement getId();
+  PsiElement getMeasureId();
 
 }

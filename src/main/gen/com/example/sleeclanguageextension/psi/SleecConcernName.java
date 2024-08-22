@@ -7,7 +7,16 @@ import com.intellij.psi.PsiElement;
 
 public interface SleecConcernName extends PsiElement {
 
-  @NotNull
+  @Nullable
+  PsiElement getConstantId();
+
+  @Nullable
+  PsiElement getEventId();
+
+  @Nullable
   PsiElement getId();
+
+  @Nullable
+  PsiElement getMeasureId();
 
 }
