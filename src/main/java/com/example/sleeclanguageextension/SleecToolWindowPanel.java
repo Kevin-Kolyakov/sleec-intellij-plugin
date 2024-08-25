@@ -9,6 +9,12 @@ import com.intellij.ui.components.JBScrollPane;
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.List;
 
 public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
     private final Project project;
@@ -73,7 +79,6 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
         Style highlightStyle = textPane.addStyle("HighlightStyle", null);
         StyleConstants.setBackground(highlightStyle, new Color(246, 246, 246)); // Set the background color to yellow (or any color you prefer)
         StyleConstants.setFontFamily(highlightStyle, "JetBrains Mono"); // Set the font to JetBrains Mono, as required
-
     }
 
     public void print(String text) {
@@ -84,6 +89,8 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
             // Split the text into lines for easier processing
             String[] lines = text.split("\n");
             boolean foundInterestingMessage = false;
+            boolean isConcern = false;
+            Set<String> relevantMeasures = new HashSet<>();
 
             for (String line : lines) {
                 // Start capturing only after "Very interesting message here"
@@ -94,10 +101,41 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
 
                 // If we've found the interesting message, print the subsequent lines
                 if (foundInterestingMessage) {
-                    // Trim the line to remove trailing spaces
-                    //line = line.trim();
+                    line = line.trim(); // Trim the line to remove trailing spaces
 
-                    insertFormattedText(line);
+                    // Detect if a trigger and response are mentioned and capture relevant measures
+                        relevantMeasures = extractCurlyBraces(text);
+
+                    // Check if this line is related to a concern being raised
+                    if (line.contains("Concern is raised")) {
+                        isConcern = true;  // Mark that a concern is being handled
+                    }
+
+                    // If the line contains a measure and it's a concern, filter and print relevant ones
+                    if (isConcern && line.startsWith("at time") && line.contains("Measure")) {
+                        String measureContent = line.substring(line.indexOf("Measure(") + 8, line.indexOf(")")).trim();
+                        String[] measureTokens = measureContent.split(", ");
+                        StringBuilder filteredMeasures = new StringBuilder("Measure(");
+
+                        for (String measure : measureTokens) {
+                            if (isRelevantMeasure(measure, relevantMeasures)) {
+                                filteredMeasures.append(measure).append(", ");
+                            }
+                        }
+
+                        // Remove the trailing comma and space
+                        if (filteredMeasures.length() > 8) {
+                            filteredMeasures.setLength(filteredMeasures.length() - 2);
+                        }
+
+                        filteredMeasures.append(")");
+                        insertFormattedText("at time 0: " + filteredMeasures.toString());
+
+                        // Reset isConcern after processing relevant measures
+                        isConcern = false;
+                    } else {
+                        insertFormattedText(line);
+                    }
                 }
             }
 
@@ -110,9 +148,45 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
         }
     }
 
+    // Helper method to extract relevant measures from a condition part of a rule
+    private Set<String> extractRelevantMeasures(String conditionsPart) {
+        Set<String> measures = new HashSet<>();
+        // Logic to extract measures like {obtainConsent} from the condition part
+        String[] conditions = conditionsPart.split("and|or");
+        for (String condition : conditions) {
+            condition = condition.trim();
+            if (condition.startsWith("{") && condition.endsWith("}")) {
+                measures.add(condition.substring(1, condition.length() - 1)); // Extract the text between {}
+            }
+        }
+        return measures;
+    }
 
+    // Helper method to determine if a measure is relevant
+    private boolean isRelevantMeasure(String measure, Set<String> relevantMeasures) {
+        for (String relevant : relevantMeasures) {
+            if (measure.contains(relevant)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    public  Set<String> extractCurlyBraces(String text) {
+        // Set to store matches (ensures uniqueness)
+        Set<String> matches = new HashSet<>();
 
+        // Regular expression to find text within curly braces
+        Pattern pattern = Pattern.compile("\\{(.*?)\\}");
+        Matcher matcher = pattern.matcher(text);
+
+        // Find all matches and add them to the set
+        while (matcher.find()) {
+            matches.add(matcher.group(1));
+        }
+
+        return matches;
+    }
     private void insertFormattedText(String line) throws BadLocationException {
         // Split line into tokens, preserving the space after the last token, if any
         String[] tokens = line.split("\\s+");
@@ -147,11 +221,9 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
         doc.insertString(doc.getLength(), "\n", doc.getStyle("regular"));
     }
 
-
     private boolean isNumberCondition(String token) {
         return token.matches("\\d+(\\.\\d+)?");
     }
-
 
     private boolean isKeyword(String token) {
         String[] keywords = {"when", "then", "unless", "within", "minutes", "hours", "days", "True", "False", "and", "or", "exists"};
@@ -190,14 +262,13 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
                 int end = Integer.parseInt(indices[1].trim());
 
                 if (start >= 0 && end > start) {
-                    doc.setCharacterAttributes(start +8, end - start, doc.getStyle("HighlightStyle"), false);
+                    doc.setCharacterAttributes(start + 8, end - start, doc.getStyle("HighlightStyle"), false);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 
     private boolean isComment(String token) {
         return token.startsWith("//");
@@ -206,7 +277,6 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
     private boolean isStringLiteral(String token) {
         return token.startsWith("\"") && token.endsWith("\"");
     }
-
 
     private boolean isTimeCondition(String token) {
         // Check if the token is a time condition like "10 minutes"
