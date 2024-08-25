@@ -1,7 +1,14 @@
 package com.example.sleeclanguageextension;
 
+import com.example.sleeclanguageextension.psi.SleecRule;
+import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.JBScrollPane;
@@ -9,12 +16,10 @@ import com.intellij.ui.components.JBScrollPane;
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.List;
 
 public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
     private final Project project;
@@ -91,6 +96,7 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
             boolean foundInterestingMessage = false;
             boolean isConcern = false;
             Set<String> relevantMeasures = new HashSet<>();
+            Set<String> eventsToCheck = new HashSet<>(); // To store all events found
 
             for (String line : lines) {
                 // Start capturing only after "Very interesting message here"
@@ -104,7 +110,15 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
                     line = line.trim(); // Trim the line to remove trailing spaces
 
                     // Detect if a trigger and response are mentioned and capture relevant measures
-                        relevantMeasures = extractCurlyBraces(text);
+                    relevantMeasures = extractCurlyBraces(text);
+
+                    // Collect all events after "exists" keyword
+                    if (line.contains("exists")) {
+                        String event = extractEventAfterExists(line);
+                        if (!event.isEmpty()) {
+                            eventsToCheck.add(event);
+                        }
+                    }
 
                     // Check if this line is related to a concern being raised
                     if (line.contains("Concern is raised")) {
@@ -139,6 +153,11 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
                 }
             }
 
+            // Print rules for each event found
+            for (String event : eventsToCheck) {
+                printRulesWithEvent(event);
+            }
+
             // Highlight the specific ranges at the end of the text
             highlightWords();
 
@@ -148,20 +167,73 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
         }
     }
 
-    // Helper method to extract relevant measures from a condition part of a rule
-    private Set<String> extractRelevantMeasures(String conditionsPart) {
-        Set<String> measures = new HashSet<>();
-        // Logic to extract measures like {obtainConsent} from the condition part
-        String[] conditions = conditionsPart.split("and|or");
-        for (String condition : conditions) {
-            condition = condition.trim();
-            if (condition.startsWith("{") && condition.endsWith("}")) {
-                measures.add(condition.substring(1, condition.length() - 1)); // Extract the text between {}
-            }
+    private String extractEventAfterExists(String line) {
+        Pattern pattern = Pattern.compile("exists\\s+(\\w+)");
+        Matcher matcher = pattern.matcher(line);
+        if (matcher.find()) {
+            return matcher.group(1);
         }
-        return measures;
+        return "";
     }
 
+    private void printRulesWithEvent(String event) throws BadLocationException {
+        // Assume we have a method to get all rule names and their corresponding triggers
+        Set<String> rulesWithEvent = getRulesWithEvent(event); // This should be your logic to fetch rules containing the event
+
+        if (!rulesWithEvent.isEmpty()) {
+            String rulesText = "Rules with " + event + ": " + String.join(", ", rulesWithEvent);
+            insertFormattedText(rulesText);
+        }
+    }
+
+    private Set<String> getRulesWithEvent(String event) {
+        Set<String> rules = new HashSet<>();
+
+        PsiFile psiFile = getPsiFileFromEditor(); // Get the PsiFile from the editor
+        if (psiFile != null) {
+            // Traverse the PSI tree to find rule definitions that contain the specified event
+            Collection<PsiElement> ruleElements = PsiTreeUtil.findChildrenOfType(psiFile, SleecRule.class);
+
+            for (PsiElement ruleElement : ruleElements) {
+                // Check if the rule contains the specific event
+                if (containsEvent(ruleElement, event)) {
+                    // Get the rule name
+                    String ruleName = getRuleName(ruleElement);
+                    if (ruleName != null) {
+                        rules.add(ruleName);
+                    }
+                }
+            }
+        }
+
+        return rules;
+    }
+
+    private boolean containsEvent(PsiElement ruleElement, String event) {
+        // Implement logic to check if the ruleElement contains the specified event
+        // This may involve traversing children elements and checking their text
+        return ruleElement.getText().contains(event);
+    }
+
+    private String getRuleName(PsiElement ruleElement) {
+        // Implement logic to extract the rule name from the PsiElement representing a rule
+        // This will depend on your PSI structure and how rules are represented
+        return ruleElement.getFirstChild().getText(); // Adjust as necessary
+    }
+
+
+
+    private PsiFile getPsiFileFromEditor() {
+        if (project != null) {
+            FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
+            VirtualFile[] selectedFiles = fileEditorManager.getSelectedFiles();
+
+            if (selectedFiles.length > 0) {
+                return PsiManager.getInstance(project).findFile(selectedFiles[0]);
+            }
+        }
+        return null;
+    }
     // Helper method to determine if a measure is relevant
     private boolean isRelevantMeasure(String measure, Set<String> relevantMeasures) {
         for (String relevant : relevantMeasures) {
