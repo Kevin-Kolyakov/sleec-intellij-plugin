@@ -113,7 +113,21 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
 
                     // Collect all events after "exists" keyword
                     if (line.contains("exists")) {
-                        String event = extractEventAfterExists(line);
+                        String event = extractEventAfterKeyword(line, "exists");
+                        if (!event.isEmpty()) {
+                            eventsToCheck.add(event);
+                        }
+                    }
+
+                    // Collect all events after "then" or "then not"
+                    if (line.contains("then ")) {
+                        String event = extractEventAfterKeyword(line, "then");
+                        if (!event.isEmpty()) {
+                            eventsToCheck.add(event);
+                        }
+                    }
+                    if (line.contains("when ")) {
+                        String event = extractEventAfterKeyword(line, "when");
                         if (!event.isEmpty()) {
                             eventsToCheck.add(event);
                         }
@@ -166,11 +180,12 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
         }
     }
 
-    private String extractEventAfterExists(String line) {
-        Pattern pattern = Pattern.compile("exists\\s+(\\w+)");
+
+    private String extractEventAfterKeyword(String line, String keyword) {
+        Pattern pattern = Pattern.compile(keyword + "\\s+(not\\s+)?(\\w+)");
         Matcher matcher = pattern.matcher(line);
         if (matcher.find()) {
-            return matcher.group(1);
+            return matcher.group(2); // Returns the event after "exists", "then", or "then not"
         }
         return "";
     }
