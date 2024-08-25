@@ -29,6 +29,7 @@ def read_model_file(file_path):
 
 def check_situational(cur_text):
     response = check_situational_conflict(cur_text)
+    print("Very interesting message here")
     print(response)
 
 if __name__ == "__main__":

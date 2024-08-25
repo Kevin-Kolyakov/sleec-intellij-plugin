@@ -147,6 +147,7 @@ public class PythonRun2 extends AnAction {
 
     private String processResponse(String response) {
         response = response.replace("\\n", "\n");
+        response = response.replace("\\t", "\\");
         return response;
     }
 }

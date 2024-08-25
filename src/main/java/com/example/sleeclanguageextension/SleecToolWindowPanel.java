@@ -34,7 +34,7 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
         // Regular text style
         Style defaultStyle = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
         Style regular = doc.addStyle("regular", defaultStyle);
-        StyleConstants.setFontFamily(defaultStyle, "Courier New");
+        StyleConstants.setFontFamily(defaultStyle, "JetBrains Mono");
         StyleConstants.setFontSize(defaultStyle, 12);
 
         // Style for keywords (e.g., when, then, unless, within)
@@ -66,67 +66,43 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
         StyleConstants.setForeground(timeStyle, JBColor.YELLOW);
         StyleConstants.setBold(timeStyle, true);
         StyleConstants.setBackground(timeStyle, JBColor.BLACK); // Black background to mimic highlighting
-    }
 
+        Style numberStyle = doc.addStyle("number", regular);
+        StyleConstants.setForeground(numberStyle, JBColor.YELLOW);
+
+        Style highlightStyle = textPane.addStyle("HighlightStyle", null);
+        StyleConstants.setBackground(highlightStyle, new Color(246, 246, 246)); // Set the background color to yellow (or any color you prefer)
+        StyleConstants.setFontFamily(highlightStyle, "JetBrains Mono"); // Set the font to JetBrains Mono, as required
+
+    }
 
     public void print(String text) {
         try {
+            // Clear the current content
+            doc.remove(0, doc.getLength());
+
             // Split the text into lines for easier processing
             String[] lines = text.split("\n");
-            boolean inRelevantSection = false;
-            boolean captureBecauseSection = false;
+            boolean foundInterestingMessage = false;
 
             for (String line : lines) {
-                // Start capturing relevant sections
-                if (line.startsWith("Situational conflict under situation :")) {
-                    inRelevantSection = true;
+                // Start capturing only after "Very interesting message here"
+                if (line.startsWith("Very interesting message here")) {
+                    foundInterestingMessage = true;
+                    continue; // Skip this line, as we want to start printing from the next one
                 }
 
-                // Start capturing "Because of" section
-                if (line.startsWith("Because of the following SLEEC rule:")) {
-                    captureBecauseSection = true;
-                    inRelevantSection = true;
-                }
+                // If we've found the interesting message, print the subsequent lines
+                if (foundInterestingMessage) {
+                    // Trim the line to remove trailing spaces
+                    //line = line.trim();
 
-                // Stop capturing after the relevant section ends
-                if (inRelevantSection && line.startsWith("----------------------------------------------------------------------------------------------------") && !captureBecauseSection) {
-                    inRelevantSection = false;
-                }
-
-                // Stop capturing after the "Because of" section ends
-                if (captureBecauseSection && line.startsWith("----------------------------------------------------------------------------------------------------")) {
-                    captureBecauseSection = false;
-                }
-
-                // If the line is part of the relevant sections, process and format it
-                if (inRelevantSection || captureBecauseSection) {
-                    String[] tokens = line.split("\\s+");
-
-                    for (String token : tokens) {
-                        Style style = doc.getStyle("regular");
-
-                        // Apply styles based on token content
-                        if (isKeyword(token)) {
-                            style = doc.getStyle("keyword");
-                        } else if (isEvent(token)) {
-                            style = doc.getStyle("event");
-                        } else if (isCondition(token)) {
-                            style = doc.getStyle("condition");
-                        } else if (isComment(token)) {
-                            style = doc.getStyle("comment");
-                        } else if (isConflict(line)) {
-                            style = doc.getStyle("conflict");
-                        } else if (isStringLiteral(token)) {
-                            style = doc.getStyle("string");
-                        } else if (isTimeCondition(token)) {
-                            style = doc.getStyle("time");
-                        }
-
-                        doc.insertString(doc.getLength(), token + " ", style);
-                    }
-                    doc.insertString(doc.getLength(), "\n", doc.getStyle("regular"));
+                    insertFormattedText(line);
                 }
             }
+
+            // Highlight the specific ranges at the end of the text
+            highlightWords();
 
             textPane.setCaretPosition(doc.getLength()); // Scroll to the bottom
         } catch (BadLocationException e) {
@@ -135,8 +111,77 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
     }
 
 
-    private boolean isKeyword(String token) {
-        String[] keywords = {"when", "then", "unless", "within"};
+
+
+    private void insertFormattedText(String line) throws BadLocationException {
+        // Keywords that should be matched within any text
+        String[] inTextKeywords = {"not", "false", "true"};
+        // Keywords that should only be matched as whole tokens
+        String[] wholeTokenKeywords = {"when", "then", "unless", "within", "minutes", "hours", "days", "and", "or", "exists"};
+
+        Style defaultStyle = doc.getStyle("regular");
+
+        int currentIndex = 0; // Tracks the current index in the line
+
+        // Iterate through the line to handle in-text keywords
+        while (currentIndex < line.length()) {
+            boolean matched = false;
+
+            // Check for each in-text keyword anywhere in the text
+            for (String keyword : inTextKeywords) {
+                if (line.regionMatches(true, currentIndex, keyword, 0, keyword.length())) {
+                    // Apply keyword style for "not", "false", "true"
+                    Style keywordStyle = doc.getStyle("keyword");
+                    doc.insertString(doc.getLength(), line.substring(currentIndex, currentIndex + keyword.length()), keywordStyle);
+
+                    // Move the index past the matched keyword
+                    currentIndex += keyword.length();
+                    matched = true;
+                    break;
+                }
+            }
+
+            // If no in-text keywords were matched, insert the current character as regular text
+            if (!matched) {
+                doc.insertString(doc.getLength(), line.substring(currentIndex, currentIndex + 1), defaultStyle);
+                currentIndex++;
+            }
+        }
+
+        // Now split the line for whole-token keywords and other styling
+        String[] tokens = line.split("\\s+");
+
+        for (int i = 0; i < tokens.length; i++) {
+            String token = tokens[i];
+            Style style = doc.getStyle("regular");
+
+            // Apply styles based on token content for whole-token keywords
+            if (isKeyword(token, wholeTokenKeywords)) {
+                style = doc.getStyle("keyword");
+            } else if (isComment(token)) {
+                style = doc.getStyle("comment");
+            } else if (isStringLiteral(token)) {
+                style = doc.getStyle("string");
+            } else if (isTimeCondition(token)) {
+                style = doc.getStyle("time");
+            } else if (isNumberCondition(token)) {
+                style = doc.getStyle("number");
+            }
+
+            // Insert token
+            doc.insertString(doc.getLength(), token, style);
+
+            // Only add space if it's not the last token
+            if (i < tokens.length - 1) {
+                doc.insertString(doc.getLength(), " ", doc.getStyle("regular"));
+            }
+        }
+
+        // Insert newline at the end of each line
+        doc.insertString(doc.getLength(), "\n", doc.getStyle("regular"));
+    }
+
+    private boolean isKeyword(String token, String[] keywords) {
         for (String keyword : keywords) {
             if (token.equals(keyword)) {
                 return true;
@@ -145,28 +190,58 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
         return false;
     }
 
-    private boolean isEvent(String token) {
-        // Example events used in the Sleec code
-        String[] events = {"OpenCurtainRequest", "SignalOpenCurtain", "OpenCurtain", "LeavePatient", "UserFallen",
-                "SupportCalled", "PatientFallen", "ProvideCompanionship", "CallSupport"};
-        for (String event : events) {
-            if (token.equals(event)) {
+
+
+    private boolean isNumberCondition(String token) {
+        return token.matches("\\d+(\\.\\d+)?");
+    }
+
+
+    private boolean isKeyword(String token) {
+        String[] keywords = {"when", "then", "unless", "within", "minutes", "hours", "days", "True", "False", "and", "or", "exists"};
+        for (String keyword : keywords) {
+            if (token.equals(keyword)) {
                 return true;
             }
         }
         return false;
     }
 
-    private boolean isCondition(String token) {
-        // Example conditions (these should match your measure names or other conditions)
-        String[] conditions = {"underDressed", "patientNotDeaf"};
-        for (String condition : conditions) {
-            if (token.equals(condition) || token.contains("{") && token.contains("}")) {
-                return true;
+    public void highlightWords() {
+        try {
+            String text = textPane.getText();  // Get the full text from the document
+            // Extract the list of ranges
+            int lastParenIndex = text.lastIndexOf("]");
+            int listStartIndex = text.indexOf("[");
+
+            if (listStartIndex == -1 || lastParenIndex == -1) {
+                System.out.println("No valid range list found");
+                return; // No valid range list found
             }
+
+            String rangesList = text.substring(listStartIndex + 1, lastParenIndex);
+
+            // Parse and apply the highlights
+            String[] rangePairs = rangesList.split("\\), \\(");
+
+            for (String pair : rangePairs) {
+                // Remove any remaining parenthesis
+                pair = pair.replace("(", "").replace(")", "");
+
+                String[] indices = pair.split(", ");
+
+                int start = Integer.parseInt(indices[0].trim());
+                int end = Integer.parseInt(indices[1].trim());
+
+                if (start >= 0 && end > start) {
+                    doc.setCharacterAttributes(start +8, end - start, doc.getStyle("HighlightStyle"), false);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return false;
     }
+
 
     private boolean isComment(String token) {
         return token.startsWith("//");
@@ -176,14 +251,9 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
         return token.startsWith("\"") && token.endsWith("\"");
     }
 
-    private boolean isConflict(String line) {
-        // Basic check for conflict sections (you might need more complex logic based on your actual output)
-        return line.contains("Conflict detected") || line.contains("UNSAT CORE") || line.contains("Situational conflict");
-    }
 
     private boolean isTimeCondition(String token) {
         // Check if the token is a time condition like "10 minutes"
         return token.matches("\\d+\\s*(minutes|seconds|hours|days)");
     }
-
 }
