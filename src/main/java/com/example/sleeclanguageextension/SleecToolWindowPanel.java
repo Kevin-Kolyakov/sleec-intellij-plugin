@@ -114,49 +114,15 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
 
 
     private void insertFormattedText(String line) throws BadLocationException {
-        // Keywords that should be matched within any text
-        String[] inTextKeywords = {"not", "false", "true"};
-        // Keywords that should only be matched as whole tokens
-        String[] wholeTokenKeywords = {"when", "then", "unless", "within", "minutes", "hours", "days", "and", "or", "exists"};
-
-        Style defaultStyle = doc.getStyle("regular");
-
-        int currentIndex = 0; // Tracks the current index in the line
-
-        // Iterate through the line to handle in-text keywords
-        while (currentIndex < line.length()) {
-            boolean matched = false;
-
-            // Check for each in-text keyword anywhere in the text
-            for (String keyword : inTextKeywords) {
-                if (line.regionMatches(true, currentIndex, keyword, 0, keyword.length())) {
-                    // Apply keyword style for "not", "false", "true"
-                    Style keywordStyle = doc.getStyle("keyword");
-                    doc.insertString(doc.getLength(), line.substring(currentIndex, currentIndex + keyword.length()), keywordStyle);
-
-                    // Move the index past the matched keyword
-                    currentIndex += keyword.length();
-                    matched = true;
-                    break;
-                }
-            }
-
-            // If no in-text keywords were matched, insert the current character as regular text
-            if (!matched) {
-                doc.insertString(doc.getLength(), line.substring(currentIndex, currentIndex + 1), defaultStyle);
-                currentIndex++;
-            }
-        }
-
-        // Now split the line for whole-token keywords and other styling
+        // Split line into tokens, preserving the space after the last token, if any
         String[] tokens = line.split("\\s+");
 
         for (int i = 0; i < tokens.length; i++) {
             String token = tokens[i];
             Style style = doc.getStyle("regular");
 
-            // Apply styles based on token content for whole-token keywords
-            if (isKeyword(token, wholeTokenKeywords)) {
+            // Apply styles based on token content
+            if (isKeyword(token)) {
                 style = doc.getStyle("keyword");
             } else if (isComment(token)) {
                 style = doc.getStyle("comment");
@@ -180,16 +146,6 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
         // Insert newline at the end of each line
         doc.insertString(doc.getLength(), "\n", doc.getStyle("regular"));
     }
-
-    private boolean isKeyword(String token, String[] keywords) {
-        for (String keyword : keywords) {
-            if (token.equals(keyword)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 
 
     private boolean isNumberCondition(String token) {
