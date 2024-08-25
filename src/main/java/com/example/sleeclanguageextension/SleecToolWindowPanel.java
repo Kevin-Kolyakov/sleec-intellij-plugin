@@ -16,20 +16,19 @@ import com.intellij.ui.components.JBScrollPane;
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
-import java.util.*;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
     private final Project project;
-    private final ToolWindow toolWindow;
     private final JTextPane textPane;
     private final StyledDocument doc;
 
     public SleecToolWindowPanel(Project project, ToolWindow toolWindow) {
         this.project = project;
-        this.toolWindow = toolWindow;
         this.textPane = new JTextPane();
         this.doc = textPane.getStyledDocument();
 
@@ -48,12 +47,12 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
         StyleConstants.setFontFamily(defaultStyle, "JetBrains Mono");
         StyleConstants.setFontSize(defaultStyle, 12);
 
-        // Style for keywords (e.g., when, then, unless, within)
+        // Style for keywords
         Style keywordStyle = doc.addStyle("keyword", regular);
-        StyleConstants.setForeground(keywordStyle, new Color(201, 3, 201)); // Purple
+        StyleConstants.setForeground(keywordStyle, new Color(201, 3, 201));
         StyleConstants.setBold(keywordStyle, true);
 
-        // Style for events (e.g., PatientFallen, ProvideCompanionship)
+        // Style for events
         Style eventStyle = doc.addStyle("event", regular);
         StyleConstants.setForeground(eventStyle, JBColor.RED);
         StyleConstants.setBold(eventStyle, true);
@@ -70,20 +69,20 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
 
         // Style for string literals
         Style stringStyle = doc.addStyle("string", regular);
-        StyleConstants.setForeground(stringStyle, new Color(0, 128, 0)); // Dark green
+        StyleConstants.setForeground(stringStyle, new Color(0, 128, 0));
 
         // Style for time conditions (e.g., 10 minutes)
         Style timeStyle = doc.addStyle("time", regular);
         StyleConstants.setForeground(timeStyle, JBColor.YELLOW);
         StyleConstants.setBold(timeStyle, true);
-        StyleConstants.setBackground(timeStyle, JBColor.BLACK); // Black background to mimic highlighting
+        StyleConstants.setBackground(timeStyle, JBColor.BLACK);
 
         Style numberStyle = doc.addStyle("number", regular);
         StyleConstants.setForeground(numberStyle, JBColor.YELLOW);
 
         Style highlightStyle = textPane.addStyle("HighlightStyle", null);
-        StyleConstants.setBackground(highlightStyle, new Color(246, 246, 246)); // Set the background color to yellow (or any color you prefer)
-        StyleConstants.setFontFamily(highlightStyle, "JetBrains Mono"); // Set the font to JetBrains Mono, as required
+        StyleConstants.setBackground(highlightStyle, new Color(246, 246, 246));
+        StyleConstants.setFontFamily(highlightStyle, "JetBrains Mono");
     }
 
     public void print(String text) {
@@ -95,11 +94,11 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
             String[] lines = text.split("\n");
             boolean foundInterestingMessage = false;
             boolean isConcern = false;
-            Set<String> relevantMeasures = new HashSet<>();
+            Set<String> relevantMeasures;
             Set<String> eventsToCheck = new HashSet<>(); // To store all events found
 
             for (String line : lines) {
-                // Start capturing only after "Very interesting message here"
+                // Start capturing only after "Very interesting message here" kind of gimmicky but it works
                 if (line.startsWith("Very interesting message here")) {
                     foundInterestingMessage = true;
                     continue; // Skip this line, as we want to start printing from the next one
@@ -177,8 +176,7 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
     }
 
     private void printRulesWithEvent(String event) throws BadLocationException {
-        // Assume we have a method to get all rule names and their corresponding triggers
-        Set<String> rulesWithEvent = getRulesWithEvent(event); // This should be your logic to fetch rules containing the event
+        Set<String> rulesWithEvent = getRulesWithEvent(event);
 
         if (!rulesWithEvent.isEmpty()) {
             String rulesText = "Rules with " + event + ": " + String.join(", ", rulesWithEvent);
@@ -189,7 +187,7 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
     private Set<String> getRulesWithEvent(String event) {
         Set<String> rules = new HashSet<>();
 
-        PsiFile psiFile = getPsiFileFromEditor(); // Get the PsiFile from the editor
+        PsiFile psiFile = getPsiFileFromEditor();
         if (psiFile != null) {
             // Traverse the PSI tree to find rule definitions that contain the specified event
             Collection<PsiElement> ruleElements = PsiTreeUtil.findChildrenOfType(psiFile, SleecRule.class);
@@ -210,15 +208,11 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
     }
 
     private boolean containsEvent(PsiElement ruleElement, String event) {
-        // Implement logic to check if the ruleElement contains the specified event
-        // This may involve traversing children elements and checking their text
         return ruleElement.getText().contains(event);
     }
 
     private String getRuleName(PsiElement ruleElement) {
-        // Implement logic to extract the rule name from the PsiElement representing a rule
-        // This will depend on your PSI structure and how rules are represented
-        return ruleElement.getFirstChild().getText(); // Adjust as necessary
+        return ruleElement.getFirstChild().getText();
     }
 
 
@@ -234,7 +228,6 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
         }
         return null;
     }
-    // Helper method to determine if a measure is relevant
     private boolean isRelevantMeasure(String measure, Set<String> relevantMeasures) {
         for (String relevant : relevantMeasures) {
             if (measure.contains(relevant)) {
@@ -245,7 +238,6 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
     }
 
     public  Set<String> extractCurlyBraces(String text) {
-        // Set to store matches (ensures uniqueness)
         Set<String> matches = new HashSet<>();
 
         // Regular expression to find text within curly braces
