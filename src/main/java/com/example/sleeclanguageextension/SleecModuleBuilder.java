@@ -1,9 +1,7 @@
 package com.example.sleeclanguageextension;
 
 import com.intellij.ide.util.projectWizard.ModuleBuilder;
-import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleType;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -15,14 +13,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Collections;
-import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class SleecModuleBuilder extends ModuleBuilder {
 
-    private static final String TEMPLATE_ZIP = "/Templates/LEGOS-SLEEC-main.zip";
+    private static final String TEMPLATE_ZIP = "/Templates/legos-sleec-main.zip";
 
     @Override
     public void setupRootModel(@NotNull ModifiableRootModel model) {

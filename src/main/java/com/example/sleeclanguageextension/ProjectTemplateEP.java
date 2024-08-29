@@ -23,7 +23,7 @@ public final class ProjectTemplateEP {
      * name of the project the user is creating). Under that directory, {@code .idea/description.html} specifies the description
      * of the template and {@code .idea/project-template.xml} specifies additional metadata for the template.
      */
-    @Attribute("LEGOS-SLEEC-main.zip")
+    @Attribute("legos-sleec-main.zip")
     @RequiredElement
     public String templatePath;
 
