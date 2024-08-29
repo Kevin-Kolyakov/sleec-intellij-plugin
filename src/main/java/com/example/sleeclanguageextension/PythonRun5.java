@@ -17,6 +17,30 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PythonRun5 extends AnAction {
+    String pythonExecutable = findPythonExecutable();
+
+    private static String findPythonExecutable() {
+        // Check if "python3" is available
+        if (isExecutableAvailable("python3")) {
+            return "python3";
+        }
+        // Check if "python" is available
+        if (isExecutableAvailable("python")) {
+            return "python";
+        }
+        // Neither executable is available
+        return null;
+    }
+    private static boolean isExecutableAvailable(String executableName) {
+        try {
+            ProcessBuilder processBuilder = new ProcessBuilder(executableName, "--version");
+            Process process = processBuilder.start();
+            int exitCode = process.waitFor();
+            return exitCode == 0;
+        } catch (IOException | InterruptedException e) {
+            return false;
+        }
+    }
     @Override
     public void actionPerformed(AnActionEvent e) {
         Project project = e.getProject();
@@ -110,7 +134,7 @@ public class PythonRun5 extends AnAction {
         File mainScript = new File(tempDir, "runSleec5.py");
 
         // Execute the temporary Python script with the path to the content file
-        ProcessBuilder processBuilder = new ProcessBuilder("python", mainScript.getAbsolutePath(), tempContentFile.getAbsolutePath());
+        ProcessBuilder processBuilder = new ProcessBuilder(pythonExecutable, mainScript.getAbsolutePath(), tempContentFile.getAbsolutePath());
         processBuilder.directory(tempDir);  // Set the working directory to the temp directory
         processBuilder.redirectErrorStream(true);
         Process process = processBuilder.start();
