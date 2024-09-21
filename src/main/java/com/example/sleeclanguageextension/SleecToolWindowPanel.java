@@ -138,6 +138,11 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
                         isConcern = true;  // Mark that a concern is being handled
                     }
 
+                    for (String event : eventsToCheck) {
+                        printRulesWithEvent(event);
+                    }
+                    eventsToCheck.clear();
+
                     // If the line contains a measure and it's a concern, filter and print relevant ones
                     if (isConcern && line.startsWith("at time") && line.contains("Measure")) {
                         String measureContent = line.substring(line.indexOf("Measure(") + 8, line.indexOf(")")).trim();
@@ -155,8 +160,10 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
                             filteredMeasures.setLength(filteredMeasures.length() - 2);
                         }
 
+
                         filteredMeasures.append(")");
                         insertFormattedText("at time 0: " + filteredMeasures.toString());
+
 
                         // Reset isConcern after processing relevant measures
                         isConcern = false;
@@ -167,9 +174,7 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
             }
 
             // Print rules for each event found
-            for (String event : eventsToCheck) {
-                printRulesWithEvent(event);
-            }
+
 
             // Highlight the specific ranges at the end of the text
             highlightWords();
