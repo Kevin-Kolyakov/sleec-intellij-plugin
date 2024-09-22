@@ -138,10 +138,13 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
                         isConcern = true;  // Mark that a concern is being handled
                     }
 
-                    for (String event : eventsToCheck) {
-                        printRulesWithEvent(event);
+                    if (isConcern) {
+                        for (String event : eventsToCheck) {
+                            printRulesWithEvent(event);
+                        }
+                        eventsToCheck.clear();
                     }
-                    eventsToCheck.clear();
+
 
                     // If the line contains a measure and it's a concern, filter and print relevant ones
                     if (isConcern && line.startsWith("at time") && line.contains("Measure")) {
@@ -172,9 +175,6 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
                     }
                 }
             }
-
-            // Print rules for each event found
-
 
             // Highlight the specific ranges at the end of the text
             highlightWords();
@@ -273,6 +273,7 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
     }
     private void insertFormattedText(String line) throws BadLocationException {
         // Split line into tokens, preserving the space after the last token, if any
+        line = line.replaceAll("\\\\ ", "\\\\\\\\\\\\");
         String[] tokens = line.split("\\s+");
 
         for (int i = 0; i < tokens.length; i++) {
