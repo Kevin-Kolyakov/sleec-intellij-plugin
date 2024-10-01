@@ -5,7 +5,7 @@ plugins {
 
 sourceSets["main"].java.srcDirs("src/main/gen")
 
-group = "com.example"
+group = "com.kevink"
 version = "1.0-SNAPSHOT"
 
 repositories {

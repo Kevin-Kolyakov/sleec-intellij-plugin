@@ -1,0 +1,202 @@
+{
+  parserClass="com.kevink.sleeclanguageextension.SleecParser"
+  parserUtilClass="com.kevink.sleeclanguageextension.SleecParserUtil"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Sleec"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.kevink.sleeclanguageextension.psi"
+  psiImplPackage="com.kevink.sleeclanguageextension.impl"
+
+  elementTypeHolderClass="com.kevink.sleeclanguageextension.SleecTypes"
+  elementTypeClass="com.kevink.sleeclanguageextension.SleecElementType"
+  tokenTypeClass="com.kevink.sleeclanguageextension.SleecTokenType"
+
+  psiImplUtilClass="com.kevink.sleeclanguageextension.SleecPsiImplUtil"
+
+  tokens=[
+    space='regexp:\s+'
+    comment='regexp://.*'
+    number='regexp:\d+(\.\d*)?'
+    def_start = 'def_start'
+    def_end = 'def_end'
+    rule_start = 'rule_start'
+    rule_end = 'rule_end'
+    concern_start = 'concern_start'
+    concern_end = 'concern_end'
+    purpose_start = 'purpose_start'
+    purpose_end = 'purpose_end'
+
+      constant_id='regexp:[A-Z][_A-Z]*'      // For constants: fully capitalized letters and underscores
+    event_id='regexp:[A-Z][\p{Alnum}_]*'   // For events: capitalized first letter, followed by alphanumeric characters or underscores
+      measure_id='regexp:[a-z][\p{Alnum}_]*' // For measures: lowercase first letter, followed by alphanumeric characters or underscores
+
+    string="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
+
+    boolean='boolean'
+    unless='unless'
+    numeric='numeric'
+    scale='scale'
+    measure='measure'
+    constant='constant'
+    event='event'
+    true='true'
+    false='false'
+    within='within'
+    eventually='eventually'
+    seconds='seconds'
+    minutes='minutes'
+    hours='hours'
+    days='days'
+    not='not'
+    and='and'
+    or='or'
+    when='when'
+    then='then'
+    exists='exists'
+    while='while'
+    meanwhile='meanwhile'
+    otherwise='otherwise'
+    else='else'
+    id='regexp:\p{Alpha}\w*'
+    op_1='+'
+    op_2='-'
+    op_3='*'
+    op_4='/'
+    op_5='!'
+  ]
+
+  name(".*id")='id'
+  extends(".*id")=expr
+}
+
+/*
+To change grammar:
+1. Change the grammar in the .bnf file
+2. Generate JFlex lexer by right clicking on this file
+3. Run Jflex Generator by right clicking at the generated lexer file
+4. Copy the generated file to the sleeclanguageextension package
+5. Define the ZZatBol boolean in the generated lexer file
+6. Run the parser generator by right clicking on this file
+7. When trying to run, there will be an error in the generated parser. This is because the parser has an incorrect import,
+   change it to the one in the previously generated one
+   import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
+ */
+root ::= root_item *
+private root_item ::= property {pin=1 recoverWhile=property_recover}
+Colon ::= ":"
+property ::= !<<eof>> propert {pin=1}
+
+propert::= Defblock RuleBlock (ConcernBlock)? (PurposeBlock)?
+
+Defblock::= "def_start" Definition* "def_end" /*{pin=1 recoverWhile=Defblock_recover}
+private Defblock_recover ::= !(def_end | rule_start | concern_start | purpose_start | <<eof>>)*/
+
+Definition::= MeasureRule | ConstantRule | EventRule
+EventRule::= event EventName
+EventName ::= event_id
+MeasureRule::= NumMeasure | ScalarMeasure | BoolMeasure
+
+BoolValue::= true | false
+BoolMeasure::= measure BoolName Colon BooleanRule {pin=2}
+BoolName ::= measure_id
+NumMeasure::= measure NumName Colon NumericRule
+NumName::= measure_id
+ConstantRule::= constant ConstantName "=" number {pin=2}
+ConstantName::= constant_id
+ScalarMeasure::= measure ScalarName Colon ScaleRule
+ScalarName::= measure_id
+
+BooleanRule::= boolean
+
+NumericRule::= numeric
+
+ScaleRule::= scale "(" ScaleParam ("," ScaleParam)* ")"
+
+ScaleParam::= number | id | measure_id | constant_id | event_id
+
+RuleBlock::= "rule_start" Rule* "rule_end" {pin=1 recoverWhile=RuleBlock_recover}
+private RuleBlock_recover ::= !(rule_end | def_start | concern_start | purpose_start | <<eof>>)
+
+Rule::= (id | measure_id | constant_id | event_id) when Trigger (and MBoolExpr)? then Response
+
+ConcernBlock::=
+    "concern_start" Concern* "concern_end" {pin=1 recoverWhile=ConcernBlock_recover}
+private ConcernBlock_recover ::= !(concern_end | def_start | rule_start | purpose_start | <<eof>>)
+
+Concern::=
+    ConcernName "exists" Trigger ("and" MBoolExpr)? ("while" ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )? |
+    ConcernName "when" Trigger ("and" MBoolExpr)? ("then" ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
+ConcernName::= id | measure_id | constant_id | event_id
+
+Headless_Concern::=
+    exists Trigger (and MBoolExpr)? (while ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )? |
+    when Trigger (and MBoolExpr)? (then ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
+
+PurposeBlock::=
+    "purpose_start" Purpose* "purpose_end" {pin=1 recoverWhile=PurposeBlock_recover}
+private PurposeBlock_recover ::= !(purpose_end | def_start | rule_start | concern_start | <<eof>>)
+
+Purpose::=
+    PurposeName exists Trigger (and MBoolExpr)? (while ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )? |
+    PurposeName when Trigger (and MBoolExpr)? (then ExtendedResponse)? (meanwhile '(' Headless_Concern ')' )?
+PurposeName::= id | measure_id | constant_id | event_id
+
+Trigger::= EventName
+
+BoolExp::= Negation | BinaryOp | BoolTerminal
+
+BoolTerminal::= "{" BoolName "}" | BoolValue
+
+Negation::= "(" "not" MBoolExpr ")"
+
+BinaryOp::= ScalarBinaryOp | BoolBinaryOp | NumericalOp
+
+ScalarBinaryOp::= "(" ScalarTerminal RelOp ScalarTerminal ")"
+
+ScalarTerminal::= ("{" ScalarName "}") | ScaleParam
+
+BoolBinaryOp::= "(" BoolExp BoolOp BoolExp ")"
+
+NumericalOp::= "(" NumExp RelOp NumExp ")"
+
+NumExp::= NumBinOp | NumTerminal
+
+NumTerminal::= number | "{" NumName "}" | ConstantName
+
+NumBinOp::= "(" NumExp BinaryArth NumExp ")"
+
+BinaryArth::= "+" | "-" | "*"
+
+MBoolExpr::= BoolExp
+
+ExtendedResponse::= Response ("while" ExtendedResponse)?
+
+Response::= Occ (Alternative)? (ND)? (Defeater*)?
+
+InnerResponse::= "{" Occ (Alternative)? (ND)? ( (Defeater*) )? "}" | Occ (Alternative)? (ND)?
+
+Occ::= not? Trigger (TimeLimit)? (INF)?
+
+INF::= eventually
+
+TimeLimit::= within TimeValue | within "[" TimeValue "," TimeValue "]"
+
+TimeValue::= NumExp TimeUnit
+
+Alternative::= otherwise InnerResponse
+
+ND::= "else" InnerResponse
+
+Defeater::= UnlessRule MBoolExpr (then InnerResponse)?
+
+UnlessRule::= unless
+
+RelOp::= "<=" | ">=" | "<>" | "<" | ">" | "="
+
+BoolOp::= and | or
+
+TimeUnit::= seconds | minutes | hours | days
+
+private property_recover ::= !(';' | id '=')
