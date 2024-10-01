@@ -6,6 +6,6 @@ import javax.swing.*;
 
 public class SleecIcons {
 
-    public static final Icon FILE = IconLoader.getIcon("/icons/jar-gray.png", SleecIcons.class);
+    public static final Icon FILE = IconLoader.getIcon("/icons/fileUnread.svg", SleecIcons.class);
 
 }
