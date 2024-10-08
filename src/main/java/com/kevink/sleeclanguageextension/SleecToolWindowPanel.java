@@ -81,7 +81,7 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
         StyleConstants.setForeground(numberStyle, JBColor.YELLOW);
 
         Style highlightStyle = textPane.addStyle("HighlightStyle", null);
-        StyleConstants.setBackground(highlightStyle, new Color(246, 246, 246));
+        StyleConstants.setBackground(highlightStyle, new Color(250, 248, 132));
         StyleConstants.setFontFamily(highlightStyle, "JetBrains Mono");
     }
 
