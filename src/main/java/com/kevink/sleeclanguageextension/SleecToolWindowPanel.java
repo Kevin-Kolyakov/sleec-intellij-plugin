@@ -86,6 +86,8 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
     }
 
     public void print(String text) {
+        int sitConflicts = 0;
+        int highlightOffset = 0;
         try {
             // Clear the current content
             doc.remove(0, doc.getLength());
@@ -95,6 +97,7 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
             boolean foundInterestingMessage = false;
             boolean isConcern = false;
             Set<String> relevantMeasures;
+            Set<String> relevantMeasures1;
             Set<String> eventsToCheck = new HashSet<>(); // To store all events found
 
             for (String line : lines) {
@@ -110,6 +113,7 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
 
                     // Detect if a trigger and response are mentioned and capture relevant measures
                     relevantMeasures = extractCurlyBraces(text);
+                    relevantMeasures1 = extractCurlyBraces(text);
 
                     // Collect all events after "exists" keyword
                     if (line.contains("exists")) {
@@ -136,7 +140,10 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
                     // Check if this line is related to a concern being raised
                     if (line.contains("Concern is raised")) {
                         isConcern = true;  // Mark that a concern is being handled
+                    } else if (line.contains("Situational conflict")) {
+                        sitConflicts++;
                     }
+
 
                     if (isConcern) {
                         for (String event : eventsToCheck) {
@@ -170,6 +177,44 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
 
                         // Reset isConcern after processing relevant measures
                         isConcern = false;
+                    } else if ((sitConflicts == 1) && line.startsWith("at time") && line.contains("Measure")) {
+                        // Record the original length of the line before any modifications
+                        int originalLength = line.length();
+
+                        // Extract the content inside Measure(...)
+                        String measureContent = line.substring(line.indexOf("Measure(") + 8, line.indexOf(")")).trim();
+                        String[] measureTokens = measureContent.split(", ");
+
+                        // Create the filtered measures string
+                        StringBuilder filteredMeasures1 = new StringBuilder("Measure(");
+
+                        for (String measure : measureTokens) {
+                            if (isRelevantMeasure(measure, relevantMeasures1)) {
+                                filteredMeasures1.append(measure).append(", ");
+                            }
+                        }
+
+                        // Remove the trailing comma and space
+                        if (filteredMeasures1.length() > 8) {
+                            filteredMeasures1.setLength(filteredMeasures1.length() - 2);
+                        }
+
+                        filteredMeasures1.append(")");
+
+                        // The text that will actually be inserted includes the prefix "at time 0: "
+                        String insertedText = "at time 0: " + filteredMeasures1.toString();
+
+                        // Insert the formatted text into the document
+                        insertFormattedText(insertedText);
+
+                        // Calculate the new length (the length of the entire inserted text)
+                        int newLength = insertedText.length();
+
+                        // Calculate the difference between the original and new lengths
+                        int lengthDifference = originalLength - newLength;
+
+                        // Update the highlightOffset by adding the length difference
+                        highlightOffset += lengthDifference;
                     } else {
                         insertFormattedText(line);
                     }
@@ -177,7 +222,7 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
             }
 
             // Highlight the specific ranges at the end of the text
-            highlightWords();
+            highlightWords(highlightOffset);
 
             textPane.setCaretPosition(doc.getLength()); // Scroll to the bottom
         } catch (BadLocationException e) {
@@ -198,9 +243,38 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
     private void printRulesWithEvent(String event) throws BadLocationException {
         Set<String> rulesWithEvent = getRulesWithEvent(event);
 
-        if (!rulesWithEvent.isEmpty()) {
+        if (!rulesWithEvent.isEmpty() && rulesWithEvent.size() > 1) {
             String rulesText = "Rules with " + event + ": " + String.join(", ", rulesWithEvent);
             insertFormattedText(rulesText);
+        } else if (!rulesWithEvent.isEmpty()) {
+            printFullRules(rulesWithEvent, event);
+        } else {
+            insertFormattedText("No rules found with " + event);
+        }
+    }
+    private void printFullRules(Set<String> rulesWithEvent, String event) throws BadLocationException {
+        PsiFile psiFile = getPsiFileFromEditor();
+
+        if (psiFile != null) {
+            // Traverse the PSI tree to find rule definitions that correspond to the rulesWithEvent
+            Collection<PsiElement> ruleElements = PsiTreeUtil.findChildrenOfType(psiFile, SleecRule.class);
+
+            for (PsiElement ruleElement : ruleElements) {
+                // Extract the full rule text
+                String ruleName = getRuleName(ruleElement);
+
+                // Check if the rule name is in the rulesWithEvent set
+                if (rulesWithEvent.contains(ruleName)) {
+                    // Get the full text of the rule (this assumes the ruleElement's text contains the full rule content)
+                    String fullRuleText = ruleElement.getText();
+
+                    // Insert the full rule content into the text pane
+                    insertFormattedText("Rule with " + event + ": " + fullRuleText);
+                }
+            }
+        } else {
+            // If no PSI file is available, insert a message indicating that no file was found
+            insertFormattedText("No PSI file found in the editor to retrieve rules.");
         }
     }
 
@@ -268,7 +342,7 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
         while (matcher.find()) {
             matches.add(matcher.group(1));
         }
-
+        System.out.println(matches);
         return matches;
     }
     private void insertFormattedText(String line) throws BadLocationException {
@@ -320,7 +394,7 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
         return false;
     }
 
-    public void highlightWords() {
+    public void highlightWords(int highlightOffset) {
         try {
             String text = textPane.getText();  // Get the full text from the document
             // Extract the list of ranges
@@ -347,7 +421,7 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
                 int end = Integer.parseInt(indices[1].trim());
 
                 if (start >= 0 && end > start) {
-                    doc.setCharacterAttributes(start + 8, end - start, doc.getStyle("HighlightStyle"), false);
+                    doc.setCharacterAttributes(start + 8 - highlightOffset, end - start, doc.getStyle("HighlightStyle"), false);
                 }
             }
         } catch (Exception e) {
