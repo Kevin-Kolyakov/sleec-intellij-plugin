@@ -41,7 +41,7 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
     }
 
     private void setupStyles() {
-        // Regular text style
+        // Regular style
         Style defaultStyle = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
         Style regular = doc.addStyle("regular", defaultStyle);
         StyleConstants.setFontFamily(defaultStyle, "JetBrains Mono");
