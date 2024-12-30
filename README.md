@@ -111,10 +111,8 @@ Your Sleec plugin is now ready to use!
 ### Method 3: Install from a Virtual Image (OVA File)
 
 1. Download the Sleec `.ova` file from the official repository or distribution source. [Download the `.ova` file here](https://github.com/your-repo/sleec-intellij-plugin/releases)
-2. Install a virtual machine software such as **VirtualBox**, **VMWare**, or **Parallels**:
+2. Install a virtual machine software such as **VirtualBox**:
    - [Download VirtualBox](https://www.virtualbox.org/)
-   - [Download VMware Workstation Player](https://www.vmware.com/products/workstation-player.html)
-   - [Download Parallels](https://www.parallels.com/)
 3. Open your virtual machine software and select the option to **Import Appliance** or **Import Virtual Machine**.
 4. Browse to the downloaded `.ova` file and follow the prompts to import it.
 5. Once the virtual machine is imported, adjust the hardware settings (e.g., RAM, CPU) as needed to match your system.
