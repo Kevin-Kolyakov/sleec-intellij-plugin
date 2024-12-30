@@ -8,7 +8,7 @@ This guide explains how to install the Sleec plugin in your IntelliJ IDEA enviro
 
 ### Hardware
 - **Performance**: Modern multi-core CPU
-- **Memory**: At least 4 GB of free RAM (8 GB recommended)
+- **Memory**: At least 4 GB of free RAM (8 GB recommended if using the Virtual Image method)
 - **Storage**: 10 GB of available disk space
 - **Device Type**: No special hardware requirements; GPU acceleration is not needed.
 
