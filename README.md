@@ -24,7 +24,7 @@ This guide explains how to install the Sleec plugin in your IntelliJ IDEA enviro
 ### Method 1: Install from Github Repository
 
 #### Step 1: Download IntelliJ and Python
-1. Download and install IntelliJ IDEA. You can get the Community Edition for free [here](https://www.jetbrains.com/idea/download/?section=windows).
+1. Download and install IntelliJ IDEA. You can get the Community Edition for free when you scroll down [here](https://www.jetbrains.com/idea/download/).
 2. Download and install Python from the official website [here](https://www.python.org/downloads/).
 
 #### Step 2: Clone the Repository
@@ -32,7 +32,7 @@ This guide explains how to install the Sleec plugin in your IntelliJ IDEA enviro
 2. Click on **Get from VCS**.
 3. Enter the following URL to clone the repository:
    ```
-   https://github.com/your-repo/sleec-intellij-plugin.git
+   https://github.com/Kevin-Kolyakov/sleec-intellij-plugin.git
    ```
 4. Wait for the files to be configured.
 
@@ -61,7 +61,7 @@ Ensure you have the following prerequisites installed before running the Sleec I
    ```
 
 #### Step 5: Access the Sleec Template
-1. In the project tab, click on the **default Sleec Template** to access all the necessary scripts and example files.
+1. In the File tab, click on New, then Project, then select the **Sleec Templates** and click next to access all the example files.
 2. Follow the instructions provided in the ReadMe file within the template for further guidance.
 3. To run the Sleec files in the template, click on any of the icons in the top right corner of the screen and select a SLEEC file.
 
@@ -101,7 +101,8 @@ Ensure you have the following prerequisites installed before running the Sleec I
 8. Search for `Sleec` in the search bar.
 9. Locate the Sleec plugin in the results and click **Install**.
 10. Restart IntelliJ IDEA when prompted.
-11.
+11. In the File tab, click on New, then Project, then select the **Sleec Templates** and click next to access all the example files.
+12. To run the Sleec files in the template, click on any of the icons in the top right corner of the screen and select a SLEEC file.
 
 Your Sleec plugin is now ready to use!
 
@@ -149,7 +150,7 @@ If you encounter issues:
 - Verify that your IntelliJ IDEA version is compatible with the Sleec plugin.
 - Ensure you restarted IntelliJ IDEA after installation.
 - Check the plugin logs in **Help > Show Log in Explorer/Finder** for detailed error messages.
-- Visit the plugin's [GitHub Issues page](https://github.com/your-repo/sleec-intellij-plugin/issues) for community support.
+- Visit the plugin's [GitHub Issues page](https://github.com/Kevin-Kolyakov/sleec-intellij-plugin/issues) for community support.
 
 ---
 
