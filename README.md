@@ -59,21 +59,20 @@ This guide explains how to install the Sleec plugin in your IntelliJ IDEA enviro
 ##### Step 4: Install Prerequisites
 Ensure you have the following prerequisites installed before running the Sleec IntelliJ Plugin:
 1. Python 3.5 or later.
-2. z3-solver with Python bindings (if pip does not work, use pip3):
    ```
    pip install z3-solver
    ```
-3. pysmt for symbolic mathematics:
    ```
    pip install pysmt
    ```
-4. OrderedSet library:
    ```
    pip install ordered-set
    ```
-5. TextX:
    ```
    pip install textx
+   ```
+   ```
+   pip install termcolor
    ```
 
 ##### Step 5: Access the Sleec Template
@@ -110,6 +109,9 @@ Ensure you have the following prerequisites installed before running the Sleec I
    ```
    ```
    pip install textx
+   ```
+   ```
+   pip install termcolor
    ```
 5. Open **IntelliJ IDEA**.
 6. Navigate to **File > Settings > Plugins** (or **Preferences > Plugins** on macOS).
