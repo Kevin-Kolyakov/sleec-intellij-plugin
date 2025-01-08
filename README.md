@@ -40,8 +40,9 @@ This guide explains how to install the Sleec plugin in your IntelliJ IDEA enviro
 #### Method 1: Install from Github Repository
 
 ##### Step 1: Download IntelliJ and Python
-1. Download and install IntelliJ IDEA. You can get the Community Edition for free when you scroll down [here](https://www.jetbrains.com/idea/download/).
+1. Download and install IntelliJ IDEA 2021.3.3. You can get the Community Edition for free when you scroll down [here](https://www.jetbrains.com/idea/download/other.html).
 2. Download and install Python from the official website [here](https://www.python.org/downloads/).
+3. Make sure to have git installed [here](https://git-scm.com/downloads).
 
 ##### Step 2: Clone the Repository
 1. Launch IntelliJ IDEA.
@@ -95,7 +96,7 @@ Ensure you have the following prerequisites installed before running the Sleec I
 ---
 
 #### Method 2: Install from JetBrains Marketplace
-1. Download and install IntelliJ IDEA. You can get the Community Edition for free [here](https://www.jetbrains.com/idea/download/?section=windows).
+1. Download and install IntelliJ IDEA 2021.3.3. You can get the Community Edition for free when you scroll down [here](https://www.jetbrains.com/idea/download/other.html).
 2. Download and install Python from the official website [here](https://www.python.org/downloads/).
 3. Install the following Python packages:
    ```
