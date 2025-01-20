@@ -96,15 +96,17 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
             // Split the text into lines for easier processing
             String[] lines = text.split("\n");
             boolean foundInterestingMessage = false;
+
             int  isConcern = 0;
             boolean foundConcernEndingLine = false;
+            boolean foundConcernEndingLine2 = false;
             Set<String> relevantMeasures;
             Set<String> relevantMeasures1;
             Set<String> eventsToCheck = new HashSet<>(); // To store all events found
 
             for (String line : lines) {
                 // Start capturing only after "Very interesting message here" kind of gimmicky but it works
-                if (line.startsWith("Very interesting message here")||(printedFirstSitConflict==2 && !line.contains("["))||(isConcern==1 && foundConcernEndingLine)) {
+                if (line.startsWith("Very interesting message here")||(printedFirstSitConflict==2 && !line.contains("["))||(isConcern==1 && foundConcernEndingLine&&foundConcernEndingLine2)) {
                     foundInterestingMessage = true;
                     continue; // Skip this line, as we want to start printing from the next one
                 }
@@ -157,6 +159,9 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
                     }
                     if (line.contains("*********************************************************************************************")){
                         foundConcernEndingLine = true;
+                    }
+                    if (line.contains("---------------")){
+                        foundConcernEndingLine2 = true;
                     }
 
                     // If the line contains a measure and it's a concern, filter and print relevant ones
