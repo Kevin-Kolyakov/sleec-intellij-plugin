@@ -6,7 +6,7 @@ plugins {
 sourceSets["main"].java.srcDirs("src/main/gen")
 
 group = "com.kevink"
-version = "2.0-SNAPSHOT"
+version = "2.2-SNAPSHOT"
 
 repositories {
     mavenCentral()
