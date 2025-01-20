@@ -88,6 +88,7 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
     public void print(String text) {
         int sitConflicts = 0;
         int highlightOffset = 0;
+        int printedFirstSitConflict = 0;  // Flag to track if the first situational conflict has been printed
         try {
             // Clear the current content
             doc.remove(0, doc.getLength());
@@ -95,14 +96,15 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
             // Split the text into lines for easier processing
             String[] lines = text.split("\n");
             boolean foundInterestingMessage = false;
-            boolean isConcern = false;
+            int  isConcern = 0;
+            boolean foundConcernEndingLine = false;
             Set<String> relevantMeasures;
             Set<String> relevantMeasures1;
             Set<String> eventsToCheck = new HashSet<>(); // To store all events found
 
             for (String line : lines) {
                 // Start capturing only after "Very interesting message here" kind of gimmicky but it works
-                if (line.startsWith("Very interesting message here")) {
+                if (line.startsWith("Very interesting message here")||(printedFirstSitConflict==2 && !line.contains("["))||(isConcern==1 && foundConcernEndingLine)) {
                     foundInterestingMessage = true;
                     continue; // Skip this line, as we want to start printing from the next one
                 }
@@ -139,22 +141,26 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
 
                     // Check if this line is related to a concern being raised
                     if (line.contains("Concern is raised")) {
-                        isConcern = true;  // Mark that a concern is being handled
-                    } else if (line.contains("Situational conflict")) {
+                        isConcern++;  // Mark that a concern is being handled
+                    } else if (line.contains("Situational conflict") && printedFirstSitConflict!=2) {
+                        // Print only the first situational conflict and skip subsequent ones
+                        printedFirstSitConflict++;
                         sitConflicts++;
                     }
 
 
-                    if (isConcern) {
+                    if (isConcern == 1) {
                         for (String event : eventsToCheck) {
                             printRulesWithEvent(event);
                         }
                         eventsToCheck.clear();
                     }
-
+                    if (line.contains("*********************************************************************************************")){
+                        foundConcernEndingLine = true;
+                    }
 
                     // If the line contains a measure and it's a concern, filter and print relevant ones
-                    if (isConcern && line.startsWith("at time") && line.contains("Measure")) {
+                    if ((isConcern>0) && line.startsWith("at time") && line.contains("Measure")) {
                         String measureContent = line.substring(line.indexOf("Measure(") + 8, line.indexOf(")")).trim();
                         String[] measureTokens = measureContent.split(", ");
                         StringBuilder filteredMeasures = new StringBuilder("Measure(");
@@ -175,8 +181,6 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
                         insertFormattedText("at time 0: " + filteredMeasures.toString());
 
 
-                        // Reset isConcern after processing relevant measures
-                        isConcern = false;
                     } else if ((sitConflicts == 1) && line.startsWith("at time") && line.contains("Measure")) {
                         // Record the original length of the line before any modifications
                         int originalLength = line.length();
@@ -215,12 +219,12 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
 
                         // Update the highlightOffset by adding the length difference
                         highlightOffset += lengthDifference;
-                    } else {
+                    } else if ((printedFirstSitConflict!=2 || line.contains("["))&&(!(isConcern>=2)||line.contains("["))) {
+                        System.out.println(isConcern);
                         insertFormattedText(line);
                     }
                 }
             }
-
             // Highlight the specific ranges at the end of the text
             highlightWords(highlightOffset);
 
@@ -331,8 +335,33 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
         return false;
     }
 
-    public  Set<String> extractCurlyBraces(String text) {
+    public Set<String> extractCurlyBraces(String text) {
         Set<String> matches = new HashSet<>();
+
+        // Find the position of the second occurrence of "Situational conflict"
+        int firstConflictIndex = text.indexOf("Situational conflict");
+        int secondConflictIndex = -1;
+        int firstConcernIndex = text.indexOf("(True");
+        int secondConcernIndex = -1;
+
+        // Check if the first occurrence was found
+        if (firstConflictIndex != -1) {
+            // Find the second occurrence of "Situational conflict"
+            secondConflictIndex = text.indexOf("Situational conflict", firstConflictIndex + 1);
+        }
+        if (firstConcernIndex != -1) {
+            // Find the second occurrence of "Concern is raised"
+            secondConcernIndex = text.indexOf("Concern", firstConcernIndex + 1);
+        }
+
+        // If the second "Situational conflict" was found, truncate the text up until that point
+        if (secondConflictIndex != -1) {
+            text = text.substring(0, secondConflictIndex);
+        }
+        if (secondConcernIndex != -1) {
+            text = text.substring(0, secondConcernIndex);
+
+        }
 
         // Regular expression to find text within curly braces
         Pattern pattern = Pattern.compile("\\{(.*?)\\}");
@@ -340,11 +369,13 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
 
         // Find all matches and add them to the set
         while (matcher.find()) {
-            matches.add(matcher.group(1));
+            matches.add(matcher.group(1)); // Add the content inside curly braces to the set
         }
-        System.out.println(matches);
+
+//        System.out.println(matches); // Optional: Debugging output
         return matches;
     }
+
     private void insertFormattedText(String line) throws BadLocationException {
         // Split line into tokens, preserving the space after the last token, if any
         line = line.replaceAll("\\\\ ", "\\\\\\\\\\\\");
