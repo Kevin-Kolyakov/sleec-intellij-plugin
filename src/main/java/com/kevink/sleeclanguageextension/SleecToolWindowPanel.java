@@ -109,7 +109,7 @@ public class SleecToolWindowPanel extends JBPanel<SleecToolWindowPanel> {
                     continue; // Skip this line, as we want to start printing from the next one
                 }
 
-                // If we've found the interesting message, print the subsequent lines
+                // If we've found the in teresting message, print the subsequent lines
                 if (foundInterestingMessage) {
                     line = line.trim(); // Trim the line to remove trailing spaces
 
