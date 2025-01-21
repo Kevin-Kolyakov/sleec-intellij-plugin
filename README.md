@@ -171,7 +171,7 @@ If you encounter issues:
 
 # Usage
 
-Below, we describe the steps to reproduce our evaluation. To do so, you will need to install the previous version of the tool to replicate our comparison using the four case studies available in X.
+Below, we describe the steps to reproduce our evaluation. To do so, you will need to install the previous version of the tool to replicate our comparison using the four case studies available in [the case-study folder](case-studies/).
 
 ## Install and launch the previous tool 
 1. Install the previous version of the tool by following the instructions here: https://github.com/NickF0211/LEGOs
