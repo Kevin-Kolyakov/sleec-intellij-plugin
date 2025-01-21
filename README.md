@@ -76,8 +76,8 @@ Ensure you have the following prerequisites installed before running the Sleec I
    ```
 
 ##### Step 5: Access the Sleec Template
-1. In the File tab, click on New, then Project, then select the **Sleec Templates** and click next to access all the example files.
-2. Follow the instructions provided in the ReadMe file within the template for further guidance.
+1. In the File tab, click on New, then Project, then select the **Sleec Templates** and click next to access all the example files in the Evaluation folder.
+2. To add new files, add them to the Evaluation folder and then save them.
 3. To run the Sleec files in the template, click on any of the icons in the top right corner of the screen and select a SLEEC file.
 
 ##### Step 6: Update the Project
@@ -119,7 +119,7 @@ Ensure you have the following prerequisites installed before running the Sleec I
 8. Search for `Sleec` in the search bar.
 9. Locate the Sleec plugin in the results and click **Install**.
 10. Restart IntelliJ IDEA when prompted.
-11. In the File tab, click on New, then Project, then select the **Sleec Templates** and click next to access all the example files.
+11. In the File tab, click on New, then Project, then select the **Sleec Templates** and click next to access all the example files in the Evaluation folder.
 12. To run the Sleec files in the template, click on any of the icons in the top right corner of the screen and select a SLEEC file.
 
 Your Sleec plugin is now ready to use!
