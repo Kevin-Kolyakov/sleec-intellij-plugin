@@ -3,14 +3,12 @@
 ## Purpose
 We present *LEGOS-SLEEC*, a tool designed to support interdisciplinary stakeholders in specifying normative requirements as <em>SLEEC rules</em> (social, legal, ethical, empathetic, and cultural domain-specific language[^1]), and in analyzing and debugging their well-formedness. *LEGOS-SLEEC* is built using four previously published components (TADA[^2], TADA2[^3], TADA3[^4], TADA4[^5]), which have been shown to be effective and usable across nine case studies[^6]. Reflecting on this experience, we have significantly improved the user interface of *LEGOS-SLEEC* and its diagnostic support, and demonstrate the effectiveness of these improvements using four interdisciplinary stakeholders[^7]. Showcase video URL is [HERE](https://youtu.be/LLaBLGxSi8A).
 
-[^1]: Nick Feng, Lina Marsso, Mehrdad Sabetzadeh, Marsha Chechik, Early Verification of Legal Compliance via Bounded Satisfiability Checking, CAV'23, 2023. Available at: <https://arxiv.org/abs/2209.04052RL>.
-[^2]: Nick Feng, Lina Marsso, Sinem Getir-Yaman, Townsend Beverley, Radu Calinescu, Ana Cavalcanti, and Marsha Chechik, Towards a Formal Framework for Normative Requirements Elicitation, ASE/NIER'23, 2023. Available at: <http://www.cs.toronto.edu/~fengnick/pdfs/ase23.pdfRL>.
-[^3]: Nick Feng, Lina Marsso, Sinem Getir Yaman, Beverley Townsend, Yesugen Baatartogtokh, Reem Ayad, Victória Oldemburgo de Mello, Isobel Standen, Ioannis Stefanakos, Calum Imrie, Genaina Rodrigues TBA, Analyzing and Debugging Normative Requirements via Satisfiability Checking, Publisher, Year. Available at: <URL>.
-[^4]: Author, Title, Publisher, Year. Available at: <URL>.
-[^5]: Author, Title, Publisher, Year. Available at: <URL>.
-[^6]: Author, Title, Publisher, Year. Available at: <URL>.
-[^7]: Author, Title, Publisher, Year. Available at: <URL>.
-[^8]: Author, Title, Publisher, Year. Available at: <URL>.
+[^1]: Author, Title, Publisher, Year. Available at: <URL>.
+[^2]: Nick Feng, Lina Marsso, Mehrdad Sabetzadeh, Marsha Chechik, Early Verification of Legal Compliance via Bounded Satisfiability Checking, CAV'23, 2023. Available at: <https://arxiv.org/abs/2209.04052RL>.
+[^3]: Nick Feng, Lina Marsso, Sinem Getir-Yaman, Townsend Beverley, Radu Calinescu, Ana Cavalcanti, and Marsha Chechik, Towards a Formal Framework for Normative Requirements Elicitation, ASE/NIER'23, 2023. Available at: <http://www.cs.toronto.edu/~fengnick/pdfs/ase23.pdfRL>.
+[^4]: Nick Feng, Lina Marsso, Sinem Getir Yaman, Beverley Townsend, Yesugen Baatartogtokh, Reem Ayad, Victória Oldemburgo de Mello, Isobel Standen, Ioannis Stefanakos, Calum Imrie, Genaina Rodrigues, Ana Cavalcanti, Radu Calinescu, and Marsha Chechik, Analyzing and Debugging Normative Requirements via Satisfiability Checking, ICSE'24, 2024. Available at: <https://arxiv.org/abs/2401.05673>.
+[^5]: Nick Feng, Lina Marsso, and Marsha Chechik, Diagnosis via Proofs of Unsatisfiability for First-Order Logic with Relational Objects, ASE'24, 2024. Available at: <https://www.arxiv.org/pdf/2409.09223>.
+[^6]: Kevin Kolyakov, Lina Marsso, Nick Feng, Junwei Quan, and Marsha Chechik, LEGOS-SLEEC: Tool for Formalizing and Analyzing Normative Requirements, ICSE/DEMO'25, 2025. Available at: <URL>.
 
 ## Provenance
 
