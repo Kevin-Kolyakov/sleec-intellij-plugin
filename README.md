@@ -179,7 +179,10 @@ Below, we describe the steps to reproduce our evaluation. To do so, you will nee
   ```
    python3 sleecFrontEnd.py
   ```
-(sometimes you might need to do python sleecFrontEnd.py)
+   sometimes you might need to use instead:
+  ```
+   python sleecFrontEnd.py
+  ```
 3. To verify that the previous tool is correctly installed, click on 
   ```
 check redundancy
