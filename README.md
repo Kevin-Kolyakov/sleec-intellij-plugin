@@ -11,6 +11,7 @@ We present *LEGOS-SLEEC*, a tool designed to support interdisciplinary stakehold
 [^6]: Kevin Kolyakov, Lina Marsso, Nick Feng, Junwei Quan, and Marsha Chechik, LEGOS-SLEEC: Tool for Formalizing and Analyzing Normative Requirements, ICSE/DEMO'25, 2025. Available at: <URL>.
 
 ## Provenance
+The artifact is available [here](https://zenodo.org/) on Zenodo, and the paper is available [here](https://zenodo.org/).
 
 ## Setup
 
