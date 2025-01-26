@@ -128,7 +128,7 @@ Your Sleec plugin is now ready to use!
 
 #### Method 3: Install from a Virtual Image (OVA File)
 
-1. Download the Sleec `.ova` file from the official repository or distribution source. [Download the `.ova` file here](https://drive.google.com/file/d/1XO-Cd-Mr-6F4WM2hjopmf77gPmitK_5i/view?usp=sharing)
+1. Download the Sleec `.ova` file from the official repository or distribution source. [Download the `.ova` file here](https://drive.google.com/file/d/1ATkwtveFr1q4Fy9RJ0iEpHA_iUGXE-7F/view?usp=sharing)
 2. Install a virtual machine software such as **VirtualBox**:
    - [Download VirtualBox](https://www.virtualbox.org/)
 3. Open your virtual machine software and select the option to **Import Appliance** or **Import Virtual Machine**.
