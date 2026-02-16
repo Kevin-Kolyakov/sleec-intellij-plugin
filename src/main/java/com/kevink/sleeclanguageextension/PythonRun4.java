@@ -11,82 +11,78 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.List;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class PythonRun4 extends AnAction {
-    String pythonExecutable = findPythonExecutable();
 
-    private static String findPythonExecutable() {
-        // Check if "python3" is available
-        if (isExecutableAvailable("python3")) {
-            return "python3";
-        }
-        // Check if "python" is available
-        if (isExecutableAvailable("python")) {
-            return "python";
-        }
-        // Neither executable is available
-        return null;
-    }
-    private static boolean isExecutableAvailable(String executableName) {
-        try {
-            ProcessBuilder processBuilder = new ProcessBuilder(executableName, "--version");
-            Process process = processBuilder.start();
-            int exitCode = process.waitFor();
-            return exitCode == 0;
-        } catch (IOException | InterruptedException e) {
-            return false;
-        }
-    }
+    private static final String TOOLWINDOW_ID = "SleecToolWindow";
+
+    // Resource/script paths (match your src/main/resources/scripts/ layout)
+    private static final String MAIN_SCRIPT_RESOURCE = "scripts/runSleec4.py";
+    private static final String WORKDIR_REL = "scripts";
+
+    // Python command selected at runtime
+    private final List<String> pythonCmd = findPythonCommand();
+
     @Override
     public void actionPerformed(AnActionEvent e) {
         Project project = e.getProject();
-        if (project == null) {
+        if (project == null) return;
+
+        // 1) Ensure Python exists
+        if (pythonCmd == null) {
+            String msg = "Python not found. Install Python and ensure it's on PATH.";
+            Messages.showErrorDialog(project, msg, "Python Not Found");
             return;
         }
 
-        // Define what files can be selected
+        // 2) Choose file
         FileChooserDescriptor descriptor = new FileChooserDescriptor(true, false, false, false, false, false);
         descriptor.setTitle("Select a SLEEC File");
-
-        // Open the file chooser dialog
         VirtualFile file = FileChooser.chooseFile(descriptor, project, null);
-        if (file != null) {
-            // Read the file content
-            Path filePath = Path.of(file.getPath());
-            try {
-                String content = Files.readString(filePath);
+        if (file == null) return;
 
-                // Get the ToolWindow instance
-                ToolWindow toolWindow = ToolWindowManager.getInstance(project).getToolWindow("SleecToolWindow");
-                if (toolWindow != null) {
-                    SleecToolWindowPanel panel = (SleecToolWindowPanel) toolWindow.getContentManager().getContent(0).getComponent();
+        // 3) Get ToolWindow panel (optional)
+        SleecToolWindowPanel panel = getPanel(project);
 
-                    // Process the file content (e.g., call your check_concern function)
-                    String response = checkConcernWithPython(content, panel);
+        try {
+            // 4) Read selected content
+            Path filePath = Paths.get(file.getPath());
+            String content = Files.readString(filePath, StandardCharsets.UTF_8);
 
-                    // Print the response to the console
-                    panel.print(processResponse(response));
-                } else {
-                    Messages.showErrorDialog(project, "Tool window not found", "Error");
-                    return;
-                }
-            } catch (IOException ioException) {
-                Messages.showErrorDialog(project, "Error reading file: " + ioException.getMessage(), "Error");
+            // 5) Run python
+            String response = runSleecPython(content);
+
+            // 6) Print response
+            if (panel != null) {
+                panel.print(processResponse(response));
+            } else {
+                Messages.showInfoMessage(project, response, "Sleec Output");
             }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Messages.showErrorDialog(project, ex.toString(), "Run Sleec Failed");
         }
     }
 
-    private String checkConcernWithPython(String content, SleecToolWindowPanel panel) throws IOException {
-        // Create a temporary directory
-        File tempDir = Files.createTempDirectory("sleec_scripts").toFile();
-        tempDir.deleteOnExit();
+    /**
+     * Main pipeline:
+     *  - Extract resources to temp dir, preserving directory structure
+     *  - Write selected .sleec content to temp file
+     *  - Run: python scripts/runSleec4.py <temp_content_file>
+     *  - Capture stdout+stderr and return
+     */
+    private String runSleecPython(String content) throws Exception {
+        // Create temp root
+        Path tempRoot = Files.createTempDirectory("sleec_scripts_");
+        tempRoot.toFile().deleteOnExit();
 
-        // List of files to copy from resources to the temporary directory
-        List<String> filesToCopy = Arrays.asList(
+        // Resources to extract
+        List<String> resourcesToCopy = Arrays.asList(
                 "scripts/Analyzer/__init__.py",
                 "scripts/Analyzer/abstraction.py",
                 "scripts/Analyzer/analyzer.py",
@@ -119,54 +115,118 @@ public class PythonRun4 extends AnAction {
                 "scripts/sleecParser.py"
         );
 
-        // Copy each file from resources to the temporary directory
-        for (String resourcePath : filesToCopy) {
-            copyResourceToDirectory(resourcePath, tempDir);
+        for (String resourcePath : resourcesToCopy) {
+            copyResourcePreservePath(resourcePath, tempRoot);
         }
 
-        // Write content to a temporary file
-        File tempContentFile = File.createTempFile("sleec_content", ".sleec", tempDir);
-        try (FileWriter writer = new FileWriter(tempContentFile)) {
-            writer.write(content);
+        // Write content to temp file
+        Path tempContentFile = Files.createTempFile(tempRoot, "sleec_content_", ".sleec");
+        Files.writeString(tempContentFile, content, StandardCharsets.UTF_8);
+
+        // Resolve main script path
+        Path mainScriptOnDisk = tempRoot.resolve(MAIN_SCRIPT_RESOURCE);
+        if (!Files.exists(mainScriptOnDisk)) {
+            throw new FileNotFoundException("Main script not found after extraction: " + mainScriptOnDisk);
         }
 
-        // Path to the main script to run
-        File mainScript = new File(tempDir, "runSleec4.py");
+        // Build command
+        List<String> cmd = new ArrayList<>();
+        cmd.addAll(pythonCmd);
+        cmd.add(mainScriptOnDisk.toAbsolutePath().toString());
+        cmd.add(tempContentFile.toAbsolutePath().toString());
 
-        // Execute the temporary Python script with the path to the content file
-        ProcessBuilder processBuilder = new ProcessBuilder(pythonExecutable, mainScript.getAbsolutePath(), tempContentFile.getAbsolutePath());
-        processBuilder.directory(tempDir);  // Set the working directory to the temp directory
-        processBuilder.redirectErrorStream(true);
-        Process process = processBuilder.start();
+        // Run from tempRoot/scripts
+        Path workDir = tempRoot.resolve(WORKDIR_REL);
 
-        StringBuilder output = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                output.append(line).append("\n");
-            }
+        ProcessBuilder pb = new ProcessBuilder(cmd);
+        pb.directory(workDir.toFile());
+        pb.redirectErrorStream(true);
+
+        Process process = pb.start();
+
+        String output;
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8))) {
+            output = reader.lines().collect(Collectors.joining("\n"));
         }
 
-        return output.toString();
+        int exitCode = process.waitFor();
+
+        if (output.trim().isEmpty()) {
+            output = "[INFO] Python produced no output.\n";
+        }
+        output += "\n\n[DEBUG] Exit code: " + exitCode + "\n";
+        output += "[DEBUG] Temp root: " + tempRoot + "\n";
+
+        return output;
     }
 
-    private void copyResourceToDirectory(String resourcePath, File destinationDir) throws IOException {
-        InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(resourcePath);
-        if (resourceStream == null) {
-            throw new FileNotFoundException("Resource not found: " + resourcePath);
+    private void copyResourcePreservePath(String resourcePath, Path tempRoot) throws IOException {
+        InputStream in = getClass().getClassLoader().getResourceAsStream(resourcePath);
+        if (in == null) throw new FileNotFoundException("Resource not found on classpath: " + resourcePath);
+
+        Path dest = tempRoot.resolve(resourcePath);
+        Files.createDirectories(dest.getParent());
+
+        try (in; OutputStream out = Files.newOutputStream(dest,
+                StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
+            in.transferTo(out);
         }
 
-        File destinationFile = new File(destinationDir, new File(resourcePath).getName());
-        destinationFile.deleteOnExit();
+        dest.toFile().deleteOnExit();
+    }
 
-        try (InputStream inStream = resourceStream;
-             OutputStream outStream = new FileOutputStream(destinationFile)) {
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = inStream.read(buffer)) != -1) {
-                outStream.write(buffer, 0, bytesRead);
+    /** Finds a working python command. Returns command tokens (e.g., ["python"], or ["py","-3"]) or null. */
+    private static List<String> findPythonCommand() {
+        boolean isWindows = System.getProperty("os.name").toLowerCase().contains("win");
+        List<List<String>> candidates = new ArrayList<>();
+
+        // Prefer your known-good python (the one where pysmt is installed)
+        //candidates.add(Collections.singletonList("C:\\Python313\\python.exe"));
+
+        if (isWindows) {
+            candidates.add(Arrays.asList("py", "-3"));
+            candidates.add(Arrays.asList("py", "-3.11"));
+            candidates.add(Arrays.asList("py", "-3.10"));
+        }
+
+        candidates.add(Collections.singletonList("python3"));
+        candidates.add(Collections.singletonList("python"));
+
+
+
+        for (List<String> cand : candidates) {
+            if (isPythonWorking(cand)) return cand;
+        }
+        return null;
+    }
+
+    private static boolean isPythonWorking(List<String> pythonCmd) {
+        try {
+            List<String> cmd = new ArrayList<>(pythonCmd);
+            cmd.add("--version");
+            Process p = new ProcessBuilder(cmd).redirectErrorStream(true).start();
+            int exit = p.waitFor();
+            return exit == 0;
+        } catch (Exception ignored) {
+            return false;
+        }
+    }
+
+    private SleecToolWindowPanel getPanel(Project project) {
+        ToolWindow toolWindow = ToolWindowManager.getInstance(project).getToolWindow(TOOLWINDOW_ID);
+        if (toolWindow == null) return null;
+
+        var cm = toolWindow.getContentManager();
+        for (int i = 0; i < cm.getContentCount(); i++) {
+            var c = cm.getContent(i);
+            if (c == null) continue;
+            var comp = c.getComponent();
+            if (comp instanceof SleecToolWindowPanel) {
+                return (SleecToolWindowPanel) comp;
             }
         }
+        return null;
     }
 
     private String processResponse(String response) {
